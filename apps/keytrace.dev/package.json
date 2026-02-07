@@ -7,9 +7,8 @@
     "build": "npm run build:client && npm run build:server",
     "build:client": "vite build --outDir dist/client --ssrManifest",
     "build:server": "vite build --outDir dist/server --ssr src/entry-server.tsx",
-    "build:function": "npm run build && esbuild handler.ts --bundle --platform=node --target=node20 --outfile=dist/function/handler.cjs --format=cjs --external:lightningcss && cp -r dist/client dist/function/",
-    "preview": "cross-env NODE_ENV=production tsx server.ts",
-    "zip": "npm run build:function && cd dist/function && zip -r ../function.zip ."
+    "server": "cross-env NODE_ENV=production tsx --env-file=.env server.ts",
+    "preview": "cross-env NODE_ENV=production tsx server.ts"
   },
   "dependencies": {
     "@atproto/oauth-client-node": "^0.3.0",
@@ -19,7 +18,6 @@
     "express": "^4.21.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "serverless-http": "^3.2.0",
     "sirv": "^3.0.0"
   },
   "devDependencies": {
@@ -31,7 +29,6 @@
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.0",
     "cross-env": "^7.0.3",
-    "esbuild": "^0.24.0",
     "tsx": "^4.19.0",
     "typescript": "^5.7.0",
     "vite": "^6.0.0"
