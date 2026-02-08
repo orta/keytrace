@@ -1,7 +1,7 @@
 export interface HttpFetchOptions {
-  format: "json" | "text";
-  headers?: Record<string, string>;
-  timeout?: number;
+    format: "json" | "text";
+    headers?: Record<string, string>;
+    timeout?: number;
 }
 /**
  * Fetch data from an HTTP/HTTPS URL

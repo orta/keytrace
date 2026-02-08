@@ -1,4 +1,4 @@
-import { getOAuthClient, getPublicUrl } from "~/server/utils/oauth"
+import { getOAuthClient, getPublicUrl, signDid } from "~/server/utils/oauth"
 
 export default defineEventHandler(async (event) => {
   try {
@@ -6,15 +6,11 @@ export default defineEventHandler(async (event) => {
     const params = new URLSearchParams(url.search)
     const client = getOAuthClient()
 
-    console.log("OAuth callback params:", Object.fromEntries(params))
-
     const { session } = await client.callback(params)
     const did = session.did
 
-    console.log("OAuth session created for DID:", did)
-
-    // Store DID in a cookie
-    setCookie(event, "did", did, {
+    // Store signed DID in a cookie (SEC-03)
+    setCookie(event, "did", signDid(did), {
       httpOnly: true,
       sameSite: "lax",
       secure: getPublicUrl().startsWith("https"),
@@ -25,10 +21,6 @@ export default defineEventHandler(async (event) => {
     return sendRedirect(event, "/")
   } catch (error) {
     console.error("OAuth callback error:", error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: "OAuth callback failed",
-      data: { details: String(error) },
-    })
+    return sendRedirect(event, "/?error=auth_failed")
   }
 })

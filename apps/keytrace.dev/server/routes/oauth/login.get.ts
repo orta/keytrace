@@ -11,16 +11,12 @@ export default defineEventHandler(async (event) => {
   try {
     const client = getOAuthClient()
     const url = await client.authorize(handle, {
-      scope: "atproto transition:generic",
+      scope: "atproto",
     })
 
     return sendRedirect(event, url.toString())
   } catch (error) {
     console.error("OAuth login error:", error)
-    throw createError({
-      statusCode: 500,
-      statusMessage: "Failed to initiate OAuth",
-      data: { details: error instanceof Error ? error.message : String(error) },
-    })
+    return sendRedirect(event, "/?error=auth_failed")
   }
 })

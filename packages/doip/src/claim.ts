@@ -9,6 +9,18 @@ import {
 import * as fetchers from "./fetchers/index.js";
 import type { VerifyOptions, ClaimVerificationResult } from "./types.js";
 
+// did:plc identifiers are base32-encoded, lowercase
+const DID_PLC_RE = /^did:plc:[a-z2-7]{24}$/;
+// did:web uses a domain name (with optional port and path segments encoded as colons)
+const DID_WEB_RE = /^did:web:[a-zA-Z0-9._:%-]+$/;
+
+/**
+ * Validate a DID string. Accepts did:plc and did:web formats.
+ */
+export function isValidDid(did: string): boolean {
+  return DID_PLC_RE.test(did) || DID_WEB_RE.test(did);
+}
+
 /**
  * Represents a single identity claim linking a DID to an external account
  */
@@ -22,8 +34,8 @@ export class Claim {
   constructor(uri: string, did: string) {
     this._uri = uri;
 
-    // Validate DID format
-    if (!did.startsWith("did:")) {
+    // Validate DID format: must be did:plc:<id> or did:web:<host>
+    if (!isValidDid(did)) {
       throw new Error(`Invalid DID format: ${did}`);
     }
     this._did = did;

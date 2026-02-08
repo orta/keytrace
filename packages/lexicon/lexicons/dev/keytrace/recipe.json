@@ -1,0 +1,138 @@
+{
+  "lexicon": 1,
+  "id": "dev.keytrace.recipe",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "any",
+      "description": "A claim verification recipe. Record key should be kebab-case (e.g., 'github-gist', 'dns-txt').",
+      "record": {
+        "type": "object",
+        "required": ["type", "version", "displayName", "instructions", "verification"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "description": "Claim type identifier (e.g., 'github', 'dns', 'mastodon')"
+          },
+          "version": {
+            "type": "integer",
+            "description": "Recipe version for breaking changes"
+          },
+          "displayName": {
+            "type": "string",
+            "description": "Human-readable name (e.g., 'GitHub Account')"
+          },
+          "params": {
+            "type": "array",
+            "items": { "type": "ref", "ref": "#param" },
+            "description": "User-provided parameters needed for verification"
+          },
+          "instructions": {
+            "type": "ref",
+            "ref": "#instructions"
+          },
+          "verification": {
+            "type": "ref",
+            "ref": "#verification"
+          }
+        }
+      }
+    },
+    "param": {
+      "type": "object",
+      "description": "A user-provided parameter for the claim",
+      "required": ["key", "label", "type"],
+      "properties": {
+        "key": {
+          "type": "string",
+          "description": "Parameter key used in templates (e.g., 'gistUrl', 'domain')"
+        },
+        "label": {
+          "type": "string",
+          "description": "Human-readable label (e.g., 'Gist URL', 'Domain name')"
+        },
+        "type": {
+          "type": "string",
+          "knownValues": ["url", "text", "domain"],
+          "description": "Input type for validation"
+        },
+        "placeholder": {
+          "type": "string",
+          "description": "Placeholder text for the input"
+        },
+        "pattern": {
+          "type": "string",
+          "description": "Regex pattern to validate input"
+        },
+        "extractFrom": {
+          "type": "string",
+          "description": "Regex with capture group to extract subject from param (e.g., extract 'octocat' from gist URL)"
+        }
+      }
+    },
+    "instructions": {
+      "type": "object",
+      "description": "User-facing instructions for making the claim",
+      "required": ["steps"],
+      "properties": {
+        "steps": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Ordered steps the user must follow"
+        },
+        "proofTemplate": {
+          "type": "string",
+          "description": "Template for proof content. Supports {claimId}, {did}, {handle}, and param keys"
+        },
+        "proofLocation": {
+          "type": "string",
+          "description": "Where to place the proof (e.g., 'Create a public gist')"
+        }
+      }
+    },
+    "verification": {
+      "type": "object",
+      "description": "Machine-readable verification steps",
+      "required": ["steps"],
+      "properties": {
+        "steps": {
+          "type": "array",
+          "items": { "type": "ref", "ref": "#verificationStep" }
+        }
+      }
+    },
+    "verificationStep": {
+      "type": "object",
+      "required": ["action"],
+      "properties": {
+        "action": {
+          "type": "string",
+          "knownValues": ["http-get", "http-paginate", "css-select", "json-path", "regex-match", "dns-txt"]
+        },
+        "url": {
+          "type": "string",
+          "description": "URL template with {user}, {claimId} placeholders"
+        },
+        "selector": {
+          "type": "string",
+          "description": "CSS selector or JSONPath expression"
+        },
+        "pattern": {
+          "type": "string",
+          "description": "Regex pattern to match"
+        },
+        "pagination": {
+          "type": "object",
+          "properties": {
+            "nextUrl": { "type": "string" },
+            "maxPages": { "type": "integer" }
+          }
+        },
+        "expect": {
+          "type": "string",
+          "description": "What to expect (e.g., 'contains:{claimId}')"
+        }
+      }
+    }
+  }
+}

@@ -2,7 +2,7 @@ import * as http from "./http.js";
 import * as dns from "./dns.js";
 import * as activitypub from "./activitypub.js";
 export interface Fetcher {
-  fetch: (uri: string, options?: any) => Promise<unknown>;
+    fetch: (uri: string, options?: any) => Promise<unknown>;
 }
 /**
  * Get a fetcher by name

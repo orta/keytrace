@@ -1,26 +1,23 @@
 export interface ActivityPubActor {
-  id: string;
-  type: string;
-  preferredUsername?: string;
-  name?: string;
-  summary?: string;
-  attachment?: Array<{
+    id: string;
     type: string;
+    preferredUsername?: string;
     name?: string;
-    value?: string;
-  }>;
-  attributedTo?: string;
+    summary?: string;
+    attachment?: Array<{
+        type: string;
+        name?: string;
+        value?: string;
+    }>;
+    attributedTo?: string;
 }
 export interface ActivityPubFetchOptions {
-  timeout?: number;
+    timeout?: number;
 }
 /**
  * Fetch an ActivityPub actor document
  */
-export declare function fetchActor(
-  uri: string,
-  options?: ActivityPubFetchOptions,
-): Promise<ActivityPubActor>;
+export declare function fetchActor(uri: string, options?: ActivityPubFetchOptions): Promise<ActivityPubActor>;
 /**
  * Fetch data from an ActivityPub URL (alias for http fetch with AP headers)
  */

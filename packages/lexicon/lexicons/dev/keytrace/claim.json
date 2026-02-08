@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "dev.keytrace.identity.claim",
+  "id": "dev.keytrace.claim",
   "defs": {
     "main": {
       "type": "record",

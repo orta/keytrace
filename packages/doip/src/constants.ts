@@ -1,7 +1,7 @@
 /**
  * The ATProto collection NSID for identity claims
  */
-export const COLLECTION_NSID = "dev.keytrace.identity.claim";
+export const COLLECTION_NSID = "dev.keytrace.claim";
 
 /**
  * Default timeout for fetcher operations in milliseconds
@@ -9,6 +9,11 @@ export const COLLECTION_NSID = "dev.keytrace.identity.claim";
 export const DEFAULT_TIMEOUT = 5000;
 
 /**
- * Public ATProto API URL (Bluesky)
+ * PLC directory URL for resolving did:plc DIDs
+ */
+export const PLC_DIRECTORY_URL = "https://plc.directory";
+
+/**
+ * Fallback public ATProto API URL (used only when PDS resolution fails)
  */
 export const PUBLIC_API_URL = "https://public.api.bsky.app";

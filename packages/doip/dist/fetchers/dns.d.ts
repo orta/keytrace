@@ -1,18 +1,15 @@
 export interface DnsFetchResult {
-  domain: string;
-  records: {
-    txt: string[];
-  };
+    domain: string;
+    records: {
+        txt: string[];
+    };
 }
 export interface DnsFetchOptions {
-  timeout?: number;
+    timeout?: number;
 }
 /**
- * Fetch DNS TXT records for a domain
- * Note: This only works in Node.js environments
+ * Fetch DNS TXT records for a domain.
+ * Returns null in environments where DNS resolution is not available.
  */
-export declare function fetch(
-  domain: string,
-  options?: DnsFetchOptions,
-): Promise<DnsFetchResult | null>;
+export declare function fetch(domain: string, options?: DnsFetchOptions): Promise<DnsFetchResult | null>;
 //# sourceMappingURL=dns.d.ts.map

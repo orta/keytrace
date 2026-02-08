@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ─── Dark mode (default) ─── */
+:root {
+  --kt-bg-root: #0C0A13;
+  --kt-bg-surface: #13111C;
+  --kt-bg-elevated: #1C1929;
+  --kt-bg-inset: #0A0910;
+
+  --kt-text-primary: #F4F4F5;
+  --kt-text-secondary: #A1A1AA;
+  --kt-text-tertiary: #71717A;
+  --kt-text-link: #A78BFA;
+
+  --kt-border-default: #27272A;
+  --kt-border-muted: #18181B;
+  --kt-border-emphasis: #3F3F46;
+
+  --kt-verified: #22C55E;
+  --kt-verified-muted: #22C55E20;
+  --kt-verified-text: #4ADE80;
+  --kt-verified-border: #22C55E40;
+
+  --kt-pending: #F59E0B;
+  --kt-pending-muted: #F59E0B20;
+  --kt-pending-text: #FBBF24;
+  --kt-pending-border: #F59E0B40;
+
+  --kt-failed: #EF4444;
+  --kt-failed-muted: #EF444420;
+  --kt-failed-text: #F87171;
+  --kt-failed-border: #EF444440;
+
+  --kt-unverified: #71717A;
+  --kt-unverified-muted: #71717A20;
+  --kt-unverified-text: #A1A1AA;
+  --kt-unverified-border: #71717A40;
+}
+
+/* ─── Light mode ─── */
+:root.light {
+  --kt-bg-root: #FAFAFA;
+  --kt-bg-surface: #FFFFFF;
+  --kt-bg-elevated: #FFFFFF;
+  --kt-bg-inset: #F4F4F5;
+
+  --kt-text-primary: #18181B;
+  --kt-text-secondary: #71717A;
+  --kt-text-tertiary: #A1A1AA;
+  --kt-text-link: #7C3AED;
+
+  --kt-border-default: #E4E4E7;
+  --kt-border-muted: #F4F4F5;
+  --kt-border-emphasis: #D4D4D8;
+}
+
+/* ─── Base styles ─── */
+@layer base {
+  html {
+    background-color: var(--kt-bg-root);
+    color: var(--kt-text-primary);
+  }
+
+  body {
+    @apply antialiased;
+  }
+}
+
+/* ─── Gradient utilities (Railway-inspired) ─── */
+@layer utilities {
+  .kt-gradient-hero {
+    background:
+      radial-gradient(ellipse at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
+      radial-gradient(ellipse at 80% 20%, rgba(34, 197, 94, 0.08) 0%, transparent 40%),
+      radial-gradient(ellipse at 50% 100%, rgba(59, 130, 246, 0.10) 0%, transparent 50%);
+  }
+
+  .kt-glow-card:hover {
+    box-shadow: 0 0 40px rgba(139, 92, 246, 0.08);
+  }
+}
+
+/* ─── Animations ─── */
+@keyframes verify-check {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.2); }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes verify-ring {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+.animate-verify-check {
+  animation: verify-check 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+}
+
+.animate-verify-ring {
+  animation: verify-ring 0.3s ease-out forwards;
+}
+
+/* ─── Page transitions ─── */
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.2s ease;
+}
+
+.slide-enter-from {
+  opacity: 0;
+  transform: translateX(12px);
+}
+
+.slide-leave-to {
+  opacity: 0;
+  transform: translateX(-12px);
+}
+
+/* ─── Fade transition ─── */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 0.15s ease;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}

@@ -1,8 +1,27 @@
-export default defineEventHandler(async (event) => {
-  const did = getCookie(event, "did")
-  console.log("Session check - DID from cookie:", did)
+import { getOAuthClient, verifySignedDid } from "~/server/utils/oauth"
 
+export default defineEventHandler(async (event) => {
+  const cookie = getCookie(event, "did")
+
+  if (!cookie) {
+    return { authenticated: false }
+  }
+
+  // Verify the cookie signature (SEC-03)
+  const did = verifySignedDid(cookie)
   if (!did) {
+    // Invalid signature -- clear the tampered cookie
+    deleteCookie(event, "did", { path: "/" })
+    return { authenticated: false }
+  }
+
+  // Validate that the OAuth session is still active (SEC-05)
+  try {
+    const client = getOAuthClient()
+    await client.restore(did)
+  } catch {
+    // OAuth session expired or revoked -- clear cookie
+    deleteCookie(event, "did", { path: "/" })
     return { authenticated: false }
   }
 
@@ -19,8 +38,7 @@ export default defineEventHandler(async (event) => {
       displayName: profile.displayName,
       avatar: profile.avatar,
     }
-  } catch (error) {
-    console.error("Profile fetch error:", error)
+  } catch {
     return {
       authenticated: true,
       did,

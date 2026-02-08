@@ -1,0 +1,29 @@
+{
+  "lexicon": 1,
+  "id": "dev.keytrace.key",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "any",
+      "description": "A daily signing key for claim attestations. Record key is the date in YYYY-MM-DD format.",
+      "record": {
+        "type": "object",
+        "required": ["publicJwk", "validFrom", "validUntil"],
+        "properties": {
+          "publicJwk": {
+            "type": "string",
+            "description": "JWK public key as a JSON string (RFC 7517 format)"
+          },
+          "validFrom": {
+            "type": "string",
+            "format": "datetime"
+          },
+          "validUntil": {
+            "type": "string",
+            "format": "datetime"
+          }
+        }
+      }
+    }
+  }
+}
