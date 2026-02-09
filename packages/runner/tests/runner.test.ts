@@ -47,9 +47,7 @@ function createMockFetch(body: string): FetchFn {
 
 describe("runRecipe", () => {
   it("should succeed with valid gist content", async () => {
-    const fetchFn = createMockFetch(
-      JSON.stringify({ keytrace: "kt-a1b2c3d4", did: "did:plc:abc123" }),
-    );
+    const fetchFn = createMockFetch(JSON.stringify({ keytrace: "kt-a1b2c3d4", did: "did:plc:abc123" }));
 
     const result = await runRecipe(githubRecipe, context, { fetch: fetchFn });
 
@@ -60,9 +58,7 @@ describe("runRecipe", () => {
   });
 
   it("should fail when claimId does not match", async () => {
-    const fetchFn = createMockFetch(
-      JSON.stringify({ keytrace: "kt-wrong", did: "did:plc:abc123" }),
-    );
+    const fetchFn = createMockFetch(JSON.stringify({ keytrace: "kt-wrong", did: "did:plc:abc123" }));
 
     const result = await runRecipe(githubRecipe, context, { fetch: fetchFn });
 
@@ -73,9 +69,7 @@ describe("runRecipe", () => {
   });
 
   it("should fail when DID does not match", async () => {
-    const fetchFn = createMockFetch(
-      JSON.stringify({ keytrace: "kt-a1b2c3d4", did: "did:plc:wrong" }),
-    );
+    const fetchFn = createMockFetch(JSON.stringify({ keytrace: "kt-a1b2c3d4", did: "did:plc:wrong" }));
 
     const result = await runRecipe(githubRecipe, context, { fetch: fetchFn });
 
@@ -102,22 +96,15 @@ describe("runRecipe", () => {
   });
 
   it("should interpolate URL correctly", async () => {
-    const fetchFn = createMockFetch(
-      JSON.stringify({ keytrace: "kt-a1b2c3d4", did: "did:plc:abc123" }),
-    );
+    const fetchFn = createMockFetch(JSON.stringify({ keytrace: "kt-a1b2c3d4", did: "did:plc:abc123" }));
 
     await runRecipe(githubRecipe, context, { fetch: fetchFn });
 
-    expect(fetchFn).toHaveBeenCalledWith(
-      "https://gist.github.com/alice/def456/raw/keytrace.json",
-      expect.any(Object),
-    );
+    expect(fetchFn).toHaveBeenCalledWith("https://gist.github.com/alice/def456/raw/keytrace.json", expect.any(Object));
   });
 
   it("should extract subject from params using extractFrom", async () => {
-    const fetchFn = createMockFetch(
-      JSON.stringify({ keytrace: "kt-a1b2c3d4", did: "did:plc:abc123" }),
-    );
+    const fetchFn = createMockFetch(JSON.stringify({ keytrace: "kt-a1b2c3d4", did: "did:plc:abc123" }));
 
     const result = await runRecipe(githubRecipe, context, { fetch: fetchFn });
 

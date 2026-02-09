@@ -1,6 +1,6 @@
-import { AtpAgent } from "@atproto/api"
+import { AtpAgent } from "@atproto/api";
 
-let _agent: AtpAgent | null = null
+let _agent: AtpAgent | null = null;
 
 /**
  * Get a singleton ATProto agent authenticated as the keytrace service account.
@@ -8,17 +8,15 @@ let _agent: AtpAgent | null = null
  */
 export async function getKeytraceAgent(): Promise<AtpAgent> {
   if (!_agent) {
-    const config = useRuntimeConfig()
+    const config = useRuntimeConfig();
     if (!config.keytraceDid || !config.keytraceAppPassword) {
-      throw new Error(
-        "Missing NUXT_KEYTRACE_DID or NUXT_KEYTRACE_APP_PASSWORD environment variables",
-      )
+      throw new Error("Missing NUXT_KEYTRACE_DID or NUXT_KEYTRACE_APP_PASSWORD environment variables");
     }
-    _agent = new AtpAgent({ service: "https://bsky.social" })
+    _agent = new AtpAgent({ service: "https://bsky.social" });
     await _agent.login({
       identifier: config.keytraceDid,
       password: config.keytraceAppPassword,
-    })
+    });
   }
-  return _agent
+  return _agent;
 }

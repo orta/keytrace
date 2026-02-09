@@ -29,10 +29,7 @@ async function hasDnsModule(): Promise<boolean> {
  * Fetch DNS TXT records for a domain.
  * Returns null in environments where DNS resolution is not available.
  */
-export async function fetch(
-  domain: string,
-  options: DnsFetchOptions = {},
-): Promise<DnsFetchResult | null> {
+export async function fetch(domain: string, options: DnsFetchOptions = {}): Promise<DnsFetchResult | null> {
   if (!(await hasDnsModule())) {
     console.debug("DNS fetching is not available in this environment");
     return null;

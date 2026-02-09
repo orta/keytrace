@@ -3,9 +3,7 @@ import { regexMatch } from "../../src/actions/regex-match.js";
 
 describe("regexMatch", () => {
   it("should return first capture group", () => {
-    expect(regexMatch("keytrace-verification=did:plc:abc", "keytrace-verification=(.+)")).toBe(
-      "did:plc:abc",
-    );
+    expect(regexMatch("keytrace-verification=did:plc:abc", "keytrace-verification=(.+)")).toBe("did:plc:abc");
   });
 
   it("should return full match when no capture group", () => {
@@ -13,9 +11,7 @@ describe("regexMatch", () => {
   });
 
   it("should handle DID patterns", () => {
-    expect(regexMatch("my did is did:plc:abc123 ok", "(did:plc:[a-z0-9]+)")).toBe(
-      "did:plc:abc123",
-    );
+    expect(regexMatch("my did is did:plc:abc123 ok", "(did:plc:[a-z0-9]+)")).toBe("did:plc:abc123");
   });
 
   it("should throw on no match", () => {

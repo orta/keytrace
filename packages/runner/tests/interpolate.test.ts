@@ -26,9 +26,7 @@ describe("interpolate", () => {
   });
 
   it("should replace param keys", () => {
-    expect(interpolate("{gistUrl}/raw", context)).toBe(
-      "https://gist.github.com/alice/def456/raw",
-    );
+    expect(interpolate("{gistUrl}/raw", context)).toBe("https://gist.github.com/alice/def456/raw");
   });
 
   it("should replace multiple placeholders in one string", () => {

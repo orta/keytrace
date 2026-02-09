@@ -18,20 +18,20 @@
 </template>
 
 <script setup lang="ts">
-import type { Component } from "vue"
+import type { Component } from "vue";
 
 export interface ServiceOption {
-  id: string
-  name: string
-  description: string
-  icon: Component
+  id: string;
+  name: string;
+  description: string;
+  icon: Component;
 }
 
 defineProps<{
-  services: ServiceOption[]
-}>()
+  services: ServiceOption[];
+}>();
 
 defineEmits<{
-  select: [service: ServiceOption]
-}>()
+  select: [service: ServiceOption];
+}>();
 </script>

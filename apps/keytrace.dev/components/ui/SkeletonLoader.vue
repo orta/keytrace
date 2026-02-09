@@ -36,6 +36,6 @@
 
 <script setup lang="ts">
 defineProps<{
-  variant?: "profile" | "card" | "row"
-}>()
+  variant?: "profile" | "card" | "row";
+}>();
 </script>

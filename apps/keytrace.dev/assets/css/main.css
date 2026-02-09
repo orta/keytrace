@@ -4,56 +4,56 @@
 
 /* ─── Dark mode (default) ─── */
 :root {
-  --kt-bg-root: #0C0A13;
-  --kt-bg-surface: #13111C;
-  --kt-bg-elevated: #1C1929;
-  --kt-bg-inset: #0A0910;
+  --kt-bg-root: #0c0a13;
+  --kt-bg-surface: #13111c;
+  --kt-bg-elevated: #1c1929;
+  --kt-bg-inset: #0a0910;
 
-  --kt-text-primary: #F4F4F5;
-  --kt-text-secondary: #A1A1AA;
-  --kt-text-tertiary: #71717A;
-  --kt-text-link: #A78BFA;
+  --kt-text-primary: #f4f4f5;
+  --kt-text-secondary: #a1a1aa;
+  --kt-text-tertiary: #71717a;
+  --kt-text-link: #a78bfa;
 
-  --kt-border-default: #27272A;
-  --kt-border-muted: #18181B;
-  --kt-border-emphasis: #3F3F46;
+  --kt-border-default: #27272a;
+  --kt-border-muted: #18181b;
+  --kt-border-emphasis: #3f3f46;
 
-  --kt-verified: #22C55E;
-  --kt-verified-muted: #22C55E20;
-  --kt-verified-text: #4ADE80;
-  --kt-verified-border: #22C55E40;
+  --kt-verified: #22c55e;
+  --kt-verified-muted: #22c55e20;
+  --kt-verified-text: #4ade80;
+  --kt-verified-border: #22c55e40;
 
-  --kt-pending: #F59E0B;
-  --kt-pending-muted: #F59E0B20;
-  --kt-pending-text: #FBBF24;
-  --kt-pending-border: #F59E0B40;
+  --kt-pending: #f59e0b;
+  --kt-pending-muted: #f59e0b20;
+  --kt-pending-text: #fbbf24;
+  --kt-pending-border: #f59e0b40;
 
-  --kt-failed: #EF4444;
-  --kt-failed-muted: #EF444420;
-  --kt-failed-text: #F87171;
-  --kt-failed-border: #EF444440;
+  --kt-failed: #ef4444;
+  --kt-failed-muted: #ef444420;
+  --kt-failed-text: #f87171;
+  --kt-failed-border: #ef444440;
 
-  --kt-unverified: #71717A;
-  --kt-unverified-muted: #71717A20;
-  --kt-unverified-text: #A1A1AA;
-  --kt-unverified-border: #71717A40;
+  --kt-unverified: #71717a;
+  --kt-unverified-muted: #71717a20;
+  --kt-unverified-text: #a1a1aa;
+  --kt-unverified-border: #71717a40;
 }
 
 /* ─── Light mode ─── */
 :root.light {
-  --kt-bg-root: #FAFAFA;
-  --kt-bg-surface: #FFFFFF;
-  --kt-bg-elevated: #FFFFFF;
-  --kt-bg-inset: #F4F4F5;
+  --kt-bg-root: #fafafa;
+  --kt-bg-surface: #ffffff;
+  --kt-bg-elevated: #ffffff;
+  --kt-bg-inset: #f4f4f5;
 
-  --kt-text-primary: #18181B;
-  --kt-text-secondary: #71717A;
-  --kt-text-tertiary: #A1A1AA;
-  --kt-text-link: #7C3AED;
+  --kt-text-primary: #18181b;
+  --kt-text-secondary: #71717a;
+  --kt-text-tertiary: #a1a1aa;
+  --kt-text-link: #7c3aed;
 
-  --kt-border-default: #E4E4E7;
-  --kt-border-muted: #F4F4F5;
-  --kt-border-emphasis: #D4D4D8;
+  --kt-border-default: #e4e4e7;
+  --kt-border-muted: #f4f4f5;
+  --kt-border-emphasis: #d4d4d8;
 }
 
 /* ─── Base styles ─── */
@@ -72,9 +72,8 @@
 @layer utilities {
   .kt-gradient-hero {
     background:
-      radial-gradient(ellipse at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%),
-      radial-gradient(ellipse at 80% 20%, rgba(34, 197, 94, 0.08) 0%, transparent 40%),
-      radial-gradient(ellipse at 50% 100%, rgba(59, 130, 246, 0.10) 0%, transparent 50%);
+      radial-gradient(ellipse at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(34, 197, 94, 0.08) 0%, transparent 40%),
+      radial-gradient(ellipse at 50% 100%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
   }
 
   .kt-glow-card:hover {
@@ -84,14 +83,28 @@
 
 /* ─── Animations ─── */
 @keyframes verify-check {
-  0% { transform: scale(0); opacity: 0; }
-  50% { transform: scale(1.2); }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 @keyframes verify-ring {
-  0% { transform: scale(0.8); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  0% {
+    transform: scale(0.8);
+    opacity: 0;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
 }
 
 .animate-verify-check {

@@ -16,27 +16,18 @@
 
       <div class="relative z-10 max-w-3xl mx-auto text-center px-6">
         <!-- Tagline pill -->
-        <div
-          class="mb-8 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/50 text-xs text-zinc-400"
-        >
+        <div class="mb-8 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/50 text-xs text-zinc-400">
           <span class="w-2 h-2 rounded-full bg-verified animate-pulse" />
           Identity verification for ATProto
         </div>
 
-        <h1
-          class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-zinc-100 leading-[1.1]"
-        >
+        <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-zinc-100 leading-[1.1]">
           Prove who you are,<br />
-          <span
-            class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-emerald-400"
-          >
-            everywhere.
-          </span>
+          <span class="text-transparent bg-clip-text bg-gradient-to-r from-violet-400 to-emerald-400"> everywhere. </span>
         </h1>
 
         <p class="mt-6 text-lg text-zinc-400 max-w-xl mx-auto leading-relaxed">
-          Link your GitHub, domain, and other accounts to your Bluesky identity.
-          Cryptographically signed, user-owned, and portable.
+          Link your GitHub, domain, and other accounts to your Bluesky identity. Cryptographically signed, user-owned, and portable.
         </p>
 
         <!-- CTA group -->
@@ -56,36 +47,20 @@
               Get Started
             </button>
           </template>
-          <NuxtLink
-            to="/@orta.bsky.social"
-            class="px-6 py-2.5 text-zinc-400 hover:text-zinc-200 text-sm font-medium transition-colors"
-          >
-            View example profile &rarr;
-          </NuxtLink>
+          <NuxtLink to="/@orta.bsky.social" class="px-6 py-2.5 text-zinc-400 hover:text-zinc-200 text-sm font-medium transition-colors"> View example profile &rarr; </NuxtLink>
         </div>
 
         <!-- Inline login form -->
         <Transition name="slide">
-          <div
-            v-if="showLogin && !session?.authenticated"
-            class="mt-8 max-w-sm mx-auto"
-          >
-            <form
-              class="flex gap-2"
-              @submit.prevent="handleLogin"
-            >
+          <div v-if="showLogin && !session?.authenticated" class="mt-8 max-w-sm mx-auto">
+            <form class="flex gap-2" @submit.prevent="handleLogin">
               <input
                 v-model="handle"
                 type="text"
                 placeholder="you.bsky.social"
                 class="flex-1 px-4 py-2.5 rounded-lg bg-kt-inset border border-zinc-800 text-sm text-zinc-200 font-mono placeholder:text-zinc-600 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all"
               />
-              <button
-                type="submit"
-                class="px-4 py-2.5 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium rounded-lg transition-all"
-              >
-                Sign in
-              </button>
+              <button type="submit" class="px-4 py-2.5 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium rounded-lg transition-all">Sign in</button>
             </form>
           </div>
         </Transition>
@@ -94,21 +69,13 @@
 
     <!-- How it works -->
     <section class="max-w-4xl mx-auto px-6 py-16">
-      <h2 class="text-lg font-semibold text-zinc-300 mb-8 text-center">
-        How it works
-      </h2>
+      <h2 class="text-lg font-semibold text-zinc-300 mb-8 text-center">How it works</h2>
 
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
-        <div
-          v-for="step in howItWorks"
-          :key="step.number"
-          class="text-center"
-        >
+        <div v-for="step in howItWorks" :key="step.number" class="text-center">
           <div
             class="w-12 h-12 mx-auto mb-4 rounded-full flex items-center justify-center text-sm font-mono font-bold"
-            :class="step.number === 3
-              ? 'bg-verified/10 text-verified'
-              : 'bg-violet-600/10 text-violet-400'"
+            :class="step.number === 3 ? 'bg-verified/10 text-verified' : 'bg-violet-600/10 text-violet-400'"
           >
             {{ step.number }}
           </div>
@@ -124,54 +91,45 @@
 
     <!-- Recent verifications feed -->
     <section class="max-w-4xl mx-auto px-6 py-16">
-      <h2 class="text-lg font-semibold text-zinc-300 mb-6">
-        Recent verifications
-      </h2>
+      <h2 class="text-lg font-semibold text-zinc-300 mb-6">Recent verifications</h2>
 
       <div class="space-y-2">
-        <RecentClaimRow
-          v-for="claim in recentClaims"
-          :key="claim.handle + claim.displayName"
-          :claim="claim"
-        />
+        <RecentClaimRow v-for="claim in recentClaims" :key="claim.handle + claim.displayName" :claim="claim" />
       </div>
     </section>
   </div>
 </template>
 
 <script setup lang="ts">
-const { session } = useSession()
+const { session } = useSession();
 
-const showLogin = ref(false)
-const handle = ref("")
+const showLogin = ref(false);
+const handle = ref("");
 
 function handleLogin() {
-  const { login } = useSession()
-  login(handle.value)
+  const { login } = useSession();
+  login(handle.value);
 }
 
-const gridSvg = `<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg"><path d="M32 0H0v32" fill="none" stroke="white" stroke-width="0.5"/></svg>`
+const gridSvg = `<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg"><path d="M32 0H0v32" fill="none" stroke="white" stroke-width="0.5"/></svg>`;
 
 const howItWorks = [
   {
     number: 1,
     title: "Sign in with Bluesky",
-    description:
-      "Authenticate with your ATProto identity. No new accounts, no key generation.",
+    description: "Authenticate with your ATProto identity. No new accounts, no key generation.",
   },
   {
     number: 2,
     title: "Add your proof",
-    description:
-      "Post a small verification token to your GitHub, domain DNS, or other account.",
+    description: "Post a small verification token to your GitHub, domain DNS, or other account.",
   },
   {
     number: 3,
     title: "Get linked",
-    description:
-      "Keytrace verifies the proof and signs an attestation stored in your ATProto repo.",
+    description: "Keytrace verifies the proof and signs an attestation stored in your ATProto repo.",
   },
-]
+];
 
 // Placeholder data for recent verifications
 const recentClaims = [
@@ -203,5 +161,5 @@ const recentClaims = [
     serviceType: "mastodon",
     createdAt: new Date(Date.now() - 1000 * 60 * 60 * 24).toISOString(),
   },
-]
+];
 </script>

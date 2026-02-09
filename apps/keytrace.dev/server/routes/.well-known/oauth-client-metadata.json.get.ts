@@ -1,5 +1,5 @@
-import { getClientMetadata } from "~/server/utils/oauth"
+import { getClientMetadata } from "~/server/utils/oauth";
 
 export default defineEventHandler(() => {
-  return getClientMetadata()
-})
+  return getClientMetadata();
+});

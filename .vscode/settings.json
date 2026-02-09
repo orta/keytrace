@@ -25,5 +25,8 @@
     "titleBar.inactiveBackground": "#cfd99a99",
     "titleBar.inactiveForeground": "#15202b99"
   },
-  "peacock.color": "#cfd99a"
+  "peacock.color": "#cfd99a",
+  "[typescript]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  }
 }

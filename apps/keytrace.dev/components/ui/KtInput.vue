@@ -15,18 +15,18 @@
 </template>
 
 <script setup lang="ts">
-import { useId } from "vue"
+import { useId } from "vue";
 
 defineProps<{
-  modelValue?: string
-  label?: string
-  placeholder?: string
-  type?: string
-}>()
+  modelValue?: string;
+  label?: string;
+  placeholder?: string;
+  type?: string;
+}>();
 
 defineEmits<{
-  "update:modelValue": [value: string]
-}>()
+  "update:modelValue": [value: string];
+}>();
 
-const inputId = useId()
+const inputId = useId();
 </script>

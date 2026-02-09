@@ -1,20 +1,17 @@
 <template>
-  <span
-    class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium"
-    :class="config.classes"
-  >
+  <span class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-xs font-medium" :class="config.classes">
     <component :is="config.icon" class="w-3 h-3" />
     {{ config.label }}
   </span>
 </template>
 
 <script setup lang="ts">
-import { computed } from "vue"
-import { CheckCircle, Clock, XCircle, MinusCircle } from "lucide-vue-next"
+import { computed } from "vue";
+import { CheckCircle, Clock, XCircle, MinusCircle } from "lucide-vue-next";
 
 const props = defineProps<{
-  status: "verified" | "pending" | "failed" | "unverified"
-}>()
+  status: "verified" | "pending" | "failed" | "unverified";
+}>();
 
 const configs = {
   verified: {
@@ -37,7 +34,7 @@ const configs = {
     icon: MinusCircle,
     label: "Unverified",
   },
-} as const
+} as const;
 
-const config = computed(() => configs[props.status])
+const config = computed(() => configs[props.status]);
 </script>

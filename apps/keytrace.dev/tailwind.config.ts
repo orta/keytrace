@@ -1,13 +1,8 @@
-import type { Config } from "tailwindcss"
+import type { Config } from "tailwindcss";
 
 export default {
   darkMode: "class",
-  content: [
-    "./components/**/*.{vue,ts}",
-    "./layouts/**/*.vue",
-    "./pages/**/*.vue",
-    "./app.vue",
-  ],
+  content: ["./components/**/*.{vue,ts}", "./layouts/**/*.vue", "./pages/**/*.vue", "./app.vue"],
   theme: {
     extend: {
       colors: {
@@ -34,4 +29,4 @@ export default {
       },
     },
   },
-} satisfies Config
+} satisfies Config;

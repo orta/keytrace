@@ -155,40 +155,40 @@ export async function fetchProfile(didOrHandle: string): Promise<Profile> {
 // packages/keytrace-runner/src/claim.ts
 
 export interface Claim {
-  uri: string
-  did: string
-  status: ClaimStatus
-  matches: ServiceProviderMatch[]
+  uri: string;
+  did: string;
+  status: ClaimStatus;
+  matches: ServiceProviderMatch[];
 }
 
 export function createClaim(uri: string, did: string): Claim {
   if (!did.startsWith("did:")) {
-    throw new Error("Invalid DID format")
+    throw new Error("Invalid DID format");
   }
-  return { uri, did, status: "pending", matches: [] }
+  return { uri, did, status: "pending", matches: [] };
 }
 
 export function matchClaim(claim: Claim): Claim {
   // find matching service providers, return updated claim
-  const matches = findMatchingProviders(claim.uri)
-  return { ...claim, matches }
+  const matches = findMatchingProviders(claim.uri);
+  return { ...claim, matches };
 }
 
 export async function verifyClaim(claim: Claim, opts?: VerifyOptions): Promise<Claim> {
   // For each matched service provider:
   // 1. Fetch proof location
   // 2. Look for DID (or handle, or profile URL) in response
-  const patterns = generateProofPatterns(claim.did)
+  const patterns = generateProofPatterns(claim.did);
   // ... verification logic
-  return { ...claim, status: "verified" }
+  return { ...claim, status: "verified" };
 }
 
 function generateProofPatterns(did: string): string[] {
   return [
-    did,                                    // did:plc:xxx
-    did.replace("did:plc:", ""),            // just xxx
-    `https://[SITE_DOMAIN]/${did}`,         // profile URL
-  ]
+    did, // did:plc:xxx
+    did.replace("did:plc:", ""), // just xxx
+    `https://[SITE_DOMAIN]/${did}`, // profile URL
+  ];
 }
 ```
 
@@ -272,17 +272,17 @@ The homepage displays a feed of recent successful attestations to show activity 
 
 ```typescript
 interface RecentClaim {
-  did: string
-  handle: string
-  avatar?: string
-  type: string           // e.g., "github-gist"
-  subject: string        // e.g., "github:octocat"
-  displayName: string    // e.g., "GitHub Account"
-  createdAt: string
+  did: string;
+  handle: string;
+  avatar?: string;
+  type: string; // e.g., "github-gist"
+  subject: string; // e.g., "github:octocat"
+  displayName: string; // e.g., "GitHub Account"
+  createdAt: string;
 }
 
 // Array of last 50 claims, newest first
-type RecentClaimsFeed = RecentClaim[]
+type RecentClaimsFeed = RecentClaim[];
 ```
 
 **Update flow:**
@@ -294,10 +294,10 @@ type RecentClaimsFeed = RecentClaim[]
 ```typescript
 // server/utils/recent-claims.ts
 async function addRecentClaim(claim: RecentClaim): Promise<void> {
-  const feed = await getRecentClaimsFromS3() ?? []
-  feed.unshift(claim)
-  if (feed.length > 50) feed.length = 50
-  await saveRecentClaimsToS3(feed)
+  const feed = (await getRecentClaimsFromS3()) ?? [];
+  feed.unshift(claim);
+  if (feed.length > 50) feed.length = 50;
+  await saveRecentClaimsToS3(feed);
 }
 ```
 
@@ -330,13 +330,15 @@ POST /api/verify
 ```
 
 **Browser usage:** The keytrace-runner in browser mode uses these endpoints:
+
 ```typescript
 const runner = createRunner({
-  fetch: (url, init) => fetch('/api/proxy/http', {
-    method: 'POST',
-    body: JSON.stringify({ url, ...init })
-  }).then(r => r.json())
-})
+  fetch: (url, init) =>
+    fetch("/api/proxy/http", {
+      method: "POST",
+      body: JSON.stringify({ url, ...init }),
+    }).then((r) => r.json()),
+});
 ```
 
 ## Implementation Phases
@@ -436,6 +438,7 @@ Keytrace maintains a daily rotating key stored in the keytrace Bluesky account's
 - **Public auditability** - anyone can fetch the key to verify signatures
 
 **Lexicon: `dev.keytrace.key`**
+
 ```json
 {
   "lexicon": 1,
@@ -471,6 +474,7 @@ Keytrace maintains a daily rotating key stored in the keytrace Bluesky account's
 Keys are stored at: `at://did:plc:hcwfdlmprcc335oixyfsw7u3/dev.keytrace.key/2026-02-08`
 
 **Key Storage:**
+
 - **Public keys**: Stored in keytrace's ATProto repo (publicly discoverable)
 - **Private keys**: Stored in S3 at `s3://{bucket}/keys/{date}.jwk` (e.g., `keys/2026-02-08.jwk`)
 
@@ -481,26 +485,27 @@ Since Railway doesn't have built-in cron, keys are generated lazily on first use
 ```typescript
 // server/utils/keys.ts
 async function getOrCreateTodaysKey(): Promise<JWK> {
-  const today = new Date().toISOString().split('T')[0]  // "2026-02-08"
+  const today = new Date().toISOString().split("T")[0]; // "2026-02-08"
 
   // Try S3 first (fast path)
-  let privateKey = await getKeyFromS3(`keys/${today}.jwk`)
-  if (privateKey) return privateKey
+  let privateKey = await getKeyFromS3(`keys/${today}.jwk`);
+  if (privateKey) return privateKey;
 
   // Generate new key pair for today
-  privateKey = await generateES256KeyPair()
+  privateKey = await generateES256KeyPair();
 
   // Save private key to S3
-  await saveKeyToS3(`keys/${today}.jwk`, privateKey)
+  await saveKeyToS3(`keys/${today}.jwk`, privateKey);
 
   // Publish public key to ATProto
-  await publishKeyToATProto(today, privateKey)
+  await publishKeyToATProto(today, privateKey);
 
-  return privateKey
+  return privateKey;
 }
 ```
 
 This approach:
+
 - No separate cron service needed
 - Keys created on-demand when first attestation is requested
 - S3 acts as cache to avoid regenerating on each request
@@ -517,20 +522,20 @@ KEYTRACE_APP_PASSWORD=xxxx-xxxx-xxxx-xxxx
 
 ```typescript
 // server/utils/keytrace-agent.ts
-import { Agent } from "@atproto/api"
+import { Agent } from "@atproto/api";
 
-let _agent: Agent | null = null
+let _agent: Agent | null = null;
 
 export async function getKeytraceAgent(): Promise<Agent> {
   if (!_agent) {
-    const config = useRuntimeConfig()
-    _agent = new Agent({ service: "https://bsky.social" })
+    const config = useRuntimeConfig();
+    _agent = new Agent({ service: "https://bsky.social" });
     await _agent.login({
       identifier: config.keytraceDid,
       password: config.keytraceAppPassword,
-    })
+    });
   }
-  return _agent
+  return _agent;
 }
 ```
 
@@ -539,6 +544,7 @@ export async function getKeytraceAgent(): Promise<Agent> {
 Recipes are public, version-controlled instructions for how to verify a specific claim type. They're stored in keytrace's ATProto repo and referenced by CID for integrity.
 
 **Lexicon: `dev.keytrace.recipe`**
+
 ```json
 {
   "lexicon": 1,
@@ -681,6 +687,7 @@ Recipes are public, version-controlled instructions for how to verify a specific
 ```
 
 **Example Recipe: GitHub Gist**
+
 ```json
 {
   "$type": "dev.keytrace.recipe",
@@ -736,6 +743,7 @@ Recipes are referenced by strong ref: `at://did:plc:hcwfdlmprcc335oixyfsw7u3/dev
 When a user's claim passes verification, keytrace creates a signed attestation record in the USER's repo.
 
 **Lexicon: `dev.keytrace.claim`**
+
 ```json
 {
   "lexicon": 1,
@@ -904,53 +912,51 @@ A generic recipe execution engine that works in **both Node and Browser** enviro
 // packages/keytrace-runner/src/index.ts
 
 /** Injected fetch function - allows caller to provide proxy, auth, etc. */
-export type FetchFn = (url: string, init?: RequestInit) => Promise<Response>
+export type FetchFn = (url: string, init?: RequestInit) => Promise<Response>;
 
 export interface RunnerConfig {
   /** Custom fetch function (defaults to global fetch) */
-  fetch?: FetchFn
+  fetch?: FetchFn;
   /** Request timeout in ms */
-  timeout?: number
+  timeout?: number;
 }
 
 export interface ClaimContext {
   /** Unique claim ID for this verification attempt */
-  claimId: string
+  claimId: string;
   /** User's ATProto DID */
-  did: string
+  did: string;
   /** User's ATProto handle */
-  handle: string
+  handle: string;
   /** User-provided params from recipe (e.g., { gistUrl: "..." }) */
-  params: Record<string, string>
+  params: Record<string, string>;
 }
 
 export interface VerificationResult {
-  success: boolean
-  steps: StepResult[]
+  success: boolean;
+  steps: StepResult[];
   /** Extracted subject from params (e.g., "github:octocat") */
-  subject?: string
-  error?: string
+  subject?: string;
+  error?: string;
 }
 
 export interface StepResult {
-  action: string
-  success: boolean
-  data?: unknown
-  error?: string
+  action: string;
+  success: boolean;
+  data?: unknown;
+  error?: string;
 }
 
-export async function runRecipe(
-  recipe: Recipe,
-  context: ClaimContext,
-  config?: RunnerConfig
-): Promise<VerificationResult>
+export async function runRecipe(recipe: Recipe, context: ClaimContext, config?: RunnerConfig): Promise<VerificationResult>;
 ```
 
 **Environment support:**
+
 - **Browser**: Uses native `fetch`, `DOMParser` for HTML parsing
 - **Node**: Uses `fetch` (Node 18+), `linkedom` for HTML parsing
 
 **Built-in actions:**
+
 - `http-get` - Fetch URL using injected fetch function
 - `css-select` - Parse HTML and run CSS selectors
 - `json-path` - Extract data from JSON
@@ -959,6 +965,7 @@ export async function runRecipe(
 
 **Template interpolation:**
 All URL and pattern strings support `{variable}` interpolation from context:
+
 - `{claimId}`, `{did}`, `{handle}` - from ClaimContext
 - `{paramKey}` - from user-provided params
 

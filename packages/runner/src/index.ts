@@ -13,7 +13,12 @@ export type {
   StepResult,
   RunnerConfig,
   FetchFn,
+  ClaimVerificationResult,
+  ProfileData,
+  ClaimData,
+  VerifyOptions,
 } from "./types.js";
+export { ClaimStatus } from "./types.js";
 
 // Template interpolation
 export { interpolate } from "./interpolate.js";
@@ -31,3 +36,19 @@ export { dnsTxt } from "./actions/dns-txt.js";
 // Built-in recipes
 export { githubGistRecipe } from "./recipes/github-gist.js";
 export { dnsTxtRecipe } from "./recipes/dns-txt.js";
+
+// Claim & Profile (from runner)
+export { createClaim, matchClaim, verifyClaim, isClaimAmbiguous, getMatchedProvider, isValidDid } from "./claim.js";
+export type { ClaimState } from "./claim.js";
+export { fetchProfile, resolvePds, verifyAllClaims, getProfileSummary, getClaimsByStatus } from "./profile.js";
+export type { FetchedProfile } from "./profile.js";
+
+// Constants
+export { COLLECTION_NSID, DEFAULT_TIMEOUT, PUBLIC_API_URL, PLC_DIRECTORY_URL } from "./constants.js";
+
+// Service providers
+export * as serviceProviders from "./serviceProviders/index.js";
+export type { ServiceProvider, ServiceProviderMatch, ProofTarget, ProofRequest, ProcessedURI } from "./serviceProviders/types.js";
+
+// Fetchers
+export * as fetchers from "./fetchers/index.js";

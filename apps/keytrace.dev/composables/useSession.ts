@@ -1,51 +1,51 @@
 interface Session {
-  authenticated: boolean
-  did?: string
-  handle?: string
-  displayName?: string
-  avatar?: string
+  authenticated: boolean;
+  did?: string;
+  handle?: string;
+  displayName?: string;
+  avatar?: string;
 }
 
-const sessionState = ref<Session | null>(null)
-const sessionLoading = ref(false)
-const sessionFetched = ref(false)
+const sessionState = ref<Session | null>(null);
+const sessionLoading = ref(false);
+const sessionFetched = ref(false);
 
 export function useSession() {
   async function fetchSession() {
-    if (sessionFetched.value) return
-    sessionLoading.value = true
+    if (sessionFetched.value) return;
+    sessionLoading.value = true;
     try {
-      const data = await $fetch<Session>("/api/oauth/session")
-      sessionState.value = data
+      const data = await $fetch<Session>("/api/oauth/session");
+      sessionState.value = data;
     } catch {
-      sessionState.value = { authenticated: false }
+      sessionState.value = { authenticated: false };
     } finally {
-      sessionLoading.value = false
-      sessionFetched.value = true
+      sessionLoading.value = false;
+      sessionFetched.value = true;
     }
   }
 
   async function refresh() {
-    sessionFetched.value = false
-    await fetchSession()
+    sessionFetched.value = false;
+    await fetchSession();
   }
 
   async function logout() {
-    await $fetch("/api/oauth/logout", { method: "POST" })
-    sessionState.value = { authenticated: false }
+    await $fetch("/api/oauth/logout", { method: "POST" });
+    sessionState.value = { authenticated: false };
   }
 
   function login(handle: string) {
     if (handle) {
       navigateTo(`/oauth/login?handle=${encodeURIComponent(handle)}`, {
         external: true,
-      })
+      });
     }
   }
 
   // Auto-fetch on first use
   if (!sessionFetched.value && !sessionLoading.value) {
-    fetchSession()
+    fetchSession();
   }
 
   return {
@@ -54,5 +54,5 @@ export function useSession() {
     refresh,
     logout,
     login,
-  }
+  };
 }

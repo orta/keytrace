@@ -56,4 +56,4 @@ export default defineNuxtConfig({
     keytraceDid: "",
     keytraceAppPassword: "",
   },
-})
+});

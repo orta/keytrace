@@ -21,10 +21,7 @@ export interface ActivityPubFetchOptions {
 /**
  * Fetch an ActivityPub actor document
  */
-export async function fetchActor(
-  uri: string,
-  options: ActivityPubFetchOptions = {},
-): Promise<ActivityPubActor> {
+export async function fetchActor(uri: string, options: ActivityPubFetchOptions = {}): Promise<ActivityPubActor> {
   const timeout = options.timeout ?? DEFAULT_TIMEOUT;
   const controller = new AbortController();
   const timeoutId = setTimeout(() => controller.abort(), timeout);
@@ -32,9 +29,8 @@ export async function fetchActor(
   try {
     const response = await globalThis.fetch(uri, {
       headers: {
-        Accept:
-          'application/activity+json, application/ld+json; profile="https://www.w3.org/ns/activitystreams"',
-        "User-Agent": "keytrace-doip/1.0",
+        Accept: 'application/activity+json, application/ld+json; profile="https://www.w3.org/ns/activitystreams"',
+        "User-Agent": "keytrace-runner/1.0",
       },
       signal: controller.signal,
     });

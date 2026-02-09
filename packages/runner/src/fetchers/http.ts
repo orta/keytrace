@@ -17,7 +17,7 @@ export async function fetch(url: string, options: HttpFetchOptions): Promise<unk
   try {
     const response = await globalThis.fetch(url, {
       headers: {
-        "User-Agent": "keytrace-doip/1.0",
+        "User-Agent": "keytrace-runner/1.0",
         Accept: options.format === "json" ? "application/json" : "text/plain",
         ...options.headers,
       },

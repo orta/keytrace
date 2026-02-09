@@ -6,18 +6,12 @@
         <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-violet-600/15 border border-violet-500/20">
           <span class="font-mono text-sm font-bold text-violet-400">kt</span>
         </div>
-        <span class="font-semibold text-zinc-200 text-sm hidden sm:block">
-          keytrace
-        </span>
+        <span class="font-semibold text-zinc-200 text-sm hidden sm:block"> keytrace </span>
       </NuxtLink>
 
       <!-- Mobile: icon buttons. Desktop: full nav -->
       <div class="flex items-center gap-2">
-        <NuxtLink
-          v-if="showAddClaim"
-          to="/add"
-          class="sm:px-3 sm:py-1.5 p-2 text-sm text-zinc-400 hover:text-zinc-200 transition-colors"
-        >
+        <NuxtLink v-if="showAddClaim" to="/add" class="sm:px-3 sm:py-1.5 p-2 text-sm text-zinc-400 hover:text-zinc-200 transition-colors">
           <PlusIcon class="w-5 h-5 sm:hidden" />
           <span class="hidden sm:inline">Add claim</span>
         </NuxtLink>
@@ -35,10 +29,10 @@
 </template>
 
 <script setup lang="ts">
-import { Plus as PlusIcon, User as UserIcon } from "lucide-vue-next"
+import { Plus as PlusIcon, User as UserIcon } from "lucide-vue-next";
 
 defineProps<{
-  avatarUrl?: string
-  showAddClaim?: boolean
-}>()
+  avatarUrl?: string;
+  showAddClaim?: boolean;
+}>();
 </script>

@@ -4,13 +4,7 @@ import activitypub from "./activitypub.js";
 import bsky from "./bsky.js";
 import type { ServiceProvider, ServiceProviderMatch } from "./types.js";
 
-export type {
-  ServiceProvider,
-  ServiceProviderMatch,
-  ProofTarget,
-  ProofRequest,
-  ProcessedURI,
-} from "./types.js";
+export type { ServiceProvider, ServiceProviderMatch, ProofTarget, ProofRequest, ProcessedURI } from "./types.js";
 
 const providers: Record<string, ServiceProvider> = {
   github,
@@ -61,11 +55,7 @@ export function matchUri(uri: string): ServiceProviderMatch[] {
 /**
  * Get the proof text a user should add to verify a claim
  */
-export function getProofTextForProvider(
-  providerId: string,
-  did: string,
-  handle?: string,
-): string | undefined {
+export function getProofTextForProvider(providerId: string, did: string, handle?: string): string | undefined {
   const provider = providers[providerId];
   return provider?.getProofText(did, handle);
 }

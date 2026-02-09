@@ -1,12 +1,4 @@
-import type {
-  Recipe,
-  ClaimContext,
-  RunnerConfig,
-  VerificationResult,
-  StepResult,
-  VerificationStep,
-  FetchFn,
-} from "./types.js";
+import type { Recipe, ClaimContext, RunnerConfig, VerificationResult, StepResult, VerificationStep, FetchFn } from "./types.js";
 import { interpolate } from "./interpolate.js";
 import { checkExpect } from "./expect.js";
 import { httpGet } from "./actions/http-get.js";
@@ -21,11 +13,7 @@ const DEFAULT_TIMEOUT = 10_000;
  * Execute a recipe's verification steps against a claim context.
  * Returns a full result with per-step details. Stops on first failure.
  */
-export async function runRecipe(
-  recipe: Recipe,
-  context: ClaimContext,
-  config?: RunnerConfig,
-): Promise<VerificationResult> {
+export async function runRecipe(recipe: Recipe, context: ClaimContext, config?: RunnerConfig): Promise<VerificationResult> {
   const fetchFn: FetchFn = config?.fetch ?? globalThis.fetch;
   const timeout = config?.timeout ?? DEFAULT_TIMEOUT;
   const steps: StepResult[] = [];
@@ -66,13 +54,7 @@ export async function runRecipe(
   return { success: true, steps, subject };
 }
 
-async function executeStep(
-  step: VerificationStep,
-  context: ClaimContext,
-  previousOutput: unknown,
-  fetchFn: FetchFn,
-  timeout: number,
-): Promise<StepResult> {
+async function executeStep(step: VerificationStep, context: ClaimContext, previousOutput: unknown, fetchFn: FetchFn, timeout: number): Promise<StepResult> {
   try {
     let data: unknown;
 

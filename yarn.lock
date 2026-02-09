@@ -1934,17 +1934,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@keytrace/doip@workspace:packages/doip":
-  version: 0.0.0-use.local
-  resolution: "@keytrace/doip@workspace:packages/doip"
-  dependencies:
-    "@atproto/api": "npm:^0.14.0"
-    "@types/node": "npm:^22.0.0"
-    typescript: "npm:^5.7.0"
-    vitest: "npm:^2.1.0"
-  languageName: unknown
-  linkType: soft
-
 "@keytrace/lexicon@workspace:packages/lexicon":
   version: 0.0.0-use.local
   resolution: "@keytrace/lexicon@workspace:packages/lexicon"
@@ -1955,8 +1944,10 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@keytrace/runner@workspace:packages/runner"
   dependencies:
+    "@atproto/api": "npm:^0.14.0"
     "@types/node": "npm:^22.0.0"
     cheerio: "npm:^1.0.0"
+    oxfmt: "npm:^0.27.0"
     typescript: "npm:^5.7.0"
     vitest: "npm:^2.1.0"
   languageName: unknown

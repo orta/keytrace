@@ -12,8 +12,7 @@ const dns: ServiceProvider = {
   homepage: "",
 
   // Match dns:domain.tld URIs (must contain at least one dot)
-  reUri:
-    /^dns:([a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)+)$/,
+  reUri: /^dns:([a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)+)$/,
 
   isAmbiguous: false,
 

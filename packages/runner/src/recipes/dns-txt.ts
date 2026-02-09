@@ -17,8 +17,7 @@ export const dnsTxtRecipe: Recipe = {
       label: "Domain name",
       type: "domain",
       placeholder: "example.com",
-      pattern:
-        "^[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)+$",
+      pattern: "^[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)+$",
     },
   ],
   instructions: {

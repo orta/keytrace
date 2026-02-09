@@ -1,4 +1,4 @@
-import { getRecentClaims } from "../utils/recent-claims"
+import { getRecentClaims } from "../utils/recent-claims";
 
 /**
  * GET /api/recent-claims
@@ -7,8 +7,8 @@ import { getRecentClaims } from "../utils/recent-claims"
  * Cached for 60 seconds to reduce storage reads.
  */
 export default defineEventHandler(async (event) => {
-  setResponseHeader(event, "Cache-Control", "public, max-age=60")
+  setResponseHeader(event, "Cache-Control", "public, max-age=60");
 
-  const claims = await getRecentClaims()
-  return claims
-})
+  const claims = await getRecentClaims();
+  return claims;
+});
