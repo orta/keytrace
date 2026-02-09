@@ -54,6 +54,8 @@ function checkSessionSecret(): void {
   }
 }
 
+export const OAUTH_SCOPE = "atproto repo:dev.keytrace.claim?action=create repo:dev.keytrace.claim?action=delete";
+
 export function getPublicUrl(): string {
   const config = useRuntimeConfig();
   return (config.public.publicUrl || "http://127.0.0.1:3000").replace(/\/$/, "");
@@ -82,7 +84,7 @@ export function getClientMetadata() {
     redirect_uris: [`${redirectBase}/oauth/callback`] as [string],
     grant_types: ["authorization_code", "refresh_token"] as ["authorization_code", "refresh_token"],
     response_types: ["code"] as ["code"],
-    scope: "atproto repo:dev.keytrace.claim?action=create repo:dev.keytrace.claim?action=delete",
+    scope: OAUTH_SCOPE,
     token_endpoint_auth_method: "none" as const,
     application_type: "web" as const,
     dpop_bound_access_tokens: true,

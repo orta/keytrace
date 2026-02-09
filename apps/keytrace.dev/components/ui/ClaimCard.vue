@@ -3,27 +3,57 @@
     <!-- Header row -->
     <div class="flex items-center justify-between px-4 py-3 border-b border-zinc-800/50">
       <div class="flex items-center gap-2.5">
-        <!-- Service icon -->
-        <div class="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center">
+        <!-- Identity avatar or service icon -->
+        <img
+          v-if="claim.identity?.avatarUrl"
+          :src="claim.identity.avatarUrl"
+          :alt="claim.identity.displayName || claim.identity.subject || 'Avatar'"
+          class="w-8 h-8 rounded-full object-cover"
+        />
+        <div v-else class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
           <component :is="serviceIcon" class="w-4 h-4 text-zinc-300" />
         </div>
-        <span class="text-sm font-semibold text-zinc-200">
-          {{ claim.displayName }}
-        </span>
+        <div class="min-w-0">
+          <span class="text-sm font-semibold text-zinc-200 block truncate">
+            {{ claim.identity?.displayName || claim.identity?.subject || claim.displayName }}
+          </span>
+          <span v-if="claim.comment" class="text-xs text-zinc-500 block truncate">
+            {{ claim.comment }}
+          </span>
+        </div>
       </div>
 
-      <!-- Status badge -->
-      <UiStatusBadge :status="claim.status" />
+      <div class="flex items-center gap-2">
+        <!-- Actions slot -->
+        <slot name="actions" />
+      </div>
     </div>
 
     <!-- Body -->
     <div class="px-4 py-3 space-y-1.5">
-      <a v-if="claim.subject" :href="claim.subject" target="_blank" rel="noopener noreferrer" class="text-sm text-violet-400 hover:text-violet-300 font-mono transition-colors">
-        {{ claim.subject }}
+      <a
+        v-if="claim.identity?.profileUrl || claim.subject"
+        :href="claim.identity?.profileUrl || claim.subject"
+        target="_blank"
+        rel="noopener noreferrer"
+        class="text-sm text-violet-400 hover:text-violet-300 font-mono transition-colors block truncate"
+      >
+        {{ claim.identity?.profileUrl || claim.subject }}
       </a>
 
-      <div class="flex items-center gap-3 text-xs text-zinc-500">
-        <span v-if="claim.recipeName">via {{ claim.recipeName }}</span>
+      <div class="flex items-center flex-wrap gap-x-3 gap-y-1 text-xs text-zinc-500">
+        <NuxtLink
+          v-if="claim.serviceType"
+          :to="`/recipes/${claim.serviceType}`"
+          class="hover:text-zinc-300 transition-colors"
+        >
+          via {{ claim.recipeName || claim.serviceType }}
+        </NuxtLink>
+        <span v-else-if="claim.recipeName">via {{ claim.recipeName }}</span>
+        <template v-if="claim.createdAt">
+          <span v-if="claim.recipeName || claim.serviceType" class="text-zinc-700">&middot;</span>
+          <span>Added {{ formatDate(claim.createdAt) }}</span>
+        </template>
         <template v-if="claim.attestation?.signedAt">
           <span class="text-zinc-700">&middot;</span>
           <span>Attested {{ formatDate(claim.attestation.signedAt) }}</span>
@@ -47,12 +77,22 @@
 import { computed } from "vue";
 import { Github, Globe, AtSign, Key } from "lucide-vue-next";
 
+export interface ClaimIdentity {
+  subject?: string;
+  avatarUrl?: string;
+  profileUrl?: string;
+  displayName?: string;
+}
+
 export interface ClaimData {
   displayName: string;
   status: "verified" | "pending" | "failed" | "unverified";
   serviceType?: string;
   subject?: string;
   recipeName?: string;
+  comment?: string;
+  createdAt?: string;
+  identity?: ClaimIdentity;
   attestation?: {
     signedAt?: string;
     signingKey?: { uri: string };

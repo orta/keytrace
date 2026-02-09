@@ -8,13 +8,28 @@ import type { ServiceProvider } from "./types.js";
  */
 const dns: ServiceProvider = {
   id: "dns",
-  name: "DNS",
+  name: "Domain",
   homepage: "",
 
   // Match dns:domain.tld URIs (must contain at least one dot)
   reUri: /^dns:([a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?)+)$/,
 
   isAmbiguous: false,
+
+  ui: {
+    description: "Link via DNS TXT record",
+    icon: "globe",
+    inputLabel: "Domain",
+    inputPlaceholder: "example.com",
+    instructions: [
+      "Open your domain's DNS settings (usually in your registrar or hosting provider)",
+      "Add a new **TXT record** at the root domain (or at `_keytrace.yourdomain.com`)",
+      "Set the record value to the verification content below",
+      "Save and wait for DNS propagation (may take a few minutes to an hour)",
+      "Enter your domain below and verify",
+    ],
+    proofTemplate: "keytrace-verification={did}",
+  },
 
   processURI(uri, match) {
     const [, domain] = match;
@@ -41,6 +56,11 @@ const dns: ServiceProvider = {
 
   getProofText(did) {
     return `keytrace-verification=${did}`;
+  },
+
+  getProofLocation(match) {
+    const [, domain] = match;
+    return `Add a TXT record at the root of ${domain} (or at _keytrace.${domain})`;
   },
 
   tests: [

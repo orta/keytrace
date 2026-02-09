@@ -25,7 +25,7 @@ export const githubGistRecipe: Recipe = {
     steps: [
       "Go to https://gist.github.com",
       "Create a new public gist",
-      "Name the file keytrace.json",
+      "Name the file `keytrace.json`",
       "Paste the verification content below into the file",
       "Save the gist and paste the URL below",
     ],

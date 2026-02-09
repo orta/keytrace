@@ -16,6 +16,21 @@ const github: ServiceProvider = {
 
   isAmbiguous: false,
 
+  ui: {
+    description: "Link via a public gist",
+    icon: "github",
+    inputLabel: "Gist URL",
+    inputPlaceholder: "https://gist.github.com/username/abc123...",
+    instructions: [
+      "Go to [gist.github.com](https://gist.github.com) and create a new gist",
+      "Name the file `keytrace.json` (or `keytrace.md` or `proof.md`)",
+      "Paste the verification content below into the file",
+      "Make sure the gist is **public**, then save it",
+      "Copy the gist URL and paste it below",
+    ],
+    proofTemplate: '{\n  "did": "{did}"\n}',
+  },
+
   processURI(uri, match) {
     const [, username, gistId] = match;
 
@@ -68,8 +83,23 @@ const github: ServiceProvider = {
     };
   },
 
+  postprocess(data, match) {
+    const [, username] = match;
+    const gist = data as { owner?: { avatar_url?: string; login?: string } };
+
+    return {
+      subject: gist.owner?.login ?? username,
+      avatarUrl: gist.owner?.avatar_url,
+      profileUrl: `https://github.com/${gist.owner?.login ?? username}`,
+    };
+  },
+
   getProofText(did) {
     return `Verifying my identity on keytrace: ${did}`;
+  },
+
+  getProofLocation() {
+    return `Create a public gist with a file named keytrace.json, keytrace.md, or proof.md containing the proof text`;
   },
 
   tests: [

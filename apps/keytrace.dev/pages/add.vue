@@ -23,7 +23,9 @@
             <span class="flex-shrink-0 w-6 h-6 rounded-full bg-zinc-800 text-zinc-500 text-xs flex items-center justify-center font-mono">
               {{ i + 1 }}
             </span>
-            <span class="text-sm text-zinc-300 pt-0.5">{{ instruction }}</span>
+            <span class="text-sm text-zinc-300 pt-0.5">
+              <Markdown :content="instruction" />
+            </span>
           </li>
         </ol>
 
@@ -94,7 +96,7 @@
 </template>
 
 <script setup lang="ts">
-import { Github, Globe, CheckCircle as CheckCircleIcon, XCircle as XCircleIcon } from "lucide-vue-next";
+import { Github, Globe, AtSign, Cloud, CheckCircle as CheckCircleIcon, XCircle as XCircleIcon } from "lucide-vue-next";
 import type { ServiceOption } from "~/components/ui/ServicePicker.vue";
 import type { VerificationStep } from "~/components/ui/VerificationLog.vue";
 
@@ -111,67 +113,71 @@ watch(
   { immediate: true },
 );
 
+// Fetch services from API
+const { data: servicesData } = await useFetch("/api/services");
+
+// Map icon names to components
+const iconMap: Record<string, unknown> = {
+  github: Github,
+  globe: Globe,
+  "at-sign": AtSign,
+  cloud: Cloud,
+};
+
+// Transform API response into ServiceOption format
+interface ServiceFromAPI {
+  id: string;
+  name: string;
+  homepage: string;
+  ui: {
+    description: string;
+    icon: string;
+    inputLabel: string;
+    inputPlaceholder: string;
+    instructions: string[];
+    proofTemplate: string;
+  };
+}
+
+interface ServiceWithUI extends ServiceOption {
+  inputLabel: string;
+  inputPlaceholder: string;
+  instructions: string[];
+  proofTemplate: string;
+}
+
+const services = computed<ServiceWithUI[]>(() => {
+  if (!servicesData.value) return [];
+  return (servicesData.value as ServiceFromAPI[]).map((s) => ({
+    id: s.id,
+    name: s.name,
+    description: s.ui.description,
+    icon: iconMap[s.ui.icon] ?? Globe,
+    inputLabel: s.ui.inputLabel,
+    inputPlaceholder: s.ui.inputPlaceholder,
+    instructions: s.ui.instructions,
+    proofTemplate: s.ui.proofTemplate,
+  }));
+});
+
 const currentStep = ref(0);
-const selectedService = ref<(ServiceOption & { inputLabel?: string; inputPlaceholder?: string; instructions?: string[]; proofTemplate?: string }) | null>(null);
+const selectedService = ref<ServiceWithUI | null>(null);
 const claimUri = ref("");
 const claimUriError = ref("");
-const claimId = ref("");
 
 const stepLabels = ["Choose service", "Create proof", "Verify"];
 
-const services: (ServiceOption & { inputLabel: string; inputPlaceholder: string; instructions: string[]; proofTemplate: string })[] = [
-  {
-    id: "github-gist",
-    name: "GitHub",
-    description: "Link via a public gist",
-    icon: Github,
-    inputLabel: "Gist URL",
-    inputPlaceholder: "https://gist.github.com/username/abc123...",
-    instructions: [
-      "Go to https://gist.github.com",
-      "Create a new public gist",
-      "Name the file keytrace.json",
-      "Paste the verification content below into the file",
-      "Save the gist and paste the URL below",
-    ],
-    proofTemplate: '{\n  "keytrace": "{claimId}",\n  "did": "{did}"\n}',
-  },
-  {
-    id: "dns-txt",
-    name: "Domain",
-    description: "Link via DNS TXT record",
-    icon: Globe,
-    inputLabel: "Domain",
-    inputPlaceholder: "example.com",
-    instructions: [
-      "Open your domain's DNS settings",
-      "Add a new TXT record to the root domain",
-      "Set the value to the verification content below",
-      "Wait for DNS propagation (may take a few minutes)",
-      "Enter your domain below and verify",
-    ],
-    proofTemplate: "keytrace-did={did}",
-  },
-];
-
 const proofContent = computed(() => {
   const template = selectedService.value?.proofTemplate ?? "";
-  return template.replace(/\{claimId\}/g, claimId.value).replace(/\{did\}/g, session.value?.did ?? "did:plc:...");
+  return template.replace(/\{did\}/g, session.value?.did ?? "did:plc:...").replace(/\{handle\}/g, session.value?.handle ?? "handle");
 });
 
 const selectedInstructions = computed(() => selectedService.value?.instructions ?? []);
 
-function generateClaimId() {
-  const bytes = new Uint8Array(8);
-  crypto.getRandomValues(bytes);
-  return "kt-" + Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
-}
-
 function selectService(service: ServiceOption) {
-  selectedService.value = services.find((s) => s.id === service.id) ?? null;
+  selectedService.value = services.value.find((s) => s.id === service.id) ?? null;
   claimUri.value = "";
   claimUriError.value = "";
-  claimId.value = generateClaimId();
   currentStep.value = 1;
 }
 
@@ -194,7 +200,8 @@ async function startVerification() {
 
   // Build the claim URI for the API
   let apiClaimUri = claimUri.value;
-  if (selectedService.value?.id === "dns-txt") {
+  if (selectedService.value?.id === "dns") {
+    // For DNS, convert domain to dns: URI format
     apiClaimUri = `dns:${claimUri.value.replace(/^(https?:\/\/)?/, "").replace(/\/.*$/, "")}`;
   }
 
@@ -300,7 +307,6 @@ function reset() {
   selectedService.value = null;
   claimUri.value = "";
   claimUriError.value = "";
-  claimId.value = "";
   verificationSteps.value = [];
   verificationComplete.value = false;
   verificationSuccess.value = false;

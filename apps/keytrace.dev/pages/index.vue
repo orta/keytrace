@@ -39,31 +39,15 @@
           >
             Go to Dashboard &rarr;
           </NuxtLink>
-          <template v-else>
-            <button
-              class="px-6 py-2.5 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium rounded-lg transition-all hover:shadow-glow-brand"
-              @click="showLogin = true"
-            >
-              Get Started
-            </button>
-          </template>
+          <button
+            v-else
+            class="px-6 py-2.5 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium rounded-lg transition-all hover:shadow-glow-brand"
+            @click="openLoginModal"
+          >
+            Get Started
+          </button>
           <NuxtLink to="/@orta.bsky.social" class="px-6 py-2.5 text-zinc-400 hover:text-zinc-200 text-sm font-medium transition-colors"> View example profile &rarr; </NuxtLink>
         </div>
-
-        <!-- Inline login form -->
-        <Transition name="slide">
-          <div v-if="showLogin && !session?.authenticated" class="mt-8 max-w-sm mx-auto">
-            <form class="flex gap-2" @submit.prevent="handleLogin">
-              <input
-                v-model="handle"
-                type="text"
-                placeholder="you.bsky.social"
-                class="flex-1 px-4 py-2.5 rounded-lg bg-kt-inset border border-zinc-800 text-sm text-zinc-200 font-mono placeholder:text-zinc-600 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all"
-              />
-              <button type="submit" class="px-4 py-2.5 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium rounded-lg transition-all">Sign in</button>
-            </form>
-          </div>
-        </Transition>
       </div>
     </section>
 
@@ -102,14 +86,7 @@
 
 <script setup lang="ts">
 const { session } = useSession();
-
-const showLogin = ref(false);
-const handle = ref("");
-
-function handleLogin() {
-  const { login } = useSession();
-  login(handle.value);
-}
+const { open: openLoginModal } = useLoginModal();
 
 const gridSvg = `<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg"><path d="M32 0H0v32" fill="none" stroke="white" stroke-width="0.5"/></svg>`;
 

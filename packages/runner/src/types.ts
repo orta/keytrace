@@ -1,10 +1,26 @@
 /**
+ * Identity metadata extracted during verification
+ */
+export interface IdentityMetadata {
+  /** Display name / username */
+  subject?: string;
+  /** Avatar/profile image URL */
+  avatarUrl?: string;
+  /** Profile page URL */
+  profileUrl?: string;
+  /** Display name if different from subject */
+  displayName?: string;
+}
+
+/**
  * Result of verifying a claim
  */
 export interface ClaimVerificationResult {
   status: ClaimStatus;
   errors: string[];
   timestamp: Date;
+  /** Identity metadata extracted from the proof source */
+  identity?: IdentityMetadata;
 }
 
 /**
@@ -24,9 +40,11 @@ export interface ProfileData {
 export interface ClaimData {
   uri: string;
   did: string;
+  type?: string;
   comment?: string;
   createdAt: string;
   rkey: string;
+  identity?: IdentityMetadata;
 }
 
 /**

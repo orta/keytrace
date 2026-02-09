@@ -8,14 +8,29 @@ import type { ServiceProvider } from "./types.js";
  */
 const activitypub: ServiceProvider = {
   id: "activitypub",
-  name: "ActivityPub",
-  homepage: "",
+  name: "Mastodon",
+  homepage: "https://joinmastodon.org",
 
   // Match Mastodon-style profile URLs: https://instance/@username
   reUri: /^https:\/\/([^/]+)\/@([^/]+)\/?$/,
 
   // Could match other ActivityPub software with same URL pattern
   isAmbiguous: true,
+
+  ui: {
+    description: "Link your Mastodon or Fediverse account",
+    icon: "at-sign",
+    inputLabel: "Profile URL",
+    inputPlaceholder: "https://mastodon.social/@username",
+    instructions: [
+      "Go to your Mastodon instance and open **Edit profile**",
+      "Add your DID to your **bio** or create a new **profile metadata field**",
+      "For metadata fields, set the label to `keytrace` and paste your DID as the value",
+      "Save your profile changes",
+      "Paste your full profile URL below (e.g., `https://mastodon.social/@username`)",
+    ],
+    proofTemplate: "{did}",
+  },
 
   processURI(uri, match) {
     const [, domain, username] = match;
@@ -43,14 +58,19 @@ const activitypub: ServiceProvider = {
   },
 
   postprocess(data) {
-    const actor = data as { preferredUsername?: string; name?: string };
+    const actor = data as { preferredUsername?: string; name?: string; icon?: { url?: string } };
     return {
-      display: actor.name || actor.preferredUsername,
+      displayName: actor.name || actor.preferredUsername,
+      avatarUrl: actor.icon?.url,
     };
   },
 
   getProofText(did) {
     return did;
+  },
+
+  getProofLocation() {
+    return `Add to your profile bio or a profile metadata field`;
   },
 
   tests: [

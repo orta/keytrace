@@ -2,7 +2,7 @@ import { ClaimStatus } from "./types.js";
 import { DEFAULT_TIMEOUT } from "./constants.js";
 import { matchUri, type ServiceProviderMatch, type ProofRequest, type ProofTarget } from "./serviceProviders/index.js";
 import * as fetchers from "./fetchers/index.js";
-import type { VerifyOptions, ClaimVerificationResult } from "./types.js";
+import type { VerifyOptions, ClaimVerificationResult, IdentityMetadata } from "./types.js";
 
 // did:plc identifiers are base32-encoded, lowercase
 const DID_PLC_RE = /^did:plc:[a-z2-7]{24}$/;
@@ -93,10 +93,24 @@ export async function verifyClaim(claim: ClaimState, opts: VerifyOptions = {}): 
 
       if (checkProof(proofData, config.proof.target, claim.did)) {
         claim.status = ClaimStatus.VERIFIED;
+
+        // Extract identity metadata via postprocess if available
+        let identity: IdentityMetadata | undefined;
+        if (match.provider.postprocess) {
+          const metadata = match.provider.postprocess(proofData, match.match);
+          identity = {
+            subject: metadata.subject,
+            avatarUrl: metadata.avatarUrl,
+            profileUrl: metadata.profileUrl,
+            displayName: metadata.displayName,
+          };
+        }
+
         return {
           status: ClaimStatus.VERIFIED,
           errors: [],
           timestamp: new Date(),
+          identity,
         };
       }
     } catch (err) {

@@ -4,7 +4,7 @@ import activitypub from "./activitypub.js";
 import bsky from "./bsky.js";
 import type { ServiceProvider, ServiceProviderMatch } from "./types.js";
 
-export type { ServiceProvider, ServiceProviderMatch, ProofTarget, ProofRequest, ProcessedURI } from "./types.js";
+export type { ServiceProvider, ServiceProviderMatch, ServiceProviderUI, ProofTarget, ProofRequest, ProcessedURI } from "./types.js";
 
 const providers: Record<string, ServiceProvider> = {
   github,

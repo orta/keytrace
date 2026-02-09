@@ -1,4 +1,4 @@
-import { getOAuthClient } from "~/server/utils/oauth";
+import { getOAuthClient, OAUTH_SCOPE } from "~/server/utils/oauth";
 
 export default defineEventHandler(async (event) => {
   const query = getQuery(event);
@@ -11,7 +11,7 @@ export default defineEventHandler(async (event) => {
   try {
     const client = getOAuthClient();
     const url = await client.authorize(handle, {
-      scope: "atproto repo:dev.keytrace.claim?action=create repo:dev.keytrace.claim?action=delete",
+      scope: OAUTH_SCOPE,
     });
 
     return sendRedirect(event, url.toString());

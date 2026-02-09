@@ -2,7 +2,7 @@ import { AtpAgent } from "@atproto/api";
 import { createClaim, verifyClaim, type ClaimState } from "./claim.js";
 import { ClaimStatus } from "./types.js";
 import { COLLECTION_NSID, PUBLIC_API_URL, PLC_DIRECTORY_URL } from "./constants.js";
-import type { ProfileData, ClaimData, VerifyOptions } from "./types.js";
+import type { ProfileData, ClaimData, VerifyOptions, IdentityMetadata } from "./types.js";
 
 /**
  * DID document service entry
@@ -111,16 +111,20 @@ async function fetchWithAgent(agent: AtpAgent, did: string): Promise<FetchedProf
       for (const record of records.data.records) {
         const value = record.value as {
           claimUri?: string;
+          type?: string;
           comment?: string;
           createdAt?: string;
+          identity?: IdentityMetadata;
         };
         if (value.claimUri) {
           claims.push({
             uri: value.claimUri,
             did,
+            type: value.type,
             comment: value.comment,
             createdAt: value.createdAt ?? new Date().toISOString(),
             rkey: parseAtUriRkey(record.uri),
+            identity: value.identity,
           });
         }
       }

@@ -5,8 +5,9 @@
  * Requires authentication. Body: { claimUri: string, comment?: string }
  */
 
-import { COLLECTION_NSID, serviceProviders } from "@keytrace/runner";
+import { COLLECTION_NSID, serviceProviders, createClaim, verifyClaim, ClaimStatus } from "@keytrace/runner";
 import { getSessionAgent } from "~/server/utils/session";
+import { createAttestation } from "~/server/utils/attestation";
 
 export default defineEventHandler(async (event) => {
   const { did, agent } = await getSessionAgent(event);
@@ -29,10 +30,58 @@ export default defineEventHandler(async (event) => {
     });
   }
 
+  // Verify the claim first to ensure it's valid and extract identity metadata
+  console.log(`[claims] Verifying claim: uri=${body.claimUri} did=${did}`);
+  const claim = createClaim(body.claimUri, did);
+  const verifyResult = await verifyClaim(claim, { timeout: 10_000 });
+
+  if (verifyResult.status !== ClaimStatus.VERIFIED) {
+    console.log(`[claims] Verification failed: ${verifyResult.errors.join(", ")}`);
+    throw createError({
+      statusCode: 400,
+      statusMessage: `Claim verification failed: ${verifyResult.errors.join(", ") || "Could not verify ownership"}`,
+    });
+  }
+
+  // Get the matched provider
+  const { provider, match } = matches[0];
+  const processed = provider.processURI(body.claimUri, match);
+
+  // Use identity from verification result, falling back to processed profile
+  const verifiedIdentity = verifyResult.identity;
+  const subject = verifiedIdentity?.subject ?? processed.profile.display.replace(/^@/, "");
+
+  // Create cryptographic attestation
+  const attestation = await createAttestation(did, provider.id, subject);
+
+  // Build the signature object per dev.keytrace.signature lexicon
+  const sig = {
+    kid: new Date().toISOString().split("T")[0], // YYYY-MM-DD
+    src: attestation.signingKey.uri,
+    signedAt: attestation.signedAt,
+    attestation: attestation.sig,
+  };
+
+  // Build the identity object per dev.keytrace.claim#identity lexicon
+  const identity: {
+    subject: string;
+    avatarUrl?: string;
+    profileUrl?: string;
+    displayName?: string;
+  } = {
+    subject,
+    avatarUrl: verifiedIdentity?.avatarUrl,
+    profileUrl: verifiedIdentity?.profileUrl ?? processed.profile.uri,
+    displayName: verifiedIdentity?.displayName,
+  };
+
   try {
     const record = {
       $type: COLLECTION_NSID,
+      type: provider.id,
       claimUri: body.claimUri,
+      identity,
+      sig,
       comment: body.comment,
       createdAt: new Date().toISOString(),
     };

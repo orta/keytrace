@@ -8,11 +8,26 @@
       "description": "An identity claim linking this DID to an external account",
       "record": {
         "type": "object",
-        "required": ["claimUri", "createdAt"],
+        "required": ["type", "claimUri", "identity", "sig", "createdAt"],
         "properties": {
+          "type": {
+            "type": "string",
+            "knownValues": ["github", "dns", "mastodon", "twitter", "website"],
+            "description": "The claim type identifier"
+          },
           "claimUri": {
             "type": "string",
-            "description": "The identity claim URI (e.g., https://gist.github.com/username/id, dns:example.com)"
+            "description": "The identity claim URI (e.g., for github: https://gist.github.com/username/id, dns:example.com)"
+          },
+          "identity": {
+            "type": "ref",
+            "ref": "#identity",
+            "description": "Structured data about the claimed identity"
+          },
+          "sig": {
+            "type": "ref",
+            "ref": "dev.keytrace.signature#main",
+            "description": "Cryptographic attestation signature from the keytrace service"
           },
           "comment": {
             "type": "string",
@@ -23,6 +38,31 @@
             "type": "string",
             "format": "datetime"
           }
+        }
+      }
+    },
+    "identity": {
+      "type": "object",
+      "description": "Generic identity data for the claimed account",
+      "required": ["subject"],
+      "properties": {
+        "subject": {
+          "type": "string",
+          "description": "Primary identifier (username, domain, handle, etc.)"
+        },
+        "avatarUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "Avatar/profile image URL"
+        },
+        "profileUrl": {
+          "type": "string",
+          "format": "uri",
+          "description": "Profile page URL"
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name if different from subject"
         }
       }
     }

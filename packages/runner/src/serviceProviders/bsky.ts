@@ -16,6 +16,21 @@ const bsky: ServiceProvider = {
 
   isAmbiguous: false,
 
+  ui: {
+    description: "Link another Bluesky account",
+    icon: "cloud",
+    inputLabel: "Profile URL",
+    inputPlaceholder: "https://bsky.app/profile/username.bsky.social",
+    instructions: [
+      "Log into the Bluesky account you want to link",
+      "Go to **Settings** → **Edit Profile**",
+      "Add your DID to your **bio** (the verification DID, not this account's DID)",
+      "Save your profile changes",
+      "Paste the profile URL below",
+    ],
+    proofTemplate: "{did}",
+  },
+
   processURI(uri, match) {
     const [, handle] = match;
 
@@ -41,6 +56,10 @@ const bsky: ServiceProvider = {
 
   getProofText(did) {
     return did;
+  },
+
+  getProofLocation() {
+    return `Add to your profile bio`;
   },
 
   tests: [

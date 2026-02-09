@@ -1,0 +1,31 @@
+{
+  "lexicon": 1,
+  "id": "dev.keytrace.signature",
+  "defs": {
+    "main": {
+      "type": "object",
+      "description": "A cryptographic signature attesting to a claim",
+      "required": ["kid", "src", "signedAt", "attestation"],
+      "properties": {
+        "kid": {
+          "type": "string",
+          "description": "Key identifier (e.g., date in YYYY-MM-DD format)"
+        },
+        "src": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "AT URI reference to the signing key record (e.g., at://did:plc:xxx/dev.keytrace.key/2024-01-15)"
+        },
+        "signedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Timestamp when the signature was created"
+        },
+        "attestation": {
+          "type": "string",
+          "description": "The cryptographic signature (base64-encoded)"
+        }
+      }
+    }
+  }
+}

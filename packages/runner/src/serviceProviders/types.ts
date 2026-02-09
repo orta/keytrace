@@ -53,6 +53,24 @@ export interface ProcessedURI {
 }
 
 /**
+ * UI configuration for the add claim wizard
+ */
+export interface ServiceProviderUI {
+  /** Short description for service picker (e.g., "Link via a public gist") */
+  description: string;
+  /** Lucide icon name (e.g., "github", "globe") */
+  icon: string;
+  /** Label for the claim URI input field */
+  inputLabel: string;
+  /** Placeholder text for the claim URI input */
+  inputPlaceholder: string;
+  /** Step-by-step instructions (markdown supported) */
+  instructions: string[];
+  /** Template for proof content. Supports {did} and {handle} placeholders */
+  proofTemplate: string;
+}
+
+/**
  * A service provider that can verify identity claims
  */
 export interface ServiceProvider {
@@ -69,20 +87,28 @@ export interface ServiceProvider {
   /** Whether matches are potentially ambiguous (could match multiple providers) */
   isAmbiguous?: boolean;
 
+  /** UI configuration for the add claim wizard */
+  ui: ServiceProviderUI;
+
   /** Process matched URI into verification config */
   processURI(uri: string, match: RegExpMatchArray): ProcessedURI;
 
-  /** Optional post-processing after fetch */
+  /** Optional post-processing after fetch to extract identity metadata */
   postprocess?(
     data: unknown,
     match: RegExpMatchArray,
   ): {
-    display?: string;
-    uri?: string;
+    subject?: string;
+    avatarUrl?: string;
+    profileUrl?: string;
+    displayName?: string;
   };
 
   /** Generate proof text for user to add to their profile */
   getProofText(did: string, handle?: string): string;
+
+  /** Human-readable instructions for where to place the proof */
+  getProofLocation?(match: RegExpMatchArray): string;
 
   /** Test cases for validation */
   tests: {

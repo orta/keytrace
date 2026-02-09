@@ -52,7 +52,19 @@
 
       <!-- Claims list -->
       <div v-if="profile.claims && profile.claims.length > 0" class="mt-8 space-y-3">
-        <ClaimCard v-for="claim in profile.claims" :key="claim.uri" :claim="mapClaim(claim)" />
+        <ClaimCard v-for="claim in profile.claims" :key="claim.uri" :claim="mapClaim(claim)">
+          <template #actions>
+            <VerifyPopover :claim-uri="claim.uri" :did="profile.did" :display-name="mapClaim(claim).displayName" :provider-name="claim.matches?.[0]?.providerName" />
+            <button
+              v-if="isOwnProfile"
+              class="p-1.5 rounded-lg text-zinc-500 hover:text-failed hover:bg-failed/10 transition-colors"
+              title="Delete claim"
+              @click.stop="deleteClaim(claim)"
+            >
+              <Trash2Icon class="w-4 h-4" />
+            </button>
+          </template>
+        </ClaimCard>
       </div>
 
       <!-- Empty state -->
@@ -78,9 +90,10 @@
 </template>
 
 <script setup lang="ts">
-import { AlertCircle as AlertCircleIcon, Share2 as ShareIcon, Link as LinkIcon } from "lucide-vue-next";
+import { AlertCircle as AlertCircleIcon, Share2 as ShareIcon, Link as LinkIcon, Trash2 as Trash2Icon } from "lucide-vue-next";
 
 const route = useRoute();
+const { session } = useSession();
 
 const rawHandle = computed(() => {
   const param = route.params.handle as string;
@@ -92,7 +105,13 @@ const cleanHandle = computed(() => {
   return rawHandle.value.replace(/^@/, "");
 });
 
-const { data: profile, pending, error } = await useFetch(() => `/api/profile/${encodeURIComponent(cleanHandle.value)}`);
+const { data: profile, pending, error, refresh } = await useFetch(() => `/api/profile/${encodeURIComponent(cleanHandle.value)}`);
+
+// Check if viewing own profile
+const isOwnProfile = computed(() => {
+  if (!session.value?.authenticated || !profile.value) return false;
+  return session.value.did === profile.value.did;
+});
 
 // Map API claims to the shape ProfileHeader expects
 const profileClaims = computed(() => (profile.value?.claims ?? []).map((c: any) => ({ status: c.status })));
@@ -103,9 +122,12 @@ function mapClaim(claim: any) {
   return {
     displayName: match?.providerName ?? guessDisplayName(claim.uri),
     status: claim.status,
-    serviceType: match?.provider ?? guessServiceType(claim.uri),
+    serviceType: claim.type ?? match?.provider ?? guessServiceType(claim.uri),
     subject: claim.uri,
     recipeName: match?.provider,
+    comment: claim.comment,
+    createdAt: claim.createdAt,
+    identity: claim.identity,
     attestation: undefined,
     recipe: undefined,
   };
@@ -131,6 +153,19 @@ function shareProfile() {
     navigator.share({ title: `${profile.value?.displayName} on Keytrace`, url });
   } else if (navigator.clipboard) {
     navigator.clipboard.writeText(url);
+  }
+}
+
+async function deleteClaim(claim: any) {
+  if (!claim.rkey) return;
+
+  if (!confirm("Are you sure you want to delete this claim?")) return;
+
+  try {
+    await $fetch(`/api/claims/${claim.rkey}`, { method: "DELETE" });
+    await refresh();
+  } catch {
+    // Could add toast notification here
   }
 }
 

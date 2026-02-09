@@ -35,7 +35,7 @@
             </div>
           </Transition>
         </div>
-        <NuxtLink v-else to="/" class="px-3 py-1.5 text-sm text-zinc-400 hover:text-zinc-200 transition-colors"> Sign in </NuxtLink>
+        <button v-else class="px-3 py-1.5 text-sm text-zinc-400 hover:text-zinc-200 transition-colors" @click="openLoginModal"> Sign in </button>
       </template>
     </NavBar>
 
@@ -45,15 +45,21 @@
 
     <footer class="border-t border-zinc-800/50 mt-16">
       <div class="max-w-5xl mx-auto px-4 py-8 flex items-center justify-between">
-        <div class="flex items-center gap-2">
-          <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-violet-600/15 border border-violet-500/20">
-            <span class="font-mono text-xs font-bold text-violet-400">kt</span>
+        <div class="flex items-center gap-4">
+          <div class="flex items-center gap-2">
+            <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-violet-600/15 border border-violet-500/20">
+              <span class="font-mono text-xs font-bold text-violet-400">kt</span>
+            </div>
+            <span class="text-xs text-zinc-500">keytrace.dev</span>
           </div>
-          <span class="text-xs text-zinc-500">keytrace.dev</span>
+          <NuxtLink to="/recipes" class="text-xs text-zinc-600 hover:text-zinc-400 transition-colors">
+            How it works
+          </NuxtLink>
         </div>
         <span class="text-xs text-zinc-600"> Identity verification for ATProto </span>
       </div>
     </footer>
+    <LoginModal />
   </div>
 </template>
 
@@ -61,6 +67,7 @@
 import { User as UserIcon } from "lucide-vue-next";
 
 const { session, logout } = useSession();
+const { open: openLoginModal } = useLoginModal();
 const menuOpen = ref(false);
 const menuRef = ref<HTMLElement | null>(null);
 

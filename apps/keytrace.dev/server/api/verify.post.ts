@@ -39,6 +39,7 @@ export default defineEventHandler(async (event) => {
         providerName: m.provider.name,
         isAmbiguous: m.isAmbiguous,
       })),
+      identity: result.identity,
     };
   } catch (err: unknown) {
     console.error(`[verify] Error:`, err);

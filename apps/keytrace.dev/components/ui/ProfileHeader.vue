@@ -15,9 +15,15 @@
       <p class="text-zinc-500 mt-0.5"><span class="text-zinc-600">@</span>{{ profile.handle }}</p>
 
       <div class="flex items-center gap-2 mt-1">
-        <code class="text-xs font-mono text-zinc-500 truncate max-w-[280px]">
+        <a
+          :href="`https://pdsls.dev/at://${profile.did}/dev.keytrace.claim`"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-xs font-mono text-zinc-500 hover:text-zinc-300 truncate max-w-[280px] transition-colors"
+          title="View claims on pdsls.dev"
+        >
           {{ profile.did }}
-        </code>
+        </a>
         <CopyButton :value="profile.did" />
       </div>
 

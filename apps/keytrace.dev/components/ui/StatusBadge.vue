@@ -7,13 +7,13 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { CheckCircle, Clock, XCircle, MinusCircle } from "lucide-vue-next";
+import { CheckCircle, Clock, XCircle, MinusCircle, HelpCircle } from "lucide-vue-next";
 
 const props = defineProps<{
-  status: "verified" | "pending" | "failed" | "unverified";
+  status: string;
 }>();
 
-const configs = {
+const configs: Record<string, { classes: string; icon: typeof CheckCircle; label: string }> = {
   verified: {
     classes: "bg-verified/15 text-verified border border-verified/20",
     icon: CheckCircle,
@@ -24,17 +24,38 @@ const configs = {
     icon: Clock,
     label: "Pending",
   },
+  init: {
+    classes: "bg-zinc-500/15 text-zinc-400 border border-zinc-500/20",
+    icon: Clock,
+    label: "Not checked",
+  },
+  matched: {
+    classes: "bg-pending/15 text-pending border border-pending/20",
+    icon: Clock,
+    label: "Pending",
+  },
   failed: {
     classes: "bg-failed/15 text-failed border border-failed/20",
     icon: XCircle,
     label: "Failed",
+  },
+  error: {
+    classes: "bg-failed/15 text-failed border border-failed/20",
+    icon: XCircle,
+    label: "Error",
   },
   unverified: {
     classes: "bg-zinc-500/15 text-zinc-400 border border-zinc-500/20",
     icon: MinusCircle,
     label: "Unverified",
   },
-} as const;
+};
 
-const config = computed(() => configs[props.status]);
+const defaultConfig = {
+  classes: "bg-zinc-500/15 text-zinc-400 border border-zinc-500/20",
+  icon: HelpCircle,
+  label: "Unknown",
+};
+
+const config = computed(() => configs[props.status] || defaultConfig);
 </script>

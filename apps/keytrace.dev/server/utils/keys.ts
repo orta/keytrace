@@ -76,8 +76,14 @@ function jwkToKeyPair(jwk: JsonWebKey): KeyPair {
 /**
  * Publish a public key to keytrace's ATProto repo as a dev.keytrace.key record.
  * Record key = date (YYYY-MM-DD).
+ * Skipped in local dev mode (when not using S3).
  */
 async function publishKeyToATProto(date: string, publicJwk: JsonWebKey): Promise<void> {
+  if (!useS3()) {
+    console.log(`[keys] Skipping ATProto publish in local dev mode (date=${date})`);
+    return;
+  }
+
   try {
     const agent = await getKeytraceAgent();
     const config = useRuntimeConfig();
@@ -103,6 +109,7 @@ async function publishKeyToATProto(date: string, publicJwk: JsonWebKey): Promise
 
 /**
  * Get the strong ref (URI + CID) for today's key record.
+ * Returns a local placeholder in dev mode (when not using S3).
  */
 export async function getTodaysKeyRef(): Promise<{
   uri: string;
@@ -110,6 +117,15 @@ export async function getTodaysKeyRef(): Promise<{
 }> {
   const today = new Date().toISOString().split("T")[0];
   const config = useRuntimeConfig();
+
+  if (!useS3()) {
+    // Return a local placeholder in dev mode
+    return {
+      uri: `at://${config.keytraceDid}/dev.keytrace.key/${today}`,
+      cid: "local-dev-key",
+    };
+  }
+
   const agent = await getKeytraceAgent();
 
   const response = await agent.com.atproto.repo.getRecord({

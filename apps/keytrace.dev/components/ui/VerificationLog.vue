@@ -33,15 +33,17 @@
   </div>
 </template>
 
-<script setup lang="ts">
-import { CheckCircle as CheckCircleIcon, XCircle as XCircleIcon } from "lucide-vue-next";
-
+<script lang="ts">
 export interface VerificationStep {
   action: string;
   detail?: string;
   status: "pending" | "running" | "success" | "error";
   duration?: number;
 }
+</script>
+
+<script setup lang="ts">
+import { CheckCircle as CheckCircleIcon, XCircle as XCircleIcon } from "lucide-vue-next";
 
 defineProps<{
   steps: VerificationStep[];

@@ -12,11 +12,9 @@ export async function getKeytraceAgent(): Promise<AtpAgent> {
     if (!config.keytraceDid || !config.keytraceAppPassword) {
       throw new Error("Missing NUXT_KEYTRACE_DID or NUXT_KEYTRACE_APP_PASSWORD environment variables");
     }
+
     _agent = new AtpAgent({ service: "https://bsky.social" });
-    await _agent.login({
-      identifier: config.keytraceDid,
-      password: config.keytraceAppPassword,
-    });
+    await _agent.login({ identifier: config.keytraceDid, password: config.keytraceAppPassword });
   }
   return _agent;
 }

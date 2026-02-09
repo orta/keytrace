@@ -30,17 +30,26 @@ export default defineEventHandler(async (event) => {
       handle: profile.handle,
       displayName: profile.displayName,
       avatar: profile.avatar,
-      claims: profile.claimInstances.map((claim) => ({
-        uri: claim.uri,
-        did: claim.did,
-        status: claim.status,
-        matches: claim.matches.map((m) => ({
-          provider: m.provider.id,
-          providerName: m.provider.name,
-          isAmbiguous: m.isAmbiguous,
-        })),
-        errors: claim.errors,
-      })),
+      claims: profile.claimInstances.map((claim) => {
+        // Find corresponding claim data for additional fields
+        const claimData = profile.claims.find((c) => c.uri === claim.uri);
+        return {
+          uri: claim.uri,
+          did: claim.did,
+          status: claim.status,
+          type: claimData?.type,
+          rkey: claimData?.rkey,
+          comment: claimData?.comment,
+          createdAt: claimData?.createdAt,
+          identity: claimData?.identity,
+          matches: claim.matches.map((m) => ({
+            provider: m.provider.id,
+            providerName: m.provider.name,
+            isAmbiguous: m.isAmbiguous,
+          })),
+          errors: claim.errors,
+        };
+      }),
       summary: getProfileSummary(profile),
     };
   } catch (err: unknown) {
