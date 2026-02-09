@@ -5,6 +5,11 @@ export interface DnsFetchResult {
   records: {
     txt: string[];
   };
+  /** Debug info showing which locations were checked */
+  _locations?: {
+    root: string[];
+    _keytrace: string[];
+  };
 }
 
 export interface DnsFetchOptions {
@@ -27,6 +32,7 @@ async function hasDnsModule(): Promise<boolean> {
 
 /**
  * Fetch DNS TXT records for a domain.
+ * Checks both the root domain and _keytrace subdomain.
  * Returns null in environments where DNS resolution is not available.
  */
 export async function fetch(domain: string, options: DnsFetchOptions = {}): Promise<DnsFetchResult | null> {
@@ -45,10 +51,22 @@ export async function fetch(domain: string, options: DnsFetchOptions = {}): Prom
       setTimeout(() => reject(new Error("DNS timeout")), timeout);
     });
 
-    const fetchPromise = dnsPromises.resolveTxt(domain).then((records) => ({
+    // Check both root domain and _keytrace subdomain
+    const rootDomain = domain;
+    const keytraceDomain = `_keytrace.${domain}`;
+
+    const fetchPromise = Promise.all([
+      dnsPromises.resolveTxt(rootDomain).catch(() => []),
+      dnsPromises.resolveTxt(keytraceDomain).catch(() => []),
+    ]).then(([rootRecords, keytraceRecords]) => ({
       domain,
       records: {
-        txt: records.flat(),
+        txt: [...rootRecords.flat(), ...keytraceRecords.flat()],
+      },
+      // Include which locations were checked for debugging
+      _locations: {
+        root: rootRecords.flat(),
+        _keytrace: keytraceRecords.flat(),
       },
     }));
 

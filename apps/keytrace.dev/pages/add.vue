@@ -71,7 +71,9 @@
           <h3 class="text-xl font-semibold text-zinc-100">Claim linked</h3>
           <p class="text-sm text-zinc-400 mt-2">Your identity proof has been verified and stored in your ATProto repo.</p>
           <div class="mt-6 flex items-center justify-center gap-3">
-            <NuxtLink to="/dashboard" class="px-5 py-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium rounded-lg transition-all"> Go to Dashboard </NuxtLink>
+            <NuxtLink :to="`/@${session?.handle}`" class="px-5 py-2 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium rounded-lg transition-all">
+              View Your Profile
+            </NuxtLink>
             <button class="px-5 py-2 text-sm text-zinc-400 hover:text-zinc-200 transition-colors" @click="reset">Add another</button>
           </div>
         </div>
@@ -98,7 +100,8 @@
 <script setup lang="ts">
 import { Github, Globe, AtSign, Cloud, CheckCircle as CheckCircleIcon, XCircle as XCircleIcon } from "lucide-vue-next";
 import type { ServiceOption } from "~/components/ui/ServicePicker.vue";
-import type { VerificationStep } from "~/components/ui/VerificationLog.vue";
+import type { VerificationStep, ExpandableContent } from "~/components/ui/VerificationLog.vue";
+import type { ProofDetails } from "@keytrace/runner";
 
 const { session } = useSession();
 
@@ -236,11 +239,21 @@ async function startVerification() {
       },
     });
 
+    // Build expandable content for the fetch step
+    const fetchExpandable: ExpandableContent | undefined = result.proofDetails
+      ? {
+          url: result.proofDetails.fetchUrl,
+          fetcher: result.proofDetails.fetcher,
+          content: result.proofDetails.content,
+        }
+      : undefined;
+
     verificationSteps.value[1] = {
       ...verificationSteps.value[1],
       status: "success",
       detail: "Proof content retrieved",
       duration: Date.now() - step2Start,
+      expandable: fetchExpandable,
     };
 
     // Step 3: Check result
@@ -248,12 +261,21 @@ async function startVerification() {
     const step3Start = Date.now();
     await new Promise((r) => setTimeout(r, 300));
 
+    // Build expandable content for the verification step
+    const verifyExpandable: ExpandableContent | undefined = result.proofDetails
+      ? {
+          targets: result.proofDetails.targets,
+          patterns: result.proofDetails.patterns,
+        }
+      : undefined;
+
     if (result.status === "verified") {
       verificationSteps.value[2] = {
         ...verificationSteps.value[2],
         status: "success",
         detail: "Identity confirmed",
         duration: Date.now() - step3Start,
+        expandable: verifyExpandable,
       };
     } else {
       verificationSteps.value[2] = {
@@ -261,6 +283,7 @@ async function startVerification() {
         status: "error",
         detail: result.errors?.join(", ") || "Proof not found",
         duration: Date.now() - step3Start,
+        expandable: verifyExpandable,
       };
       verificationComplete.value = true;
       verificationSuccess.value = false;

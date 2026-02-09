@@ -34,10 +34,10 @@
         <div class="mt-10 flex items-center justify-center gap-4">
           <NuxtLink
             v-if="session?.authenticated"
-            to="/dashboard"
+            :to="`/@${session.handle}`"
             class="px-6 py-2.5 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium rounded-lg transition-all hover:shadow-glow-brand"
           >
-            Go to Dashboard &rarr;
+            Go To Your Profile &rarr;
           </NuxtLink>
           <button
             v-else
@@ -46,7 +46,7 @@
           >
             Get Started
           </button>
-          <NuxtLink to="/@orta.bsky.social" class="px-6 py-2.5 text-zinc-400 hover:text-zinc-200 text-sm font-medium transition-colors"> View example profile &rarr; </NuxtLink>
+          <NuxtLink to="/@orta.io" class="px-6 py-2.5 text-zinc-400 hover:text-zinc-200 text-sm font-medium transition-colors"> View example profile &rarr; </NuxtLink>
         </div>
       </div>
     </section>

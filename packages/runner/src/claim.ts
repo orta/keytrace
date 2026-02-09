@@ -2,7 +2,7 @@ import { ClaimStatus } from "./types.js";
 import { DEFAULT_TIMEOUT } from "./constants.js";
 import { matchUri, type ServiceProviderMatch, type ProofRequest, type ProofTarget } from "./serviceProviders/index.js";
 import * as fetchers from "./fetchers/index.js";
-import type { VerifyOptions, ClaimVerificationResult, IdentityMetadata } from "./types.js";
+import type { VerifyOptions, ClaimVerificationResult, IdentityMetadata, ProofDetails, ProofTargetResult } from "./types.js";
 
 // did:plc identifiers are base32-encoded, lowercase
 const DID_PLC_RE = /^did:plc:[a-z2-7]{24}$/;
@@ -85,13 +85,30 @@ export async function verifyClaim(claim: ClaimState, opts: VerifyOptions = {}): 
     };
   }
 
+  // Track proof details for the response
+  let proofDetails: ProofDetails | undefined;
+
   // Try each matched provider until one succeeds
   for (const match of claim.matches) {
     try {
       const config = match.provider.processURI(claim.uri, match.match);
       const proofData = await fetchProof(config.proof.request, opts);
 
-      if (checkProof(proofData, config.proof.target, claim.did)) {
+      // Build proof details
+      const patterns = generateProofPatterns(claim.did);
+      const targetResults = checkProofWithDetails(proofData, config.proof.target, patterns);
+
+      proofDetails = {
+        fetchUrl: config.proof.request.uri,
+        fetcher: config.proof.request.fetcher,
+        content: truncateContent(proofData),
+        targets: targetResults,
+        patterns,
+      };
+
+      const verified = targetResults.some((t) => t.matched);
+
+      if (verified) {
         claim.status = ClaimStatus.VERIFIED;
 
         // Extract identity metadata via postprocess if available
@@ -111,6 +128,7 @@ export async function verifyClaim(claim: ClaimState, opts: VerifyOptions = {}): 
           errors: [],
           timestamp: new Date(),
           identity,
+          proofDetails,
         };
       }
     } catch (err) {
@@ -126,6 +144,7 @@ export async function verifyClaim(claim: ClaimState, opts: VerifyOptions = {}): 
     status: ClaimStatus.FAILED,
     errors: claim.errors,
     timestamp: new Date(),
+    proofDetails,
   };
 }
 
@@ -145,23 +164,62 @@ async function fetchProof(request: ProofRequest, opts: VerifyOptions): Promise<u
   return data;
 }
 
-function checkProof(data: unknown, targets: ProofTarget[], did: string): boolean {
-  const proofPatterns = generateProofPatterns(did);
-  console.log(`[runner] Checking proof for DID ${did}, patterns: ${JSON.stringify(proofPatterns)}`);
+function checkProofWithDetails(data: unknown, targets: ProofTarget[], patterns: string[]): ProofTargetResult[] {
+  console.log(`[runner] Checking proof, patterns: ${JSON.stringify(patterns)}`);
   console.log(`[runner] Proof targets: ${JSON.stringify(targets.map((t) => t.path.join(".")))}`);
+
+  const results: ProofTargetResult[] = [];
 
   for (const target of targets) {
     const values = extractValues(data, target.path);
     console.log(`[runner] Target ${target.path.join(".")}: found ${values.length} value(s)${values.length > 0 ? `: ${JSON.stringify(values.map((v) => v.slice(0, 100)))}` : ""}`);
+
+    let matched = false;
     for (const value of values) {
-      if (matchesPattern(value, proofPatterns, target.relation)) {
+      if (matchesPattern(value, patterns, target.relation)) {
         console.log(`[runner] Match found at ${target.path.join(".")} (relation: ${target.relation})`);
-        return true;
+        matched = true;
+        break;
       }
     }
+
+    results.push({
+      path: target.path,
+      relation: target.relation,
+      valuesFound: values.map((v) => v.slice(0, 500)), // Truncate long values
+      matched,
+    });
   }
-  console.log(`[runner] No match found in any target`);
-  return false;
+
+  if (!results.some((r) => r.matched)) {
+    console.log(`[runner] No match found in any target`);
+  }
+
+  return results;
+}
+
+function truncateContent(data: unknown): string {
+  const MAX_LENGTH = 2000;
+  let content: string;
+
+  if (data === null || data === undefined) {
+    return "(no content returned)";
+  }
+
+  if (typeof data === "string") {
+    content = data;
+  } else {
+    try {
+      content = JSON.stringify(data, null, 2);
+    } catch {
+      content = String(data);
+    }
+  }
+
+  if (content.length > MAX_LENGTH) {
+    return content.slice(0, MAX_LENGTH) + "\n... (truncated)";
+  }
+  return content;
 }
 
 function generateProofPatterns(did: string): string[] {

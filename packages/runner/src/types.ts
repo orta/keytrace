@@ -13,6 +13,32 @@ export interface IdentityMetadata {
 }
 
 /**
+ * Details about a single proof target check
+ */
+export interface ProofTargetResult {
+  path: string[];
+  relation: string;
+  valuesFound: string[];
+  matched: boolean;
+}
+
+/**
+ * Details about the proof fetching and matching process
+ */
+export interface ProofDetails {
+  /** The URL that was fetched */
+  fetchUrl: string;
+  /** The fetcher used (http, dns, etc.) */
+  fetcher: string;
+  /** Raw content that was fetched (truncated if large) */
+  content: string;
+  /** The proof targets that were checked */
+  targets: ProofTargetResult[];
+  /** The patterns used for matching (DID variations) */
+  patterns: string[];
+}
+
+/**
  * Result of verifying a claim
  */
 export interface ClaimVerificationResult {
@@ -21,6 +47,8 @@ export interface ClaimVerificationResult {
   timestamp: Date;
   /** Identity metadata extracted from the proof source */
   identity?: IdentityMetadata;
+  /** Details about the proof fetching and verification process */
+  proofDetails?: ProofDetails;
 }
 
 /**

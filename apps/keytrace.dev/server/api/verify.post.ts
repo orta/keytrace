@@ -40,6 +40,7 @@ export default defineEventHandler(async (event) => {
         isAmbiguous: m.isAmbiguous,
       })),
       identity: result.identity,
+      proofDetails: result.proofDetails,
     };
   } catch (err: unknown) {
     console.error(`[verify] Error:`, err);

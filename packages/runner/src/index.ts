@@ -18,6 +18,8 @@ export type {
   ClaimData,
   VerifyOptions,
   IdentityMetadata,
+  ProofDetails,
+  ProofTargetResult,
 } from "./types.js";
 export { ClaimStatus } from "./types.js";
 
