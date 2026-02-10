@@ -71,6 +71,9 @@ git add .
 git commit -m "Release v$NEW_VERSION"
 git tag "v$NEW_VERSION"
 
+echo "==> Pushing to git..."
+git push
+git push --tags
+
 echo ""
-echo "Deploy complete! Version $NEW_VERSION published."
-echo "Run 'git push && git push --tags' to push to remote."
+echo "Deploy complete! Version $NEW_VERSION published and pushed."
