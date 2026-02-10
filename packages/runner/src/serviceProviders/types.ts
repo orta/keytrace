@@ -41,9 +41,10 @@ export interface ProofRequest {
 export interface ProcessedURI {
   /** Profile display info */
   profile: {
+    /** Display name for the identity (e.g., username, domain) */
     display: string;
+    /** URL to the identity's profile page */
     uri: string;
-    qrcode?: boolean;
   };
   /** How to fetch and verify the proof */
   proof: {

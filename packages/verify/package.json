@@ -1,0 +1,36 @@
+{
+  "name": "@keytrace/verify",
+  "version": "0.0.1",
+  "description": "Verify keytrace identity claims",
+  "files": [
+    "src",
+    "dist"
+  ],
+  "type": "module",
+  "main": "./src/verify.ts",
+  "types": "./src/verify.ts",
+  "exports": {
+    ".": {
+      "types": "./src/verify.ts",
+      "default": "./src/verify.ts"
+    },
+    "./types": {
+      "types": "./src/types.ts",
+      "default": "./src/types.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "typescript": "^5.7.0",
+    "vitest": "^2.1.0"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}

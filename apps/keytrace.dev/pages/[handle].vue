@@ -83,6 +83,32 @@
           <div>DID: {{ profile.did }}</div>
           <div>Handle: {{ profile.handle }}</div>
           <div v-if="profile.summary">Claims: {{ profile.summary.total }} total, {{ profile.summary.verified }} linked</div>
+          <div v-for="claim in profile.claims" :key="claim.uri" class="mt-4 pl-2 border-l border-zinc-700 space-y-0.5">
+            <div>type: {{ claim.type }}</div>
+            <div>claim: {{ claim.identity?.subject }}</div>
+            <div class="break-all">
+              proof:
+              <a
+                :href="`https://pdsls.dev/${claim.uri.replace('at://', 'at/')}`"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-violet-400 hover:text-violet-300 transition-colors"
+              >
+                {{ claim.uri }}
+              </a>
+            </div>
+            <div class="break-all">
+              record:
+              <a
+                :href="`https://pdsls.dev/at://${profile.did}/dev.keytrace.claim/${claim.rkey}`"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="text-violet-400 hover:text-violet-300 transition-colors"
+              >
+                {{ claim.rkey }}
+              </a>
+            </div>
+          </div>
         </div>
       </details>
     </template>

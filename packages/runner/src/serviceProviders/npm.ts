@@ -53,7 +53,6 @@ const npm: ServiceProvider = {
       profile: {
         display: `~${handle}`,
         uri: `https://www.npmjs.com/~${handle}`,
-        qrcode: true,
       },
       proof: {
         request: {

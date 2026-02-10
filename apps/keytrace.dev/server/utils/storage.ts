@@ -56,7 +56,11 @@ export async function loadJson<T>(key: string): Promise<T | null> {
       const body = await response.Body?.transformToString();
       return body ? JSON.parse(body) : null;
     } catch (e: any) {
-      if (e.name === "NoSuchKey") return null;
+      if (e.name === "NoSuchKey") {
+        console.log(`[storage] Key not found in S3: ${key}`);
+        return null;
+      }
+      console.error(`[storage] Error loading from S3: ${key}`, e);
       throw e;
     }
   }
@@ -66,7 +70,12 @@ export async function loadJson<T>(key: string): Promise<T | null> {
   try {
     const content = fs.readFileSync(filePath, "utf-8");
     return JSON.parse(content);
-  } catch {
+  } catch (e: any) {
+    if (e.code === "ENOENT") {
+      console.log(`[storage] File not found: ${filePath}`);
+    } else {
+      console.error(`[storage] Error loading file: ${filePath}`, e);
+    }
     return null;
   }
 }
@@ -76,14 +85,20 @@ export async function loadJson<T>(key: string): Promise<T | null> {
  */
 export async function saveJson<T>(key: string, data: T): Promise<void> {
   if (useS3()) {
-    await getS3Client().send(
-      new PutObjectCommand({
-        Bucket: getS3Config().bucket,
-        Key: key,
-        Body: JSON.stringify(data),
-        ContentType: "application/json",
-      }),
-    );
+    try {
+      await getS3Client().send(
+        new PutObjectCommand({
+          Bucket: getS3Config().bucket,
+          Key: key,
+          Body: JSON.stringify(data),
+          ContentType: "application/json",
+        }),
+      );
+      console.log(`[storage] Saved to S3: ${key}`);
+    } catch (e) {
+      console.error(`[storage] Error saving to S3: ${key}`, e);
+      throw e;
+    }
     return;
   }
 
@@ -94,6 +109,7 @@ export async function saveJson<T>(key: string, data: T): Promise<void> {
     fs.mkdirSync(dir, { recursive: true });
   }
   fs.writeFileSync(filePath, JSON.stringify(data, null, 2), "utf-8");
+  console.log(`[storage] Saved to file: ${filePath}`);
 }
 
 // S3-based storage for production

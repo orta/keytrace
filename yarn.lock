@@ -1953,6 +1953,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@keytrace/verify@workspace:packages/verify":
+  version: 0.0.0-use.local
+  resolution: "@keytrace/verify@workspace:packages/verify"
+  dependencies:
+    "@types/node": "npm:^22.0.0"
+    typescript: "npm:^5.7.0"
+    vitest: "npm:^2.1.0"
+  languageName: unknown
+  linkType: soft
+
 "@koa/router@npm:^12.0.1":
   version: 12.0.2
   resolution: "@koa/router@npm:12.0.2"

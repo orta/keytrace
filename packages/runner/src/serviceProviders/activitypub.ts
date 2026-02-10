@@ -39,7 +39,6 @@ const activitypub: ServiceProvider = {
       profile: {
         display: `@${username}@${domain}`,
         uri,
-        qrcode: true,
       },
       proof: {
         request: {

@@ -38,7 +38,6 @@ const dns: ServiceProvider = {
       profile: {
         display: domain,
         uri: `https://${domain}`,
-        qrcode: false,
       },
       proof: {
         request: {

@@ -74,7 +74,7 @@
     </section>
 
     <!-- Recent verifications feed -->
-    <section class="max-w-4xl mx-auto px-6 py-16">
+    <section v-if="recentClaims && recentClaims.length > 0" class="max-w-4xl mx-auto px-6 py-16">
       <h2 class="text-lg font-semibold text-zinc-300 mb-6">Recent verifications</h2>
 
       <div class="space-y-2">

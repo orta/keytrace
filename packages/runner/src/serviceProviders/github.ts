@@ -38,7 +38,6 @@ const github: ServiceProvider = {
       profile: {
         display: `@${username}`,
         uri: `https://github.com/${username}`,
-        qrcode: true,
       },
       proof: {
         request: {

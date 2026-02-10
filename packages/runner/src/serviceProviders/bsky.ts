@@ -38,7 +38,6 @@ const bsky: ServiceProvider = {
       profile: {
         display: handle.startsWith("did:") ? handle : `@${handle}`,
         uri,
-        qrcode: true,
       },
       proof: {
         request: {
