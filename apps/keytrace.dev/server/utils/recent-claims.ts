@@ -21,14 +21,30 @@ export interface RecentClaim {
 const FEED_KEY = "recent-claims.json";
 const MAX_ITEMS = 50;
 
+// Track last known feed size to detect unexpected empty reads
+let lastKnownFeedSize = 0;
+
 /**
  * Add a claim to the recent claims feed.
  * Prepends to the list, trims to 50 items, and saves.
+ * Includes safeguard against S3 read failures that would wipe the feed.
  */
 export async function addRecentClaim(claim: RecentClaim): Promise<void> {
   const feed = await getRecentClaims();
+
+  // Safeguard: if we previously had data but now read empty, S3 may have failed
+  // Don't overwrite - log warning and skip save to prevent data loss
+  if (feed.length === 0 && lastKnownFeedSize > 5) {
+    console.warn(
+      `[recent-claims] Read returned empty but last known size was ${lastKnownFeedSize}. ` +
+        `Skipping save to prevent data loss. New claim not added: ${claim.subject}`,
+    );
+    return;
+  }
+
   feed.unshift(claim);
   if (feed.length > MAX_ITEMS) feed.length = MAX_ITEMS;
+  lastKnownFeedSize = feed.length;
   await saveJson(FEED_KEY, feed);
 }
 
@@ -36,5 +52,9 @@ export async function addRecentClaim(claim: RecentClaim): Promise<void> {
  * Get the recent claims feed from storage.
  */
 export async function getRecentClaims(): Promise<RecentClaim[]> {
-  return (await loadJson<RecentClaim[]>(FEED_KEY)) ?? [];
+  const feed = (await loadJson<RecentClaim[]>(FEED_KEY)) ?? [];
+  if (feed.length > 0) {
+    lastKnownFeedSize = feed.length;
+  }
+  return feed;
 }

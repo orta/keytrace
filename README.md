@@ -68,6 +68,31 @@ User submits gist URL
 - `dev.keytrace.key` - Daily signing key for attestations
 - `dev.keytrace.signature` - Cryptographic attestation structure
 
+## Deployment
+
+### Publishing Packages
+
+Use the deploy script to bump versions and publish all packages to npm:
+
+```bash
+./scripts/deploy.sh patch   # 0.0.1 → 0.0.2
+./scripts/deploy.sh minor   # 0.0.2 → 0.1.0
+./scripts/deploy.sh major   # 0.1.0 → 1.0.0
+```
+
+This will:
+1. Bump versions in `@keytrace/runner`, `@keytrace/verify`, and `@keytrace/lexicon`
+2. Build all packages
+3. Publish to npm
+4. Create a git commit and tag
+
+After running, push to remote:
+
+```bash
+git push && git push --tags
+```
+
+
 ## License
 
 MIT
