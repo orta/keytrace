@@ -135,24 +135,54 @@ const props = defineProps<{
   result: VerificationResult;
 }>();
 
-// Extract PDS URL from the first claim's sig.src if available
-const pdsUrl = computed(() => {
-  if (props.result.claims.length > 0 && props.result.claims[0].claim.sig?.src) {
-    try {
-      // Parse AT URI: at://did:plc:xxx/collection/rkey
-      const atUri = props.result.claims[0].claim.sig.src;
-      const parts = atUri.replace("at://", "").split("/");
-      const did = parts[0];
-      // We don't have the actual PDS URL in the result, so we show a placeholder
-      // In reality, the verify package resolves this internally
-      if (did.startsWith("did:plc:")) {
-        return "https://bsky.social (or user's PDS)";
-      }
-      return "Resolved from DID document";
-    } catch {
-      return "Resolved from DID document";
-    }
+const pdsUrl = ref<string>("Resolving...");
+
+// Resolve the PDS URL from the PLC directory
+async function resolvePds() {
+  const did = props.result.did;
+  if (!did) {
+    pdsUrl.value = "Unknown";
+    return;
   }
-  return "Resolved from DID document";
+
+  try {
+    if (did.startsWith("did:plc:")) {
+      const response = await fetch(`https://plc.directory/${did}`);
+      if (response.ok) {
+        const didDoc = await response.json();
+        const pdsService = didDoc.service?.find(
+          (s: { id: string; type: string }) => s.id === "#atproto_pds" || s.type === "AtprotoPersonalDataServer"
+        );
+        if (pdsService?.serviceEndpoint) {
+          pdsUrl.value = pdsService.serviceEndpoint;
+          return;
+        }
+      }
+    } else if (did.startsWith("did:web:")) {
+      const host = did.replace("did:web:", "").replaceAll(":", "/");
+      const response = await fetch(`https://${host}/.well-known/did.json`);
+      if (response.ok) {
+        const didDoc = await response.json();
+        const pdsService = didDoc.service?.find(
+          (s: { id: string; type: string }) => s.id === "#atproto_pds" || s.type === "AtprotoPersonalDataServer"
+        );
+        if (pdsService?.serviceEndpoint) {
+          pdsUrl.value = pdsService.serviceEndpoint;
+          return;
+        }
+      }
+    }
+    pdsUrl.value = "https://bsky.social";
+  } catch {
+    pdsUrl.value = "https://bsky.social";
+  }
+}
+
+onMounted(() => {
+  resolvePds();
+});
+
+watch(() => props.result.did, () => {
+  resolvePds();
 });
 </script>
