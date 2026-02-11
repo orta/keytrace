@@ -44,7 +44,7 @@ export default defineNuxtConfig({
       dedupe: ["vue"],
     },
     server: {
-      allowedHosts: [".ngrok-free.app"],
+      allowedHosts: [".ngrok-free.app", ".loca.lt"],
     },
   },
 

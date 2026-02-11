@@ -93,6 +93,44 @@ git push && git push --tags
 ```
 
 
+## Adding a New Service Provider
+
+Want to add support for a new platform (e.g., GitLab, Codeberg, Tangled.) The key requirement is that the platform must have some way for users to **publicly post text content** that Keytrace can fetch and verify — things like profile bios, public posts, gists, comments, or files.
+
+### Proof of Identity Pattern
+
+Every service provider follows the same pattern:
+
+1. The user places a **proof string** (containing their DID) somewhere publicly readable on the service
+2. Keytrace fetches that public URL and checks that the proof string is present
+3. Metadata (username, avatar, profile URL) is extracted from the response
+
+Good proof locations include: public gists/snippets, profile bios, DNS TXT records, public repos, pinned posts, or any content the user controls that's fetchable via HTTP.
+
+You need to be careful that it's a place where only the identity can post. For example you can post a GitHub gist with a keytrace DID but the comments can also contain keytrace DIDs for other people. This could be used to make a false claim.
+
+### Using Claude Code to Add a Provider
+
+From the repo root, try a prompt like:
+
+> Add a new service provider for [ServiceName]. Users will prove their identity by [describe the proof location, e.g. "creating a public snippet on GitLab containing their DID", or "adding their DID to their Codeberg profile bio"]. The proof URL format is [e.g. "https://gitlab.com/-/snippets/:id"]. Look at the existing providers in `packages/runner/src/serviceProviders/` for the pattern — especially `github.ts` for an HTTP+JSON example or `dns.ts` for a simpler one. Register the new provider in the index file and add URI match tests.
+
+That should give Claude Code enough to:
+- Create a new file in `packages/runner/src/serviceProviders/`
+- Implement the `ServiceProvider` interface (URI regex, `processURI`, `ui` config, `getProofText`, test cases)
+- Register it in `packages/runner/src/serviceProviders/index.ts`
+
+### What Goes in the PR
+
+When you open your PR, please include:
+
+- **How to create a proof**: Step-by-step instructions for how a user creates the public proof on the service (e.g., "go to gitlab.com/-/snippets/new, paste this, make it public")
+- **Example proof URL**: A real or realistic example URL so I can test the flow
+- **Any API quirks**: Rate limits, auth requirements, non-standard response formats, CORS issues, etc.
+- **Fetcher needs**: The existing fetchers are `http`, `dns`, and `activitypub`. If your service needs something different, note that
+
+I ([@orta](https://github.com/orta)) will handle wiring up the integration into the web app UI, adding the service icon, and any server-side proxy configuration that might be needed.
+
 ## License
 
 MIT

@@ -1,47 +1,42 @@
 import type { Recipe } from "../types.js";
 
 /**
- * Built-in recipe: Tangled Account verification via keytrace.json.
+ * Built-in recipe: Tangled Account verification via string.
  *
- * The user creates a keytrace.json file at tangled.org/<username>/keytrace/keytrace.json
- * containing their claim ID and DID, then provides the file URL for verification.
+ * The user creates a string (Tangled's gist equivalent) containing
+ * their DID, then provides the string URL for verification.
+ * Raw content is fetched from {stringUrl}/raw.
  */
 export const tangledRecipe: Recipe = {
   $type: "dev.keytrace.recipe",
   type: "tangled",
   version: 1,
-  displayName: "Tangled Account",
+  displayName: "Tangled Account (via String)",
   params: [
     {
-      key: "tangledUrl",
-      label: "Tangled URL",
+      key: "stringUrl",
+      label: "String URL",
       type: "url",
-      placeholder: "https://tangled.org/username/keytrace/keytrace.json",
-      pattern: "^https://tangled\\.org/([^/]+)/keytrace/keytrace\\.json$",
-      extractFrom: "^https://tangled\\.org/([^/]+)/",
+      placeholder: "https://tangled.org/strings/username/abc123...",
+      pattern: "^https://tangled\\.org/strings/([^/]+)/([a-z0-9]+)/?$",
+      extractFrom: "^https://tangled\\.org/strings/([^/]+)/",
     },
   ],
   instructions: {
     steps: [
-      "Go to your tangled.org account",
-      "Create a `keytrace` directory (if it doesn't exist)",
-      "Create a `keytrace.json` file in the keytrace directory",
+      "Go to [tangled.org/strings](https://tangled.org/strings) and create a new string",
+      "Name the file `keytrace.json`",
       "Paste the verification content below into the file",
-      "Save the file and paste the full URL below",
+      "Save the string and paste the URL below",
     ],
-    proofTemplate: '{\n  "keytrace": "{claimId}",\n  "did": "{did}"\n}',
-    proofLocation: "keytrace.json file on tangled.org",
+    proofTemplate: '{\n  "did": "{did}"\n}',
+    proofLocation: "Public string on tangled.org",
   },
   verification: {
     steps: [
       {
         action: "http-get",
-        url: "{tangledUrl}",
-      },
-      {
-        action: "json-path",
-        selector: "$.keytrace",
-        expect: "equals:{claimId}",
+        url: "{stringUrl}/raw",
       },
       {
         action: "json-path",

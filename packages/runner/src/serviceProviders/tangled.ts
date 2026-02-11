@@ -4,36 +4,36 @@ import type { ServiceProvider } from "./types.js";
  * Tangled service provider
  *
  * Users prove ownership of their tangled.org account by creating a
- * keytrace.json file at tangled.org/<username>/keytrace/keytrace.json
- * containing their DID.
+ * "string" (Tangled's equivalent of a gist) containing their DID.
+ * URL format: https://tangled.org/strings/<username>/<stringId>
+ * Raw content: https://tangled.org/strings/<username>/<stringId>/raw
  */
 const tangled: ServiceProvider = {
   id: "tangled",
   name: "Tangled",
   homepage: "https://tangled.org",
 
-  // Match tangled.org/<username>/keytrace/keytrace.json URLs
-  reUri: /^https:\/\/tangled\.org\/([^/]+)\/keytrace\/keytrace\.json$/,
+  // Match tangled.org string URLs: https://tangled.org/strings/username/stringId
+  reUri: /^https:\/\/tangled\.org\/strings\/([^/]+)\/([a-z0-9]+)\/?$/,
 
   isAmbiguous: false,
 
   ui: {
-    description: "Link via tangled.org keytrace.json",
-    icon: "link",
-    inputLabel: "Tangled URL",
-    inputPlaceholder: "https://tangled.org/username/keytrace/keytrace.json",
+    description: "Link via a Tangled string",
+    icon: "tangled",
+    inputLabel: "String URL",
+    inputPlaceholder: "https://tangled.org/strings/username/abc123...",
     instructions: [
-      "Go to your tangled.org account",
-      "Create a `keytrace` directory (if it doesn't exist)",
-      "Create a `keytrace.json` file in the keytrace directory",
+      "Go to [tangled.org/strings](https://tangled.org/strings) and create a new string",
+      "Name the file `keytrace.json`",
       "Paste the verification content below into the file",
-      "Save the file and paste the full URL below",
+      "Save the string and paste the URL below",
     ],
-    proofTemplate: '{\n  "keytrace": "{claimId}",\n  "did": "{did}"\n}',
+    proofTemplate: '{\n  "did": "{did}"\n}',
   },
 
   processURI(uri, match) {
-    const [, username] = match;
+    const [, username, stringId] = match;
 
     return {
       profile: {
@@ -42,18 +42,11 @@ const tangled: ServiceProvider = {
       },
       proof: {
         request: {
-          uri,
+          uri: `https://tangled.org/strings/${username}/${stringId}/raw`,
           fetcher: "http",
           format: "json",
         },
         target: [
-          // Check keytrace field equals claimId
-          {
-            path: ["keytrace"],
-            relation: "equals",
-            format: "text",
-          },
-          // Check did field equals did
           {
             path: ["did"],
             relation: "contains",
@@ -77,14 +70,14 @@ const tangled: ServiceProvider = {
     return `Verifying my identity on keytrace: ${did}`;
   },
 
-  getProofLocation(match) {
-    const [, username] = match;
-    return `Create keytrace.json at tangled.org/${username}/keytrace/`;
+  getProofLocation() {
+    return `Create a string on tangled.org with a keytrace.json file containing the proof text`;
   },
 
   tests: [
-    { uri: "https://tangled.org/alice/keytrace/keytrace.json", shouldMatch: true },
-    { uri: "https://tangled.org/user123/keytrace/keytrace.json", shouldMatch: true },
+    { uri: "https://tangled.org/strings/alice/abc123def", shouldMatch: true },
+    { uri: "https://tangled.org/strings/orta.io/3melbs7rkoz22", shouldMatch: true },
+    { uri: "https://tangled.org/strings/alice/abc123def/", shouldMatch: true },
     { uri: "https://tangled.org/alice", shouldMatch: false },
     { uri: "https://github.com/alice", shouldMatch: false },
   ],
