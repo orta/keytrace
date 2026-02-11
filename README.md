@@ -81,7 +81,7 @@ Use the deploy script to bump versions and publish all packages to npm:
 ```
 
 This will:
-1. Bump versions in `@keytrace/runner`, `@keytrace/verify`, and `@keytrace/lexicon`
+1. Bump versions in `@keytrace/runner`, `@keytrace/claims`, and `@keytrace/lexicon`
 2. Build all packages
 3. Publish to npm
 4. Create a git commit and tag

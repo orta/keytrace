@@ -1,20 +1,20 @@
-# @keytrace/verify
+# @keytrace/claims
 
-Verify Keytrace identity claims by checking their signatures. Works in both browser and Node.js.
+Get Keytrace identity claims, and also verify their signatures. Works in both browser and Node.js.
 
 ## Installation
 
 ```bash
-npm install @keytrace/verify
+npm install @keytrace/claims
 ```
 
 ## Usage
 
 ```typescript
-import { verifyClaims, verifyClaimsOnDid } from '@keytrace/verify';
+import { getClaimsForHandle, getClaimsForDid } from '@keytrace/claims';
 
 // Verify all claims for a handle
-const result = await verifyClaims('alice.bsky.social');
+const result = await getClaimsForHandle('alice.bsky.social');
 
 console.log(`${result.summary.verified}/${result.summary.total} claims verified`);
 
@@ -27,25 +27,25 @@ for (const claim of result.claims) {
 }
 
 // Or verify by DID directly
-const result2 = await verifyClaimsOnDid('did:plc:abc123');
+const result2 = await getClaimsForDid('did:plc:abc123');
 ```
 
 ## API
 
-### `verifyClaims(handle, options?)`
+### `getClaimsForHandle(handle, options?)`
 
 Verify all keytrace claims for an ATProto handle.
 
 ```typescript
-const result = await verifyClaims('alice.bsky.social');
+const result = await getClaimsForHandle('alice.bsky.social');
 ```
 
-### `verifyClaimsOnDid(did, options?)`
+### `getClaimsForDid(did, options?)`
 
 Verify all keytrace claims for a DID.
 
 ```typescript
-const result = await verifyClaimsOnDid('did:plc:abc123');
+const result = await getClaimsForDid('did:plc:abc123');
 ```
 
 ### Options

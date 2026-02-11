@@ -39,7 +39,7 @@ NEW_VERSION="$MAJOR.$MINOR.$PATCH"
 echo "    New version: $NEW_VERSION"
 
 # Update package versions
-PACKAGES=("packages/runner" "packages/verify" "packages/lexicon")
+PACKAGES=("packages/runner" "packages/claims" "packages/lexicon")
 
 for pkg in "${PACKAGES[@]}"; do
   echo "==> Updating $pkg to $NEW_VERSION..."

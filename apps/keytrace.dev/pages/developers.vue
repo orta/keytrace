@@ -4,9 +4,9 @@
     <div class="mb-8">
       <div class="flex items-center gap-3 mb-2">
         <div class="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-md bg-violet-600/15 border border-violet-500/20">
-          <span class="font-mono text-xs font-bold text-violet-400">@keytrace/verify</span>
+          <span class="font-mono text-xs font-bold text-violet-400">@keytrace/claims</span>
         </div>
-        <a href="https://www.npmjs.com/package/@keytrace/verify" target="_blank" rel="noopener" class="text-xs text-zinc-500 hover:text-zinc-400"> npm </a>
+        <a href="https://www.npmjs.com/package/@keytrace/claims" target="_blank" rel="noopener" class="text-xs text-zinc-500 hover:text-zinc-400"> npm </a>
       </div>
       <h1 class="text-2xl font-bold text-zinc-100 mb-2">Verify Keytrace Claims</h1>
       <p class="text-zinc-400">Verify identity claims in the browser or Node.js. Zero runtime dependencies.</p>
@@ -14,7 +14,7 @@
 
     <!-- Install command -->
     <div class="mb-8 bg-zinc-900 border border-zinc-800 rounded-lg p-4 flex items-center justify-between">
-      <code class="font-mono text-sm text-zinc-300">npm install @keytrace/verify</code>
+      <code class="font-mono text-sm text-zinc-300">npm install @keytrace/claims</code>
       <button class="text-zinc-500 hover:text-zinc-300 transition-colors" @click="copyInstall" :title="copied ? 'Copied!' : 'Copy'">
         <CheckIcon v-if="copied" class="w-4 h-4 text-verified" />
         <CopyIcon v-else class="w-4 h-4" />
@@ -75,9 +75,9 @@
         </p>
         <p class="text-xs text-zinc-500 mb-2 w-full text-left">Running this code:</p>
         <div class="w-full bg-zinc-900 border border-zinc-800 rounded p-3 overflow-x-auto">
-          <pre class="text-xs font-mono text-zinc-400"><span class="text-violet-400">import</span> { verifyClaims } <span class="text-violet-400">from</span> <span class="text-green-400">'@keytrace/verify'</span>;
+          <pre class="text-xs font-mono text-zinc-400"><span class="text-violet-400">import</span> { getClaimsForHandle } <span class="text-violet-400">from</span> <span class="text-green-400">'@keytrace/claims'</span>;
 
-<span class="text-violet-400">const</span> result = <span class="text-violet-400">await</span> verifyClaims(<span class="text-green-400">'{{ handle }}'</span>);</pre>
+<span class="text-violet-400">const</span> result = <span class="text-violet-400">await</span> getClaimsForHandle(<span class="text-green-400">'{{ handle }}'</span>);</pre>
         </div>
       </div>
     </div>
@@ -99,9 +99,9 @@
         <div class="bg-zinc-900 border border-zinc-800 rounded p-4 overflow-x-auto">
           <pre
             class="text-xs text-zinc-300 font-mono"
-          ><span class="text-violet-400">import</span> { verifyClaims } <span class="text-violet-400">from</span> <span class="text-green-400">'@keytrace/verify'</span>;
+          ><span class="text-violet-400">import</span> { getClaimsForHandle } <span class="text-violet-400">from</span> <span class="text-green-400">'@keytrace/claims'</span>;
 
-<span class="text-violet-400">const</span> result = <span class="text-violet-400">await</span> verifyClaims(<span class="text-green-400">'alice.bsky.social'</span>);
+<span class="text-violet-400">const</span> result = <span class="text-violet-400">await</span> getClaimsForHandle(<span class="text-green-400">'alice.bsky.social'</span>);
 
 console.log(<span class="text-green-400">`${result.summary.verified}/${result.summary.total} claims verified`</span>);
 
@@ -141,7 +141,7 @@ console.log(<span class="text-green-400">`${result.summary.verified}/${result.su
     <!-- Footer link -->
     <div class="mt-12 pt-8 border-t border-zinc-800/50">
       <a
-        href="https://github.com/orta/keytrace/tree/main/packages/verify"
+        href="https://github.com/orta/keytrace/tree/main/packages/claims"
         target="_blank"
         rel="noopener"
         class="inline-flex items-center gap-2 text-sm text-zinc-500 hover:text-zinc-300 transition-colors"
@@ -157,6 +157,16 @@ console.log(<span class="text-green-400">`${result.summary.verified}/${result.su
 import { Copy as CopyIcon, Check as CheckIcon, Loader2 as LoaderIcon, AlertCircle as AlertCircleIcon, Github as GithubIcon } from "lucide-vue-next";
 
 const { handle, status, result, error, verify, reset } = useVerifyDemo();
+
+useSeoMeta({
+  title: "Developers - @keytrace/claims",
+  ogTitle: "Verify Keytrace Claims - @keytrace/claims",
+  description: "Verify identity claims in the browser or Node.js. Zero runtime dependencies.",
+  ogDescription: "Verify identity claims in the browser or Node.js. Zero runtime dependencies.",
+  twitterCard: "summary_large_image",
+});
+
+defineOgImageComponent("Developer");
 
 const handleInput = ref("");
 const copied = ref(false);
@@ -187,7 +197,7 @@ function runVerify() {
 }
 
 async function copyInstall() {
-  await navigator.clipboard.writeText("npm install @keytrace/verify");
+  await navigator.clipboard.writeText("npm install @keytrace/claims");
   copied.value = true;
   setTimeout(() => {
     copied.value = false;

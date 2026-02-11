@@ -88,6 +88,14 @@
 const { session } = useSession();
 const { open: openLoginModal } = useLoginModal();
 
+useSeoMeta({
+  title: "Keytrace - Identity Verification for ATProto",
+  ogTitle: "Keytrace - You be you, everywhere.",
+  description: "Link your GitHub, domain, and other accounts to your Bluesky identity. Cryptographically signed, user-owned, and portable.",
+  ogDescription: "Link your GitHub, domain, and other accounts to your Bluesky identity. Cryptographically signed, user-owned, and portable.",
+  twitterCard: "summary_large_image",
+});
+
 const gridSvg = `<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg"><path d="M32 0H0v32" fill="none" stroke="white" stroke-width="0.5"/></svg>`;
 
 const howItWorks = [
@@ -120,5 +128,14 @@ const { data: recentClaims } = await useFetch("/api/recent-claims", {
       identity: claim.identity,
     })),
   default: () => [],
+});
+
+defineOgImageComponent("Home", {
+  claims: computed(() =>
+    (recentClaims.value ?? []).slice(0, 4).map((c: any) => ({
+      handle: c.handle,
+      type: c.serviceType,
+    })),
+  ),
 });
 </script>

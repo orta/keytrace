@@ -1,4 +1,4 @@
-import type { VerificationResult } from "@keytrace/verify";
+import type { VerificationResult } from "@keytrace/claims";
 
 type DemoStatus = "idle" | "verifying" | "complete" | "error";
 
@@ -22,8 +22,8 @@ export function useVerifyDemo() {
 
     try {
       // Dynamic import for client-side only
-      const { verifyClaims } = await import("@keytrace/verify");
-      result.value = await verifyClaims(handle.value);
+      const { getClaimsForHandle } = await import("@keytrace/claims");
+      result.value = await getClaimsForHandle(handle.value);
       status.value = "complete";
     } catch (err) {
       error.value = err instanceof Error ? err.message : "Verification failed";

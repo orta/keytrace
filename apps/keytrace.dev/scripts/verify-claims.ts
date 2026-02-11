@@ -6,7 +6,7 @@
  * Example: npx tsx scripts/verify-claims.ts kitten.sh
  */
 
-import { verifyClaims } from "@keytrace/verify";
+import { getClaimsForHandle } from "@keytrace/claims";
 
 const COLORS = {
   reset: "\x1b[0m",
@@ -36,7 +36,7 @@ async function main() {
   console.log(c("bold", `\nVerifying claims for ${c("cyan", handle)}...\n`));
 
   try {
-    const result = await verifyClaims(handle);
+    const result = await getClaimsForHandle(handle);
 
     // Header
     console.log(c("dim", "─".repeat(60)));

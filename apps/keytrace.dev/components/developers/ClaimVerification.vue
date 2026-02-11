@@ -134,7 +134,7 @@
 
 <script setup lang="ts">
 import { Check as CheckIcon, X as XIcon, ChevronDown as ChevronDownIcon } from "lucide-vue-next";
-import type { ClaimVerificationResult } from "@keytrace/verify";
+import type { ClaimVerificationResult } from "@keytrace/claims";
 
 interface ES256PublicJwk {
   kty: string;

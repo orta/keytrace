@@ -196,15 +196,30 @@ async function deleteClaim(claim: any) {
 }
 
 // OG meta tags
-useHead({
-  title: computed(() => (profile.value ? `${profile.value.displayName || profile.value.handle} - Keytrace` : "Profile - Keytrace")),
-  meta: [
-    {
-      name: "description",
-      content: computed(() =>
-        profile.value ? `View ${profile.value.displayName || profile.value.handle}'s verified identities on Keytrace` : "View verified identities on Keytrace",
-      ),
-    },
-  ],
+const ogDisplayName = computed(() => profile.value?.displayName || profile.value?.handle || "Profile");
+const ogDescription = computed(() => (profile.value ? `View ${ogDisplayName.value}'s verified identities on Keytrace` : "View verified identities on Keytrace"));
+
+useSeoMeta({
+  title: computed(() => `${ogDisplayName.value} - Keytrace`),
+  ogTitle: computed(() => `${ogDisplayName.value} on Keytrace`),
+  description: ogDescription,
+  ogDescription,
+  twitterCard: "summary_large_image",
+});
+
+defineOgImageComponent("Profile", {
+  displayName: computed(() => profile.value?.displayName || ""),
+  handle: computed(() => profile.value?.handle || ""),
+  avatar: computed(() => profile.value?.avatar || ""),
+  verifiedCount: computed(() => profile.value?.summary?.verified || 0),
+  claims: computed(() =>
+    (profile.value?.claims ?? [])
+      .filter((c: any) => c.status === "verified" || c.status === "init")
+      .slice(0, 6)
+      .map((c: any) => ({
+        type: c.type || c.matches?.[0]?.provider || "",
+        subject: c.identity?.subject || c.identity?.displayName || "",
+      })),
+  ),
 });
 </script>

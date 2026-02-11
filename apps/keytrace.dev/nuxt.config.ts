@@ -2,7 +2,21 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-01-01",
   devtools: { enabled: true },
 
-  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/google-fonts"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/google-fonts", "nuxt-og-image"],
+
+  ogImage: {
+    fonts: [
+      "Inter:400",
+      "Inter:600",
+      "Inter:700",
+      "JetBrains+Mono:400",
+    ],
+  },
+
+  site: {
+    url: process.env.NUXT_PUBLIC_PUBLIC_URL || "http://localhost:3000",
+    name: "Keytrace",
+  },
 
   components: [
     {

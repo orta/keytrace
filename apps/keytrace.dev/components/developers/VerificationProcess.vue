@@ -129,7 +129,7 @@
 
 <script setup lang="ts">
 import { ArrowRight as ArrowRightIcon, Check as CheckIcon, X as XIcon } from "lucide-vue-next";
-import type { VerificationResult } from "@keytrace/verify";
+import type { VerificationResult } from "@keytrace/claims";
 
 const props = defineProps<{
   result: VerificationResult;

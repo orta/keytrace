@@ -23,9 +23,9 @@ export type {
  * @param options Optional configuration
  * @returns Verification results for all claims
  */
-export async function verifyClaims(handle: string, options?: VerifyOptions): Promise<VerificationResult> {
+export async function getClaimsForHandle(handle: string, options?: VerifyOptions): Promise<VerificationResult> {
   const did = await resolveHandle(handle, options);
-  const result = await verifyClaimsOnDid(did, options);
+  const result = await getClaimsForDid(did, options);
 
   return {
     ...result,
@@ -40,7 +40,7 @@ export async function verifyClaims(handle: string, options?: VerifyOptions): Pro
  * @param options Optional configuration
  * @returns Verification results for all claims
  */
-export async function verifyClaimsOnDid(did: string, options?: VerifyOptions): Promise<VerificationResult> {
+export async function getClaimsForDid(did: string, options?: VerifyOptions): Promise<VerificationResult> {
   // Resolve PDS for the user
   const pdsUrl = await resolvePds(did, options);
 

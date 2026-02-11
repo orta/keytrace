@@ -2,7 +2,7 @@
 
 Core verification library for Keytrace identity claims. Matches claim URIs to service providers, fetches proofs, and verifies ownership.
 
-This library is still very work in progress, and not fully built out for folks who want to run the full verification proofing system. You can use @keytrace/verify to get a list of claims and verify they are real based on public key encryption.
+This library is still very work in progress, and not fully built out for folks who want to run the full verification proofing system. You can use @keytrace/claims to get a list of claims and verify they are real based on public key encryption.
 
 This would allow you to do the HTTP and DNS requests necessary to make the initial proof.
 

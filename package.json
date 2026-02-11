@@ -11,6 +11,7 @@
     "test": "turbo run test",
     "lint": "turbo run lint",
     "typecheck": "turbo run typecheck",
+    "type-check": "turbo run typecheck",
     "format": "oxfmt --write .",
     "format:check": "oxfmt --check .",
     "deploy": "./scripts/deploy.sh"
