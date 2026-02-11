@@ -7,5 +7,10 @@
   "type": "module",
   "exports": {
     "./lexicons/*": "./lexicons/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orta/keytrace",
+    "directory": "packages/lexicon"
   }
 }

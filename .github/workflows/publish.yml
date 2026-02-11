@@ -35,7 +35,7 @@ jobs:
 
       - name: Publish packages
         run: |
-          for pkg in packages/runner packages/claims; do
+          for pkg in packages/runner packages/claims packages/lexicon; do
             echo "Publishing $pkg..."
             cd "$pkg"
             npm publish --access public --provenance
