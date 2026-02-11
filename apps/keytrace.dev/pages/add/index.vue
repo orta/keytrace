@@ -12,6 +12,7 @@
 <script setup lang="ts">
 import { Github, Globe, AtSign, Cloud } from "lucide-vue-next";
 import NpmIcon from "~/components/icons/NpmIcon.vue";
+import TangledIcon from "~/components/icons/TangledIcon.vue";
 import type { ServiceOption } from "~/components/ui/ServicePicker.vue";
 
 const { session } = useSession();
@@ -37,6 +38,7 @@ const iconMap: Record<string, unknown> = {
   "at-sign": AtSign,
   cloud: Cloud,
   npm: NpmIcon,
+  tangled: TangledIcon,
 };
 
 // Transform API response into ServiceOption format

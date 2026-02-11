@@ -40,6 +40,7 @@ export { dnsTxt } from "./actions/dns-txt.js";
 // Built-in recipes
 export { githubGistRecipe } from "./recipes/github-gist.js";
 export { dnsTxtRecipe } from "./recipes/dns-txt.js";
+export { tangledRecipe } from "./recipes/tangled.js";
 
 // Claim & Profile (from runner)
 export { createClaim, matchClaim, verifyClaim, isClaimAmbiguous, getMatchedProvider, isValidDid } from "./claim.js";

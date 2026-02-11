@@ -102,6 +102,7 @@
 <script setup lang="ts">
 import { Github, Globe, AtSign, Cloud, CheckCircle as CheckCircleIcon, XCircle as XCircleIcon } from "lucide-vue-next";
 import NpmIcon from "~/components/icons/NpmIcon.vue";
+import TangledIcon from "~/components/icons/TangledIcon.vue";
 import type { ServiceOption } from "~/components/ui/ServicePicker.vue";
 import type { VerificationStep, ExpandableContent } from "~/components/ui/VerificationLog.vue";
 import type { ProofDetails } from "@keytrace/runner";
@@ -132,6 +133,7 @@ const iconMap: Record<string, unknown> = {
   "at-sign": AtSign,
   cloud: Cloud,
   npm: NpmIcon,
+  tangled: TangledIcon,
 };
 
 // Transform API response into ServiceOption format

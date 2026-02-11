@@ -3,6 +3,7 @@ import dns from "./dns.js";
 import activitypub from "./activitypub.js";
 import bsky from "./bsky.js";
 import npm from "./npm.js";
+import tangled from "./tangled.js";
 import type { ServiceProvider, ServiceProviderMatch } from "./types.js";
 
 export type { ServiceProvider, ServiceProviderMatch, ServiceProviderUI, ProofTarget, ProofRequest, ProcessedURI } from "./types.js";
@@ -13,6 +14,7 @@ const providers: Record<string, ServiceProvider> = {
   activitypub,
   bsky,
   npm,
+  tangled,
 };
 
 /**
@@ -62,4 +64,4 @@ export function getProofTextForProvider(providerId: string, did: string, handle?
   return provider?.getProofText(did, handle);
 }
 
-export { github, dns, activitypub, bsky, npm };
+export { github, dns, activitypub, bsky, npm, tangled };

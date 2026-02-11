@@ -20,16 +20,26 @@
           :alt="identityDisplay"
           class="w-4 h-4 rounded-full"
         />
-        <span class="text-sm text-violet-400 font-medium">
+        <a
+          v-if="claim.identity?.profileUrl"
+          :href="claim.identity.profileUrl"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="text-sm text-violet-400 font-medium hover:text-violet-300 transition-colors"
+        >
+          {{ identityDisplay }}
+        </a>
+        <span v-else class="text-sm text-violet-400 font-medium">
           {{ identityDisplay }}
         </span>
       </div>
+      <span v-if="serviceName" class="text-zinc-600 text-sm">on {{ serviceName }}</span>
     </div>
 
     <!-- Service icon + timestamp -->
-    <div class="flex items-center gap-3 text-xs text-zinc-500">
+    <div class="flex items-center gap-3 text-xs text-zinc-500 shrink-0 w-24 justify-end">
       <component :is="serviceIcon" :class="iconClass" />
-      <span v-if="claim.createdAt">{{ relativeTime(claim.createdAt) }}</span>
+      <span v-if="claim.createdAt" class="w-12 text-right">{{ relativeTime(claim.createdAt) }}</span>
     </div>
   </div>
 </template>
@@ -38,6 +48,7 @@
 import { computed } from "vue";
 import { Github, Globe, AtSign, Key, User as UserIcon } from "lucide-vue-next";
 import NpmIcon from "~/components/icons/NpmIcon.vue";
+import TangledIcon from "~/components/icons/TangledIcon.vue";
 
 export interface RecentClaimIdentity {
   subject?: string;
@@ -67,17 +78,26 @@ const serviceIcons: Record<string, any> = {
   mastodon: AtSign,
   fediverse: AtSign,
   npm: NpmIcon,
+  tangled: TangledIcon,
 };
 
 const serviceIcon = computed(() => serviceIcons[props.claim.serviceType ?? ""] ?? Key);
 
-// npm icon needs different sizing
-const iconClass = computed(() => {
-  if (props.claim.serviceType === "npm") {
-    return "w-5 h-5";
-  }
-  return "w-4 h-4";
-});
+const serviceNames: Record<string, string> = {
+  github: "GitHub",
+  "github-gist": "GitHub",
+  domain: "DNS",
+  dns: "DNS",
+  mastodon: "Mastodon",
+  fediverse: "Fediverse",
+  npm: "npm",
+  tangled: "Tangled",
+  bsky: "Bluesky",
+};
+
+const serviceName = computed(() => serviceNames[props.claim.serviceType ?? ""]);
+
+const iconClass = "w-5 h-5";
 
 // Show identity name - prefer displayName, then subject, then fall back to service display name
 const identityDisplay = computed(() => {

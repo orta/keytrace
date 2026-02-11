@@ -10,7 +10,7 @@
           :alt="claim.identity.displayName || claim.identity.subject || 'Avatar'"
           class="w-8 h-8 rounded-full object-cover"
         />
-        <component v-else-if="claim.serviceType === 'npm'" :is="serviceIcon" class="w-7 h-7 text-zinc-300" />
+        <component v-else-if="claim.serviceType === 'npm' || claim.serviceType === 'tangled'" :is="serviceIcon" class="w-7 h-7 text-zinc-300" />
         <div v-else class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
           <component :is="serviceIcon" class="w-4 h-4 text-zinc-300" />
         </div>
@@ -74,6 +74,7 @@
 import { computed } from "vue";
 import { Github, Globe, AtSign, Key } from "lucide-vue-next";
 import NpmIcon from "~/components/icons/NpmIcon.vue";
+import TangledIcon from "~/components/icons/TangledIcon.vue";
 
 export interface ClaimIdentity {
   subject?: string;
@@ -112,6 +113,7 @@ const serviceIcons: Record<string, any> = {
   mastodon: AtSign,
   fediverse: AtSign,
   npm: NpmIcon,
+  tangled: TangledIcon,
 };
 
 const serviceIcon = computed(() => serviceIcons[props.claim.serviceType ?? ""] ?? Key);
