@@ -13,6 +13,10 @@
 
         <!-- Mobile: icon buttons. Desktop: full nav -->
         <div class="flex items-center gap-2">
+          <NuxtLink to="/chat" class="sm:px-3 sm:py-1.5 p-2 text-sm text-zinc-400 hover:text-zinc-200 transition-colors">
+            <RadioIcon class="w-5 h-5 sm:hidden" />
+            <span class="hidden sm:inline">Relay</span>
+          </NuxtLink>
           <NuxtLink v-if="showAddClaim" to="/add" class="sm:px-3 sm:py-1.5 p-2 text-sm text-zinc-400 hover:text-zinc-200 transition-colors">
             <PlusIcon class="w-5 h-5 sm:hidden" />
             <span class="hidden sm:inline">Add claim</span>
@@ -39,7 +43,7 @@
 </template>
 
 <script setup lang="ts">
-import { Plus as PlusIcon, User as UserIcon, TriangleAlert as TriangleAlertIcon } from "lucide-vue-next";
+import { Plus as PlusIcon, Radio as RadioIcon, User as UserIcon, TriangleAlert as TriangleAlertIcon } from "lucide-vue-next";
 
 defineProps<{
   avatarUrl?: string;

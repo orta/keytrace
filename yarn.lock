@@ -1903,6 +1903,16 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@keytrace/relay@workspace:*, @keytrace/relay@workspace:packages/relay":
+  version: 0.0.0-use.local
+  resolution: "@keytrace/relay@workspace:packages/relay"
+  dependencies:
+    "@types/node": "npm:^22.0.0"
+    typescript: "npm:^5.7.0"
+    vitest: "npm:^2.1.0"
+  languageName: unknown
+  linkType: soft
+
 "@keytrace/runner@workspace:packages/runner":
   version: 0.0.0-use.local
   resolution: "@keytrace/runner@workspace:packages/runner"
@@ -7599,6 +7609,7 @@ __metadata:
     "@atproto/oauth-client-node": "npm:^0.3.0"
     "@aws-sdk/client-s3": "npm:^3.700.0"
     "@keytrace/claims": "workspace:*"
+    "@keytrace/relay": "workspace:*"
     "@nuxtjs/google-fonts": "npm:^3.2.0"
     "@nuxtjs/tailwindcss": "npm:^6.14.0"
     lucide-vue-next: "npm:^0.563.0"

@@ -1,0 +1,34 @@
+# Keytrace Relay Stack
+#
+# Runs Matterbridge (multi-platform chat bridge) alongside the ingester
+# sidecar that forwards all messages to keytrace.dev for live broadcasting.
+# Messages with a DID are also saved for identity verification.
+#
+# Usage:
+#   1. Copy config/matterbridge.toml.example → matterbridge.toml and configure your platforms
+#   2. Copy .env.example → .env and fill in tokens
+#   3. docker compose up -d
+
+services:
+  matterbridge:
+    image: ghcr.io/42wim/matterbridge:latest
+    restart: unless-stopped
+    volumes:
+      - ./matterbridge.toml:/matterbridge.toml:ro
+    # The API listens on 4242 inside the container.
+    # Only the ingester needs access — no need to expose to host.
+    expose:
+      - "4242"
+
+  ingester:
+    build: .
+    restart: unless-stopped
+    depends_on:
+      - matterbridge
+    environment:
+      # Matterbridge API — use the Docker service name as hostname
+      MATTERBRIDGE_URL: http://matterbridge:4242
+      MATTERBRIDGE_TOKEN: ${MATTERBRIDGE_API_TOKEN}
+      # Where to POST all messages (live chat broadcast + DID storage)
+      KEYTRACE_CHAT_URL: ${KEYTRACE_CHAT_URL:-https://keytrace.dev/api/chat/messages}
+      KEYTRACE_INGEST_TOKEN: ${KEYTRACE_INGEST_TOKEN}
