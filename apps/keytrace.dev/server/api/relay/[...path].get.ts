@@ -1,8 +1,9 @@
 /**
- * GET /api/relay/:platform/:username
+ * GET /api/relay/:platform/:identifier
  *
  * Public endpoint for the runner to fetch verified DID messages from the relay store.
- * Returns the latest DID verification for a given platform/username pair.
+ * The identifier can be a username or a platform-native userid (Signal UUID, etc.).
+ * Both work because the store writes under both keys.
  */
 export default defineEventHandler(async (event) => {
   const path = getRouterParam(event, "path");
@@ -15,14 +16,14 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: "Expected /api/relay/:platform/:username" });
   }
 
-  const [platform, username] = parts;
+  const [platform, identifier] = parts;
 
-  if (!platform || !username) {
-    throw createError({ statusCode: 400, statusMessage: "Missing platform or username" });
+  if (!platform || !identifier) {
+    throw createError({ statusCode: 400, statusMessage: "Missing platform or identifier" });
   }
 
   const store = getRelayStore();
-  const msg = await store.get(platform, decodeURIComponent(username));
+  const msg = await store.get(platform, decodeURIComponent(identifier));
 
   if (!msg) {
     throw createError({ statusCode: 404, statusMessage: "No verification found" });
@@ -31,6 +32,7 @@ export default defineEventHandler(async (event) => {
   return {
     did: msg.did,
     username: msg.username,
+    userid: msg.userid,
     platform: msg.platform,
     timestamp: msg.timestamp,
   };

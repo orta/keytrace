@@ -2,6 +2,8 @@ export interface ChatMessage {
   id: string;
   text: string;
   username: string;
+  /** Platform-native stable ID (Signal UUID, Telegram numeric ID, etc.) */
+  userid?: string;
   platform: string;
   gateway?: string;
   timestamp: number;

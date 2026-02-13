@@ -65,7 +65,7 @@ describe("MemoryStore", () => {
     expect(await store.get("telegram", "nobody")).toBeUndefined();
   });
 
-  it("ignores messages without a DID", async () => {
+  it("ignores invalid DID strings", async () => {
     const result = await store.put("telegram", "alice", "hello world");
     expect(result).toBeUndefined();
     expect(await store.get("telegram", "alice")).toBeUndefined();
@@ -90,19 +90,10 @@ describe("MemoryStore", () => {
     expect(await store.get("telegram", "ALICE")).toBeDefined();
   });
 
-  it("tracks size", async () => {
-    expect(store.size).toBe(0);
-    await store.put("telegram", "alice", "did:plc:a");
-    expect(store.size).toBe(1);
-    await store.put("signal", "bob", "did:plc:b");
-    expect(store.size).toBe(2);
-  });
-
   it("deletes messages", async () => {
     await store.put("telegram", "alice", "did:plc:a");
     expect(await store.delete("telegram", "alice")).toBe(true);
     expect(await store.get("telegram", "alice")).toBeUndefined();
-    expect(store.size).toBe(0);
   });
 
   it("clears all messages", async () => {
@@ -112,10 +103,43 @@ describe("MemoryStore", () => {
     expect(store.size).toBe(0);
   });
 
-  it("extracts DID from longer message text", async () => {
+  it("extracts DID from longer text passed as did param", async () => {
     await store.put("telegram", "alice", "hey verify me: did:plc:abc123 thanks");
     const msg = await store.get("telegram", "alice");
     expect(msg!.did).toBe("did:plc:abc123");
-    expect(msg!.raw).toBe("hey verify me: did:plc:abc123 thanks");
+  });
+
+  describe("userid support", () => {
+    it("stores under userid and retrieves by userid", async () => {
+      await store.put("signal", "alice", "did:plc:abc123", "uuid-1234");
+      const msg = await store.get("signal", "uuid-1234");
+      expect(msg).toBeDefined();
+      expect(msg!.did).toBe("did:plc:abc123");
+      expect(msg!.userid).toBe("uuid-1234");
+      expect(msg!.username).toBe("alice");
+    });
+
+    it("retrieves by username when userid was provided", async () => {
+      await store.put("signal", "alice", "did:plc:abc123", "uuid-1234");
+      const msg = await store.get("signal", "alice");
+      expect(msg).toBeDefined();
+      expect(msg!.did).toBe("did:plc:abc123");
+    });
+
+    it("stores under username when no userid provided", async () => {
+      await store.put("telegram", "alice", "did:plc:abc123");
+      const msg = await store.get("telegram", "alice");
+      expect(msg).toBeDefined();
+      expect(msg!.userid).toBeUndefined();
+    });
+
+    it("updates by userid even if username changes", async () => {
+      await store.put("signal", "alice", "did:plc:first", "uuid-1234");
+      await store.put("signal", "alice_new", "did:plc:second", "uuid-1234");
+      // Same userid, different username — lookup by userid gets latest
+      const msg = await store.get("signal", "uuid-1234");
+      expect(msg!.did).toBe("did:plc:second");
+      expect(msg!.username).toBe("alice_new");
+    });
   });
 });

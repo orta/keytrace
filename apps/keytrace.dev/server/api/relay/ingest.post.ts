@@ -4,7 +4,7 @@
  * Receives DID verification messages from the Matterbridge ingester.
  * Protected by a bearer token (NUXT_RELAY_INGEST_TOKEN).
  *
- * Body: { platform: string, username: string, did: string }
+ * Body: { platform: string, username: string, did: string, userid?: string }
  */
 
 const DID_PATTERN = /^did:(plc|web):[a-zA-Z0-9._:%-]+$/;
@@ -23,7 +23,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event);
-  const { platform, username, did } = body ?? {};
+  const { platform, username, did, userid } = body ?? {};
 
   if (!platform || typeof platform !== "string" || !PLATFORM_PATTERN.test(platform)) {
     throw createError({ statusCode: 400, statusMessage: "Invalid platform" });
@@ -38,9 +38,9 @@ export default defineEventHandler(async (event) => {
   }
 
   const store = getRelayStore();
-  await store.put(platform, username, did);
+  await store.put(platform, username, did, userid);
 
-  console.log(`[relay] Ingested: ${platform}/${username} → ${did}`);
+  console.log(`[relay] Ingested: ${platform}/${userid ?? username} → ${did}`);
 
-  return { ok: true, platform, username, did };
+  return { ok: true, platform, username, userid, did };
 });

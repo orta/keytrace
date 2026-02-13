@@ -5,7 +5,7 @@
  * Broadcasts every message to connected SSE clients on /chat.
  * If a message contains a DID, also saves it to the relay store.
  *
- * Body: { text: string, username: string, account: string, gateway?: string }
+ * Body: { text: string, username: string, userid?: string, account: string, gateway?: string }
  */
 import { extractDid, extractPlatform } from "@keytrace/relay";
 
@@ -22,7 +22,7 @@ export default defineEventHandler(async (event) => {
   }
 
   const body = await readBody(event);
-  const { text, username, account, gateway } = body ?? {};
+  const { text, username, userid, account, gateway } = body ?? {};
 
   if (!text || typeof text !== "string") {
     throw createError({ statusCode: 400, statusMessage: "Missing text" });
@@ -40,15 +40,16 @@ export default defineEventHandler(async (event) => {
   let saved = false;
   if (did) {
     const store = getRelayStore();
-    const result = await store.put(platform, username, did);
+    const result = await store.put(platform, username, did, userid);
     saved = !!result;
-    console.log(`[chat] DID saved: ${platform}/${username} → ${did}`);
+    console.log(`[chat] DID saved: ${platform}/${userid ?? username} → ${did}`);
   }
 
   const msg: ChatMessage = {
     id: crypto.randomUUID(),
     text,
     username,
+    userid: userid || undefined,
     platform,
     gateway,
     timestamp: Date.now(),

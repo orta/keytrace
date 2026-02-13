@@ -34,7 +34,7 @@ function getConfig(): IngesterConfig {
 /** Forward a message to the keytrace.dev chat endpoint (broadcasts to SSE + saves DIDs) */
 async function postToChat(
   config: IngesterConfig,
-  msg: { text: string; username: string; account: string; gateway?: string },
+  msg: { text: string; username: string; userid?: string; account: string; gateway?: string },
 ): Promise<{ ok: boolean; saved?: boolean }> {
   try {
     const res = await fetch(config.chatUrl, {
@@ -117,11 +117,11 @@ async function connectStream(config: IngesterConfig): Promise<void> {
         // Skip system events (like api_connected)
         if (msg.event) continue;
 
-        const { text, username, account, gateway } = msg;
+        const { text, username, userid, account, gateway } = msg;
         if (!text || !username || !account) continue;
 
         // Forward ALL messages to the chat endpoint (broadcasts to SSE clients + saves DIDs)
-        const result = await postToChat(config, { text, username, account, gateway });
+        const result = await postToChat(config, { text, username, userid, account, gateway });
 
         // If a DID was saved, send a confirmation reply back through the chat platform
         if (result.saved && gateway) {
