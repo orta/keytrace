@@ -4,6 +4,7 @@ import activitypub from "./activitypub.js";
 import bsky from "./bsky.js";
 import npm from "./npm.js";
 import tangled from "./tangled.js";
+import { signal, telegram, discord, whatsapp, matrix } from "./relay.js";
 import type { ServiceProvider, ServiceProviderMatch } from "./types.js";
 
 export type { ServiceProvider, ServiceProviderMatch, ServiceProviderUI, ProofTarget, ProofRequest, ProcessedURI } from "./types.js";
@@ -15,6 +16,11 @@ const providers: Record<string, ServiceProvider> = {
   bsky,
   npm,
   tangled,
+  signal,
+  telegram,
+  discord,
+  whatsapp,
+  matrix,
 };
 
 /**
@@ -64,4 +70,4 @@ export function getProofTextForProvider(providerId: string, did: string, handle?
   return provider?.getProofText(did, handle);
 }
 
-export { github, dns, activitypub, bsky, npm, tangled };
+export { github, dns, activitypub, bsky, npm, tangled, signal, telegram, discord, whatsapp, matrix };

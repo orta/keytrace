@@ -112,6 +112,29 @@ export async function saveJson<T>(key: string, data: T): Promise<void> {
   console.log(`[storage] Saved to file: ${filePath}`);
 }
 
+/**
+ * Delete JSON data from storage (S3 in production, file in development).
+ */
+export async function deleteJson(key: string): Promise<void> {
+  if (useS3()) {
+    await getS3Client().send(
+      new DeleteObjectCommand({
+        Bucket: getS3Config().bucket,
+        Key: key,
+      }),
+    );
+    return;
+  }
+
+  // File storage
+  const filePath = path.join(DATA_DIR, key);
+  try {
+    fs.unlinkSync(filePath);
+  } catch (e: any) {
+    if (e.code !== "ENOENT") throw e;
+  }
+}
+
 // S3-based storage for production
 class S3SessionStore implements NodeSavedSessionStore {
   private prefix = "sessions/";

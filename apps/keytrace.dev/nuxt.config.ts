@@ -69,5 +69,6 @@ export default defineNuxtConfig({
     s3Endpoint: "",
     keytraceDid: "",
     keytracePassword: "",
+    relayIngestToken: "",
   },
 });

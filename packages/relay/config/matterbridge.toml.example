@@ -1,0 +1,86 @@
+# Keytrace Relay — Matterbridge Configuration
+#
+# This bridges messages from chat platforms to the Keytrace relay service.
+# All messages are forwarded to the ingester sidecar, which broadcasts them
+# to the live chat page. Messages containing a DID are also saved for verification.
+#
+# Setup:
+# 1. Copy this to packages/relay/matterbridge.toml
+# 2. Fill in bot tokens for each platform you want to support
+# 3. Copy .env.example → .env and fill in tokens
+# 4. docker compose up -d (from packages/relay/)
+
+# --- Internal API (consumed by the ingester sidecar) ---
+[api]
+# Bind to 0.0.0.0 so the ingester container can reach it
+BindAddress = "0.0.0.0:4242"
+Token = "change-me-to-a-secret"
+Buffer = 1000
+
+# --- Telegram ---
+# Get a bot token from @BotFather on Telegram
+# [telegram]
+# [telegram.keytrace]
+# Token = "YOUR_TELEGRAM_BOT_TOKEN"
+# RemoteNickFormat = "{NICK}"
+
+# --- Signal ---
+# Requires signal-cli-rest-api running (https://github.com/bbernhard/signal-cli-rest-api)
+# [signalgo]
+# [signalgo.keytrace]
+# Number = "+1234567890"
+# Url = "http://localhost:8080"
+# RemoteNickFormat = "{NICK}"
+
+# --- Discord ---
+# Create a bot at https://discord.com/developers/applications
+# [discord]
+# [discord.keytrace]
+# Token = "YOUR_DISCORD_BOT_TOKEN"
+# Server = "your-server-id"
+# RemoteNickFormat = "{NICK}"
+
+# --- WhatsApp ---
+# Uses whatsmeow (built into matterbridge)
+# [whatsapp]
+# [whatsapp.keytrace]
+# RemoteNickFormat = "{NICK}"
+
+# --- Matrix ---
+# [matrix]
+# [matrix.keytrace]
+# Server = "https://matrix.org"
+# Login = "your-bot-username"
+# Password = "your-bot-password"
+# RemoteNickFormat = "{NICK}"
+
+# --- Gateway: connect all platforms to the API ---
+[[gateway]]
+name = "keytrace-relay"
+enable = true
+
+  # Uncomment each platform as you configure it above:
+
+  # [[gateway.inout]]
+  # account = "telegram.keytrace"
+  # channel = "keytrace-verify"
+
+  # [[gateway.inout]]
+  # account = "signalgo.keytrace"
+  # channel = "keytrace-verify"
+
+  # [[gateway.inout]]
+  # account = "discord.keytrace"
+  # channel = "keytrace-verify"
+
+  # [[gateway.inout]]
+  # account = "whatsapp.keytrace"
+  # channel = "keytrace-verify"
+
+  # [[gateway.inout]]
+  # account = "matrix.keytrace"
+  # channel = "keytrace-verify"
+
+  [[gateway.inout]]
+  account = "api.relay"
+  channel = "api"
