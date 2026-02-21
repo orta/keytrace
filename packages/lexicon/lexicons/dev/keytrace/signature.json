@@ -9,21 +9,26 @@
       "properties": {
         "kid": {
           "type": "string",
-          "description": "Key identifier (e.g., date in YYYY-MM-DD format)"
+          "description": "Key identifier (e.g., date in YYYY-MM-DD format)."
         },
         "src": {
           "type": "string",
           "format": "at-uri",
-          "description": "AT URI reference to the signing key record (e.g., at://did:plc:xxx/dev.keytrace.key/2024-01-15)"
+          "description": "AT URI reference to the signing key record published by the verification service (e.g., at://did:plc:serviceaccount/dev.keytrace.serverPublicKey/2024-01-15)."
         },
         "signedAt": {
           "type": "string",
           "format": "datetime",
-          "description": "Timestamp when the signature was created"
+          "description": "Datetime when the signature was created (ISO 8601)."
         },
         "attestation": {
           "type": "string",
-          "description": "The cryptographic signature (base64-encoded)"
+          "description": "The cryptographic signature (base64-encoded)."
+        },
+        "retractedAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Datetime when this signature was retracted. Present only if the signature has been retracted (ISO 8601)."
         }
       }
     }

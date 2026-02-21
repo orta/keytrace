@@ -1,6 +1,6 @@
 {
   "lexicon": 1,
-  "id": "dev.keytrace.key",
+  "id": "dev.keytrace.serverPublicKey",
   "defs": {
     "main": {
       "type": "record",
@@ -16,11 +16,13 @@
           },
           "validFrom": {
             "type": "string",
-            "format": "datetime"
+            "format": "datetime",
+            "description": "Datetime from which this key is valid (ISO 8601)."
           },
           "validUntil": {
             "type": "string",
-            "format": "datetime"
+            "format": "datetime",
+            "description": "Datetime until which this key is valid (ISO 8601)."
           }
         }
       }

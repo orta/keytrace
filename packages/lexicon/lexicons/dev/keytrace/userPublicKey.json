@@ -1,0 +1,58 @@
+{
+  "lexicon": 1,
+  "id": "dev.keytrace.userPublicKey",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "description": "A user-published public key.",
+      "record": {
+        "type": "object",
+        "required": ["keyType", "publicKey", "createdAt"],
+        "properties": {
+          "keyType": {
+            "type": "string",
+            "knownValues": ["pgp", "ssh-ed25519", "ssh-ecdsa"],
+            "description": "Format of the public key."
+          },
+          "publicKeyArmored": {
+            "type": "string",
+            "maxLength": 16384,
+            "maxGraphemes": 16384,
+            "description": "Full public key in standard text armored format."
+          },
+          "fingerprint": {
+            "type": "string",
+            "maxGraphemes": 256,
+            "description": "Key fingerprint."
+          },
+          "label": {
+            "type": "string",
+            "maxGraphemes": 128,
+            "description": "Human-readable label for this key (e.g., 'work laptop', 'signing key')."
+          },
+          "comment": {
+            "type": "string",
+            "maxGraphemes": 512,
+            "description": "Optional comment or description."
+          },
+          "expiresAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "Datetime when this key expires (ISO 8601)."
+          },
+          "retractedAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "Datetime when this key was retracted. Present only if the key has been retracted (ISO 8601)."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "Datetime when this key was created (ISO 8601)."
+          }
+        }
+      }
+    }
+  }
+}

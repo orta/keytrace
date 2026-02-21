@@ -8,7 +8,7 @@
       "description": "An identity claim linking this DID to an external account",
       "record": {
         "type": "object",
-        "required": ["type", "claimUri", "identity", "sig", "createdAt"],
+        "required": ["type", "claimUri", "identity", "sigs", "createdAt"],
         "properties": {
           "type": {
             "type": "string",
@@ -24,10 +24,13 @@
             "ref": "#identity",
             "description": "Structured data about the claimed identity"
           },
-          "sig": {
-            "type": "ref",
-            "ref": "dev.keytrace.signature#main",
-            "description": "Cryptographic attestation signature from the keytrace service"
+          "sigs": {
+            "type": "array",
+            "items": {
+              "type": "ref",
+              "ref": "dev.keytrace.signature#main"
+            },
+            "description": "One or more cryptographic attestation signatures from verification services."
           },
           "comment": {
             "type": "string",
@@ -36,11 +39,22 @@
           },
           "createdAt": {
             "type": "string",
-            "format": "datetime"
+            "format": "datetime",
+            "description": "Datetime when this claim was created (ISO 8601)."
+          },
+          "nonce": {
+            "type": "string",
+            "maxGraphemes": 128,
+            "description": "Random one-time value embedded in the challenge text posted to the external service. Used by verifiers to confirm the proof was created specifically for this claim session."
           },
           "prerelease": {
             "type": "boolean",
             "description": "Whether this claim was created during the prerelease/alpha period"
+          },
+          "retractedAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "Datetime when this claim was retracted. Present only if the claim has been retracted (ISO 8601)."
           }
         }
       }

@@ -1,0 +1,47 @@
+{
+  "lexicon": 1,
+  "id": "dev.keytrace.statement",
+  "defs": {
+    "main": {
+      "type": "record",
+      "key": "tid",
+      "description": "A public statement signed by one of the user's own published public keys (dev.keytrace.userPublicKey).",
+      "record": {
+        "type": "object",
+        "required": ["content", "keyRef", "sig", "createdAt"],
+        "properties": {
+          "content": {
+            "type": "string",
+            "maxLength": 10000,
+            "maxGraphemes": 10000,
+            "description": "The statement text that was signed."
+          },
+          "subject": {
+            "type": "string",
+            "maxGraphemes": 256,
+            "description": "Optional short subject or title for the statement."
+          },
+          "keyRef": {
+            "type": "string",
+            "format": "at-uri",
+            "description": "AT URI of the dev.keytrace.userPublicKey record whose private key produced this signature (e.g., at://did:plc:xxx/dev.keytrace.userPublicKey/3k4...)"
+          },
+          "sig": {
+            "type": "string",
+            "description": "Cryptographic signature of the content field, produced by the key referenced in keyRef (PGP cleartext or detached, base64-encoded binary signature)."
+          },
+          "retractedAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "Datetime when this statement was retracted. Present only if the statement has been retracted (ISO 8601)."
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "datetime",
+            "description": "Datetime when this statement was created (ISO 8601)."
+          }
+        }
+      }
+    }
+  }
+}
