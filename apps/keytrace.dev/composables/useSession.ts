@@ -4,6 +4,7 @@ interface Session {
   handle?: string;
   displayName?: string;
   avatar?: string;
+  needsReauth?: boolean;
 }
 
 const sessionState = ref<Session | null>(null);

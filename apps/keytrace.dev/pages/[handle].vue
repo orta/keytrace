@@ -153,6 +153,8 @@ function mapClaim(claim: any) {
     recipeName: match?.provider,
     comment: claim.comment,
     createdAt: claim.createdAt,
+    lastVerifiedAt: claim.lastVerifiedAt,
+    failedAt: claim.failedAt,
     identity: claim.identity,
     attestation: undefined,
     recipe: undefined,

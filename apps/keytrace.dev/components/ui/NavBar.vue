@@ -17,6 +17,10 @@
             <PlusIcon class="w-5 h-5 sm:hidden" />
             <span class="hidden sm:inline">Add claim</span>
           </NuxtLink>
+          <NuxtLink v-if="showAddClaim" to="/settings" class="sm:px-3 sm:py-1.5 p-2 text-sm text-zinc-400 hover:text-zinc-200 transition-colors">
+            <SettingsIcon class="w-5 h-5 sm:hidden" />
+            <span class="hidden sm:inline">Settings</span>
+          </NuxtLink>
 
           <!-- Avatar/login button -->
           <slot name="user">
@@ -32,14 +36,14 @@
     <div class="bg-amber-950 border-b border-amber-500/20 px-4 py-2">
       <p class="max-w-5xl mx-auto text-xs text-amber-300/90 text-center">
         <TriangleAlertIcon class="w-3 h-3 inline-block mr-1 -mt-0.5" />
-        Keytrace is in alpha. You likely will need to re-verify your claims when we it goes live.
+        Keytrace is in alpha. You likely will need to re-verify your claims when it goes live.
       </p>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
-import { Plus as PlusIcon, User as UserIcon, TriangleAlert as TriangleAlertIcon } from "lucide-vue-next";
+import { Plus as PlusIcon, User as UserIcon, TriangleAlert as TriangleAlertIcon, Settings as SettingsIcon } from "lucide-vue-next";
 
 defineProps<{
   avatarUrl?: string;

@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { CheckCircle, Clock, XCircle, MinusCircle, HelpCircle } from "lucide-vue-next";
+import { CheckCircle, Clock, XCircle, MinusCircle, HelpCircle, Ban } from "lucide-vue-next";
 
 const props = defineProps<{
   status: string;
@@ -43,6 +43,11 @@ const configs: Record<string, { classes: string; icon: typeof CheckCircle; label
     classes: "bg-failed/15 text-failed border border-failed/20",
     icon: XCircle,
     label: "Error",
+  },
+  retracted: {
+    classes: "bg-zinc-500/15 text-zinc-400 border border-zinc-500/20",
+    icon: Ban,
+    label: "Retracted",
   },
   unverified: {
     classes: "bg-zinc-500/15 text-zinc-400 border border-zinc-500/20",

@@ -34,16 +34,24 @@
     <!-- Claims list -->
     <template v-else-if="claims">
       <div v-if="claims.claims && claims.claims.length > 0" class="space-y-3">
-        <div v-for="claim in claims.claims" :key="claim.uri" class="group rounded-xl border border-zinc-800 bg-kt-surface hover:border-zinc-700 transition-all">
+        <div
+          v-for="claim in claims.claims"
+          :key="claim.uri"
+          class="group rounded-xl border bg-kt-surface transition-all"
+          :class="claim.status === 'retracted' ? 'border-zinc-700/50 opacity-75' : 'border-zinc-800 hover:border-zinc-700'"
+        >
           <div class="flex items-center justify-between px-4 py-3">
             <div class="flex items-center gap-3 min-w-0">
               <div class="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center">
-                <component :is="getServiceIcon(claim.claimUri)" class="w-4 h-4 text-zinc-300" />
+                <component :is="getServiceIcon(claim.uri)" class="w-4 h-4 text-zinc-300" />
               </div>
               <div class="min-w-0">
-                <span class="text-sm font-medium text-zinc-200 block truncate">
-                  {{ claim.claimUri }}
-                </span>
+                <div class="flex items-center gap-2">
+                  <span class="text-sm font-medium text-zinc-200 block truncate">
+                    {{ claim.identity?.subject || claim.uri }}
+                  </span>
+                  <StatusBadge v-if="claim.status" :status="claim.status" />
+                </div>
                 <span v-if="claim.comment" class="text-xs text-zinc-500">
                   {{ claim.comment }}
                 </span>
@@ -51,8 +59,21 @@
             </div>
 
             <div class="flex items-center gap-2 ml-4">
-              <button class="p-2 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800 transition-colors" title="Re-verify" @click="reverify(claim)">
+              <button
+                v-if="claim.status !== 'retracted'"
+                class="p-2 rounded-lg text-zinc-500 hover:text-zinc-300 hover:bg-zinc-800 transition-colors"
+                title="Re-verify"
+                @click="reverify(claim)"
+              >
                 <RefreshCwIcon class="w-4 h-4" />
+              </button>
+              <button
+                v-if="claim.status !== 'retracted'"
+                class="p-2 rounded-lg text-zinc-500 hover:text-pending hover:bg-pending/10 transition-colors"
+                title="Retract claim"
+                @click="retractClaim(claim)"
+              >
+                <BanIcon class="w-4 h-4" />
               </button>
               <button class="p-2 rounded-lg text-zinc-500 hover:text-failed hover:bg-failed/10 transition-colors" title="Delete claim" @click="deleteClaim(claim)">
                 <Trash2Icon class="w-4 h-4" />
@@ -82,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import { Plus as PlusIcon, AlertCircle as AlertCircleIcon, Link as LinkIcon, RefreshCw as RefreshCwIcon, Trash2 as Trash2Icon, Github, Globe, AtSign, Key } from "lucide-vue-next";
+import { Plus as PlusIcon, AlertCircle as AlertCircleIcon, Link as LinkIcon, RefreshCw as RefreshCwIcon, Trash2 as Trash2Icon, Ban as BanIcon, Github, Globe, AtSign, Key } from "lucide-vue-next";
 import type { Component } from "vue";
 
 const { session } = useSession();
@@ -114,32 +135,50 @@ function getServiceIcon(uri: string): Component {
   return Key;
 }
 
+function handlePatchError(err: unknown) {
+  const status = (err as any)?.response?.status ?? (err as any)?.statusCode;
+  if (status === 403) {
+    alert("App access has been revoked. Please log out and re-authorize keytrace.");
+  }
+}
+
 async function reverify(claim: any) {
+  if (!claim.rkey) return;
   try {
-    await $fetch("/api/verify", {
-      method: "POST",
-      body: {
-        claimUri: claim.claimUri,
-        did: claims.value?.did,
-      },
+    await $fetch(`/api/claims/${claim.rkey}`, {
+      method: "PATCH",
+      body: { action: "reverify" },
     });
     await refresh();
-  } catch {
-    // Error handling could be improved with toast notifications
+  } catch (err) {
+    handlePatchError(err);
+  }
+}
+
+async function retractClaim(claim: any) {
+  if (!claim.rkey) return;
+  if (!confirm("Are you sure you want to retract this claim? It will be marked as retracted but not deleted.")) return;
+
+  try {
+    await $fetch(`/api/claims/${claim.rkey}`, {
+      method: "PATCH",
+      body: { action: "retract" },
+    });
+    await refresh();
+  } catch (err) {
+    handlePatchError(err);
   }
 }
 
 async function deleteClaim(claim: any) {
-  // Extract rkey from the AT URI (at://did/collection/rkey)
-  const parts = claim.uri?.split("/");
-  const rkey = parts?.[parts.length - 1];
-  if (!rkey) return;
+  if (!claim.rkey) return;
 
   try {
-    await $fetch(`/api/claims/${rkey}`, { method: "DELETE" });
+    await $fetch(`/api/claims/${claim.rkey}`, { method: "DELETE" });
     await refresh();
   } catch {
-    // Error handling could be improved with toast notifications
+    // Delete failures are less likely to be auth-related since
+    // existing sessions already have the delete scope
   }
 }
 </script>

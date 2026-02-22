@@ -54,7 +54,8 @@ function checkSessionSecret(): void {
   }
 }
 
-export const OAUTH_SCOPE = "atproto repo:dev.keytrace.claim?action=create repo:dev.keytrace.claim?action=delete";
+export const OAUTH_SCOPE =
+  "atproto repo:dev.keytrace.claim?action=create repo:dev.keytrace.claim?action=update repo:dev.keytrace.claim?action=delete repo:dev.keytrace.profile?action=create repo:dev.keytrace.profile?action=update";
 
 export function getPublicUrl(): string {
   const config = useRuntimeConfig();

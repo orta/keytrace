@@ -39,6 +39,15 @@
       </template>
     </NavBar>
 
+    <!-- Reauth banner: shown when the user's session is missing new scopes -->
+    <div v-if="session?.authenticated && session.needsReauth" class="bg-violet-950 border-b border-violet-500/20 px-4 py-2">
+      <p class="max-w-5xl mx-auto text-xs text-violet-300/90 text-center">
+        Keytrace needs additional permissions.
+        <button class="underline hover:text-violet-200 ml-1" @click="reauthorize">Re-authorize</button>
+        to enable all features.
+      </p>
+    </div>
+
     <main>
       <slot />
     </main>
@@ -74,7 +83,7 @@
 <script setup lang="ts">
 import { User as UserIcon } from "lucide-vue-next";
 
-const { session, logout } = useSession();
+const { session, logout, login } = useSession();
 const { open: openLoginModal } = useLoginModal();
 const menuOpen = ref(false);
 const menuRef = ref<HTMLElement | null>(null);
@@ -92,5 +101,11 @@ async function handleLogout() {
   menuOpen.value = false;
   await logout();
   navigateTo("/");
+}
+
+function reauthorize() {
+  if (session.value?.handle) {
+    login(session.value.handle);
+  }
 }
 </script>

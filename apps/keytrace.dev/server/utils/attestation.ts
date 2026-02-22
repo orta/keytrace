@@ -12,6 +12,7 @@ export interface Attestation {
   sig: string;
   signingKey: { uri: string; cid: string };
   signedAt: string;
+  signedFields: string[];
 }
 
 export interface ClaimRecord {
@@ -49,6 +50,45 @@ export async function createAttestation(did: string, type: string, subject: stri
     sig,
     signingKey: keyRef,
     signedAt: now,
+    signedFields: Object.keys(claimData).sort(),
+  };
+}
+
+export interface StatusClaimData {
+  [key: string]: string;
+  did: string;
+  claimUri: string;
+  status: string;
+  statusAt: string;
+}
+
+/**
+ * Create a cryptographic attestation for a status change (re-verification or retraction).
+ * Signs over { did, claimUri, status, statusAt } so the status fields can't be tampered with.
+ */
+export async function createStatusAttestation(
+  did: string,
+  claimUri: string,
+  status: string,
+  statusAt: string,
+): Promise<Attestation> {
+  const keyPair = await getOrCreateTodaysKey();
+
+  const claimData: StatusClaimData = {
+    claimUri,
+    did,
+    status,
+    statusAt,
+  };
+
+  const sig = signClaim(claimData, keyPair.privateKey);
+  const keyRef = await getTodaysKeyRef();
+
+  return {
+    sig,
+    signingKey: keyRef,
+    signedAt: statusAt,
+    signedFields: Object.keys(claimData).sort(),
   };
 }
 

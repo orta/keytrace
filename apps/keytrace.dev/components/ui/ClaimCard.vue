@@ -55,6 +55,14 @@
           <span class="text-zinc-700">&middot;</span>
           <span>Attested {{ formatDate(claim.attestation.signedAt) }}</span>
         </template>
+        <template v-if="claim.lastVerifiedAt">
+          <span class="text-zinc-700">&middot;</span>
+          <span>Last checked {{ formatDate(claim.lastVerifiedAt) }}</span>
+        </template>
+        <template v-if="claim.status === 'retracted' && claim.failedAt">
+          <span class="text-zinc-700">&middot;</span>
+          <span>Retracted {{ formatDate(claim.failedAt) }}</span>
+        </template>
       </div>
 
       <!-- Trust chain (expandable) -->
@@ -85,12 +93,14 @@ export interface ClaimIdentity {
 
 export interface ClaimData {
   displayName: string;
-  status: "verified" | "pending" | "failed" | "unverified";
+  status: "verified" | "pending" | "failed" | "unverified" | "retracted";
   serviceType?: string;
   subject?: string;
   recipeName?: string;
   comment?: string;
   createdAt?: string;
+  lastVerifiedAt?: string;
+  failedAt?: string;
   identity?: ClaimIdentity;
   attestation?: {
     signedAt?: string;
@@ -126,6 +136,8 @@ const statusClasses = computed(() => {
       return "border-pending/20 bg-kt-surface hover:border-pending/40";
     case "failed":
       return "border-failed/20 bg-kt-surface hover:border-failed/40";
+    case "retracted":
+      return "border-zinc-700/50 bg-kt-surface/50 opacity-75";
     default:
       return "border-zinc-800 bg-kt-surface hover:border-zinc-700";
   }

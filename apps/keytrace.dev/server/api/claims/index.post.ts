@@ -61,6 +61,7 @@ export default defineEventHandler(async (event) => {
     src: attestation.signingKey.uri,
     signedAt: attestation.signedAt,
     attestation: attestation.sig,
+    signedFields: attestation.signedFields,
   };
 
   // Build the identity object per dev.keytrace.claim#identity lexicon
@@ -77,6 +78,7 @@ export default defineEventHandler(async (event) => {
   };
 
   try {
+    const now = new Date().toISOString();
     const record = {
       $type: COLLECTION_NSID,
       type: provider.id,
@@ -84,7 +86,9 @@ export default defineEventHandler(async (event) => {
       identity,
       sig,
       comment: body.comment,
-      createdAt: new Date().toISOString(),
+      status: "verified",
+      lastVerifiedAt: now,
+      createdAt: now,
       prerelease: true,
     };
 

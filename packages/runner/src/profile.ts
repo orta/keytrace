@@ -167,6 +167,9 @@ async function fetchWithAgent(agent: AtpAgent, did: string, opts?: ProfileOption
           createdAt?: string;
           identity?: IdentityMetadata;
           sig?: { src?: string };
+          status?: "verified" | "failed" | "retracted";
+          lastVerifiedAt?: string;
+          failedAt?: string;
         };
         if (value.claimUri) {
           claims.push({
@@ -178,6 +181,9 @@ async function fetchWithAgent(agent: AtpAgent, did: string, opts?: ProfileOption
             rkey: parseAtUriRkey(record.uri),
             identity: value.identity,
             sig: value.sig,
+            status: value.status,
+            lastVerifiedAt: value.lastVerifiedAt,
+            failedAt: value.failedAt,
           });
         }
       }

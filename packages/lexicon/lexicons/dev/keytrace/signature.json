@@ -5,7 +5,7 @@
     "main": {
       "type": "object",
       "description": "A cryptographic signature attesting to a claim",
-      "required": ["kid", "src", "signedAt", "attestation"],
+      "required": ["kid", "src", "signedAt", "attestation", "signedFields"],
       "properties": {
         "kid": {
           "type": "string",
@@ -23,7 +23,12 @@
         },
         "attestation": {
           "type": "string",
-          "description": "The cryptographic signature (base64-encoded)"
+          "description": "The cryptographic signature (JWS compact serialization)"
+        },
+        "signedFields": {
+          "type": "array",
+          "items": { "type": "string" },
+          "description": "Ordered list of field names included in the signed payload (e.g., ['did', 'subject', 'type', 'verifiedAt'])"
         }
       }
     }

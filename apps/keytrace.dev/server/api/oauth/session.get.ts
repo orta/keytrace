@@ -1,4 +1,4 @@
-import { getOAuthClient, verifySignedDid } from "~/server/utils/oauth";
+import { getOAuthClient, verifySignedDid, OAUTH_SCOPE } from "~/server/utils/oauth";
 
 export default defineEventHandler(async (event) => {
   const cookie = getCookie(event, "did");
@@ -16,9 +16,16 @@ export default defineEventHandler(async (event) => {
   }
 
   // Validate that the OAuth session is still active (SEC-05)
+  let needsReauth = false;
   try {
     const client = getOAuthClient();
-    await client.restore(did);
+    const session = await client.restore(did);
+
+    // Check if the granted scopes cover all required scopes
+    const tokenInfo = await session.getTokenInfo();
+    const grantedScopes = new Set((tokenInfo.scope || "").split(" ").filter(Boolean));
+    const requiredScopes = OAUTH_SCOPE.split(" ").filter(Boolean);
+    needsReauth = requiredScopes.some((s) => !grantedScopes.has(s));
   } catch {
     // OAuth session expired or revoked -- clear cookie
     deleteCookie(event, "did", { path: "/" });
@@ -35,11 +42,13 @@ export default defineEventHandler(async (event) => {
       handle: profile.handle,
       displayName: profile.displayName,
       avatar: profile.avatar,
+      needsReauth,
     };
   } catch {
     return {
       authenticated: true,
       did,
+      needsReauth,
     };
   }
 });
