@@ -58,6 +58,7 @@ export interface ProfileData {
   did: string;
   handle: string;
   displayName?: string;
+  description?: string;
   avatar?: string;
   claims: ClaimData[];
 }

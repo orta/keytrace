@@ -36,6 +36,7 @@
           displayName: profile.displayName || profile.handle,
           handle: profile.handle,
           did: profile.did,
+          description: profile.description,
         }"
         :claims="profileClaims"
       >

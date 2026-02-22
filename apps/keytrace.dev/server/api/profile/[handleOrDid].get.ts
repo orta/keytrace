@@ -29,6 +29,7 @@ export default defineEventHandler(async (event) => {
       did: profile.did,
       handle: profile.handle,
       displayName: profile.displayName,
+      description: profile.description,
       avatar: profile.avatar,
       claims: profile.claimInstances.map((claim) => {
         // Find corresponding claim data for additional fields

@@ -130,13 +130,14 @@ async function fetchWithAgent(agent: AtpAgent, did: string, opts?: ProfileOption
 
   // Fetch Bluesky profile for display info via public API (not PDS)
   // The PDS doesn't serve app.bsky.actor.getProfile - only the AppView does
-  let bskyProfile: { handle: string; displayName?: string; avatar?: string } | null = null;
+  let bskyProfile: { handle: string; displayName?: string; description?: string; avatar?: string } | null = null;
   try {
     const publicAgent = new AtpAgent({ service: PUBLIC_API_URL });
     const profileRes = await publicAgent.getProfile({ actor: did });
     bskyProfile = {
       handle: profileRes.data.handle,
       displayName: profileRes.data.displayName,
+      description: profileRes.data.description,
       avatar: profileRes.data.avatar,
     };
   } catch (err: unknown) {
@@ -212,6 +213,7 @@ async function fetchWithAgent(agent: AtpAgent, did: string, opts?: ProfileOption
     did,
     handle: bskyProfile?.handle ?? did,
     displayName: bskyProfile?.displayName,
+    description: bskyProfile?.description,
     avatar: bskyProfile?.avatar,
     claims,
     claimInstances,

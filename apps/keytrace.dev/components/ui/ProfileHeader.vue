@@ -13,6 +13,7 @@
       </h1>
 
       <p class="text-zinc-500 mt-0.5"><span class="text-zinc-600">@</span>{{ profile.handle }}</p>
+      <p v-if="profile.description" class="text-sm text-zinc-400 mt-1.5">{{ profile.description }}</p>
 
       <div class="flex items-center gap-2 mt-1">
         <a
@@ -56,6 +57,7 @@ export interface ProfileData {
   displayName: string;
   handle: string;
   did: string;
+  description?: string;
 }
 
 export interface Claim {
