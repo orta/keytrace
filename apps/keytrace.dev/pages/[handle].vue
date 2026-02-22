@@ -165,6 +165,7 @@ function guessDisplayName(uri: string) {
   if (uri.includes("github.com")) return "GitHub Account";
   if (uri.startsWith("dns:")) return "Domain";
   if (uri.includes("mastodon")) return "Mastodon Account";
+  if (uri.startsWith("pgp:")) return "PGP Key";
   return "Identity Claim";
 }
 
@@ -172,6 +173,7 @@ function guessServiceType(uri: string) {
   if (uri.includes("github.com")) return "github";
   if (uri.startsWith("dns:")) return "dns";
   if (uri.includes("mastodon")) return "mastodon";
+  if (uri.startsWith("pgp:")) return "pgp";
   return "";
 }
 

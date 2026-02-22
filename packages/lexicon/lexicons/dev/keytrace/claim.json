@@ -12,7 +12,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "knownValues": ["github", "dns", "mastodon", "twitter", "website"],
+            "knownValues": ["github", "dns", "mastodon", "twitter", "website", "pgp"],
             "description": "The claim type identifier"
           },
           "claimUri": {

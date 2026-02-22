@@ -53,7 +53,7 @@ export { COLLECTION_NSID, DEFAULT_TIMEOUT, PUBLIC_API_URL, PLC_DIRECTORY_URL } f
 
 // Service providers
 export * as serviceProviders from "./serviceProviders/index.js";
-export type { ServiceProvider, ServiceProviderMatch, ServiceProviderUI, ProofTarget, ProofRequest, ProcessedURI } from "./serviceProviders/types.js";
+export type { ServiceProvider, ServiceProviderMatch, ServiceProviderUI, ExtraInput, ProofTarget, ProofRequest, ProcessedURI } from "./serviceProviders/types.js";
 
 // Fetchers
 export * as fetchers from "./fetchers/index.js";

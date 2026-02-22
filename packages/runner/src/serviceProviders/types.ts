@@ -54,6 +54,22 @@ export interface ProcessedURI {
 }
 
 /**
+ * An additional input field for the add claim wizard (beyond the main claim URI)
+ */
+export interface ExtraInput {
+  /** Unique key used as placeholder in templates, e.g. "fingerprint" → {fingerprint} */
+  key: string;
+  /** Label displayed above the input */
+  label: string;
+  /** Placeholder text */
+  placeholder: string;
+  /** Optional regex pattern for validation */
+  pattern?: string;
+  /** Validation error message shown when pattern doesn't match */
+  patternError?: string;
+}
+
+/**
  * UI configuration for the add claim wizard
  */
 export interface ServiceProviderUI {
@@ -71,6 +87,8 @@ export interface ServiceProviderUI {
   instructions: string[];
   /** Template for proof content. Supports {did} and {handle} placeholders */
   proofTemplate: string;
+  /** Additional input fields beyond the main claim URI */
+  extraInputs?: ExtraInput[];
 }
 
 /**
