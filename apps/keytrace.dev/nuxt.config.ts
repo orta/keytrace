@@ -2,6 +2,13 @@ export default defineNuxtConfig({
   compatibilityDate: "2025-01-01",
   devtools: { enabled: true },
 
+  // Disable inline SSR styles so <head> stays small enough for
+  // social-card crawlers (Bluesky cardyb, Twitter, etc.) to reach
+  // the og: meta tags. CSS is still loaded via external <link> tags.
+  features: {
+    inlineStyles: false,
+  },
+
   modules: ["@nuxtjs/tailwindcss", "@nuxtjs/google-fonts", "nuxt-og-image"],
 
   ogImage: {
