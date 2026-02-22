@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts">
-import { Github, Globe, AtSign, Cloud } from "lucide-vue-next";
+import { Github, Globe, AtSign, Cloud, Shield } from "lucide-vue-next";
 import NpmIcon from "~/components/icons/NpmIcon.vue";
 import TangledIcon from "~/components/icons/TangledIcon.vue";
 import type { ServiceOption } from "~/components/ui/ServicePicker.vue";
@@ -39,6 +39,7 @@ const iconMap: Record<string, unknown> = {
   cloud: Cloud,
   npm: NpmIcon,
   tangled: TangledIcon,
+  shield: Shield,
 };
 
 // Transform API response into ServiceOption format

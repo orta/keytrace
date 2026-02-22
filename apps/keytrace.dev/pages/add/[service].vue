@@ -30,6 +30,16 @@
             </li>
           </ol>
 
+          <!-- Extra inputs (e.g. PGP fingerprint) — shown before proof so values are substituted -->
+          <div v-if="selectedService?.extraInputs" class="mt-6 space-y-4">
+            <div v-for="input in selectedService.extraInputs" :key="input.key">
+              <KtInput v-model="extraInputValues[input.key]" :label="input.label" :placeholder="input.placeholder" />
+              <p v-if="extraInputErrors[input.key]" class="mt-1.5 text-xs text-failed">
+                {{ extraInputErrors[input.key] }}
+              </p>
+            </div>
+          </div>
+
           <!-- Proof content to copy -->
           <div class="mt-6 relative">
             <div class="rounded-lg bg-kt-inset border border-zinc-800 p-4 font-mono text-sm text-emerald-400 whitespace-pre-wrap break-all">{{ proofContent }}</div>
@@ -100,7 +110,7 @@
 </template>
 
 <script setup lang="ts">
-import { Github, Globe, AtSign, Cloud, CheckCircle as CheckCircleIcon, XCircle as XCircleIcon } from "lucide-vue-next";
+import { Github, Globe, AtSign, Cloud, Shield, CheckCircle as CheckCircleIcon, XCircle as XCircleIcon } from "lucide-vue-next";
 import NpmIcon from "~/components/icons/NpmIcon.vue";
 import TangledIcon from "~/components/icons/TangledIcon.vue";
 import type { ServiceOption } from "~/components/ui/ServicePicker.vue";
@@ -134,9 +144,18 @@ const iconMap: Record<string, unknown> = {
   cloud: Cloud,
   npm: NpmIcon,
   tangled: TangledIcon,
+  shield: Shield,
 };
 
 // Transform API response into ServiceOption format
+interface ExtraInputFromAPI {
+  key: string;
+  label: string;
+  placeholder: string;
+  pattern?: string;
+  patternError?: string;
+}
+
 interface ServiceFromAPI {
   id: string;
   name: string;
@@ -149,6 +168,7 @@ interface ServiceFromAPI {
     inputDefaultTemplate?: string;
     instructions: string[];
     proofTemplate: string;
+    extraInputs?: ExtraInputFromAPI[];
   };
 }
 
@@ -158,6 +178,7 @@ interface ServiceWithUI extends ServiceOption {
   inputDefaultTemplate?: string;
   instructions: string[];
   proofTemplate: string;
+  extraInputs?: ExtraInputFromAPI[];
 }
 
 const services = computed<ServiceWithUI[]>(() => {
@@ -172,6 +193,7 @@ const services = computed<ServiceWithUI[]>(() => {
     inputDefaultTemplate: s.ui.inputDefaultTemplate,
     instructions: s.ui.instructions,
     proofTemplate: s.ui.proofTemplate,
+    extraInputs: s.ui.extraInputs,
   }));
 });
 
@@ -183,6 +205,10 @@ const claimUri = ref("");
 const claimUriError = ref("");
 // Generate a stable claim ID for this session
 const claimId = ref(crypto.randomUUID());
+
+// Extra input values (e.g. PGP fingerprint)
+const extraInputValues = ref<Record<string, string>>({});
+const extraInputErrors = ref<Record<string, string>>({});
 
 // Two-step flow for direct service pages
 const stepLabels = ["Create proof", "Verify"];
@@ -207,11 +233,16 @@ const proofContent = computed(() => {
   const template = selectedService.value?.proofTemplate ?? "";
   const handle = session.value?.handle ?? "handle";
   const slugHandle = handle.replace(/\./g, "-").toLowerCase();
-  return template
+  let result = template
     .replace(/\{did\}/g, session.value?.did ?? "did:plc:...")
     .replace(/\{handle\}/g, handle)
     .replace(/\{slugHandle\}/g, slugHandle)
     .replace(/\{claimId\}/g, claimId.value);
+  // Replace extra input placeholders
+  for (const [key, value] of Object.entries(extraInputValues.value)) {
+    result = result.replace(new RegExp(`\\{${key}\\}`, "g"), value || `{${key}}`);
+  }
+  return result;
 });
 
 const selectedInstructions = computed(() => selectedService.value?.instructions ?? []);
@@ -233,11 +264,32 @@ async function startVerification() {
   verificationSuccess.value = false;
   verificationError.value = "";
 
+  // Validate extra inputs
+  if (selectedService.value?.extraInputs) {
+    let hasErrors = false;
+    for (const input of selectedService.value.extraInputs) {
+      const value = extraInputValues.value[input.key] ?? "";
+      if (!value) {
+        extraInputErrors.value[input.key] = `${input.label} is required`;
+        hasErrors = true;
+      } else if (input.pattern && !new RegExp(input.pattern).test(value)) {
+        extraInputErrors.value[input.key] = input.patternError ?? `Invalid ${input.label}`;
+        hasErrors = true;
+      } else {
+        extraInputErrors.value[input.key] = "";
+      }
+    }
+    if (hasErrors) return;
+  }
+
   // Build the claim URI for the API
   let apiClaimUri = claimUri.value;
   if (selectedService.value?.id === "dns") {
     // For DNS, convert domain to dns: URI format
     apiClaimUri = `dns:${claimUri.value.replace(/^(https?:\/\/)?/, "").replace(/\/.*$/, "")}`;
+  } else if (selectedService.value?.id === "pgp") {
+    // For PGP, prefix URL with pgp:
+    apiClaimUri = `pgp:${claimUri.value}`;
   }
 
   // Set up verification steps

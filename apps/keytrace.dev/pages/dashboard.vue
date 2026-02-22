@@ -103,7 +103,7 @@
 </template>
 
 <script setup lang="ts">
-import { Plus as PlusIcon, AlertCircle as AlertCircleIcon, Link as LinkIcon, RefreshCw as RefreshCwIcon, Trash2 as Trash2Icon, Ban as BanIcon, Github, Globe, AtSign, Key } from "lucide-vue-next";
+import { Plus as PlusIcon, AlertCircle as AlertCircleIcon, Link as LinkIcon, RefreshCw as RefreshCwIcon, Trash2 as Trash2Icon, Ban as BanIcon, Github, Globe, AtSign, Key, Shield } from "lucide-vue-next";
 import type { Component } from "vue";
 
 const { session } = useSession();
@@ -126,12 +126,14 @@ const serviceIcons: Record<string, Component> = {
   domain: Globe,
   dns: Globe,
   mastodon: AtSign,
+  pgp: Shield,
 };
 
 function getServiceIcon(uri: string): Component {
   if (uri.includes("github.com")) return serviceIcons.github;
   if (uri.startsWith("dns:")) return serviceIcons.dns;
   if (uri.includes("mastodon")) return serviceIcons.mastodon;
+  if (uri.startsWith("pgp:")) return serviceIcons.pgp;
   return Key;
 }
 
