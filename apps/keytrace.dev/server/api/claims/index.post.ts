@@ -7,7 +7,7 @@
 
 import { COLLECTION_NSID, serviceProviders, createClaim, verifyClaim, ClaimStatus } from "@keytrace/runner";
 import { getSessionAgent } from "~/server/utils/session";
-import { createAttestation } from "~/server/utils/attestation";
+import { createAttestation, createStatusAttestation } from "~/server/utils/attestation";
 import { addRecentClaim } from "~/server/utils/recent-claims";
 
 export default defineEventHandler(async (event) => {
@@ -53,7 +53,7 @@ export default defineEventHandler(async (event) => {
   const subject = verifiedIdentity?.subject ?? processed.profile.display.replace(/^@/, "");
 
   // Create cryptographic attestation
-  const attestation = await createAttestation(did, provider.id, subject);
+  const attestation = await createAttestation(did, provider.id, subject, body.claimUri);
 
   // Build the signature object per dev.keytrace.signature lexicon
   const sig = {
@@ -79,12 +79,23 @@ export default defineEventHandler(async (event) => {
 
   try {
     const now = new Date().toISOString();
+
+    // Create a status sig attesting the initial "verified" status
+    const statusAttestation = await createStatusAttestation(did, body.claimUri, "verified", now);
+    const statusSig = {
+      kid: "status",
+      src: statusAttestation.signingKey.uri,
+      signedAt: statusAttestation.signedAt,
+      attestation: statusAttestation.sig,
+      signedFields: statusAttestation.signedFields,
+    };
+
     const record = {
       $type: COLLECTION_NSID,
       type: provider.id,
       claimUri: body.claimUri,
       identity,
-      sigs: [sig],
+      sigs: [sig, statusSig],
       comment: body.comment,
       status: "verified",
       lastVerifiedAt: now,

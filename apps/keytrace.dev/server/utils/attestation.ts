@@ -2,10 +2,10 @@ import { getOrCreateTodaysKey, getTodaysKeyRef } from "./keys";
 import { signClaim, canonicalize } from "./signing";
 
 export interface ClaimData {
-  type: string;
-  subject: string;
+  claimUri: string;
   did: string;
-  verifiedAt: string;
+  "identity.subject": string;
+  type: string;
 }
 
 export interface Attestation {
@@ -32,18 +32,18 @@ export interface ClaimRecord {
  * 3. Signs with ES256
  * 4. Returns the attestation (sig + key ref + timestamp)
  */
-export async function createAttestation(did: string, type: string, subject: string): Promise<Attestation> {
+export async function createAttestation(did: string, type: string, subject: string, claimUri: string): Promise<Attestation> {
   const keyPair = await getOrCreateTodaysKey();
   const now = new Date().toISOString();
 
   const claimData: ClaimData = {
+    claimUri,
     did,
-    subject,
+    "identity.subject": subject,
     type,
-    verifiedAt: now,
   };
 
-  const sig = signClaim(claimData, keyPair.privateKey);
+  const sig = signClaim(claimData as unknown as Record<string, unknown>, keyPair.privateKey);
   const keyRef = await getTodaysKeyRef();
 
   return {
@@ -54,17 +54,10 @@ export async function createAttestation(did: string, type: string, subject: stri
   };
 }
 
-export interface StatusClaimData {
-  [key: string]: string;
-  did: string;
-  claimUri: string;
-  status: string;
-  statusAt: string;
-}
-
 /**
  * Create a cryptographic attestation for a status change (re-verification or retraction).
- * Signs over { did, claimUri, status, statusAt } so the status fields can't be tampered with.
+ * Signs over { claimUri, did, status, <timestampField> } so the status fields can't be tampered with.
+ * The timestamp field name matches the record field: lastVerifiedAt, failedAt, or retractedAt.
  */
 export async function createStatusAttestation(
   did: string,
@@ -74,11 +67,15 @@ export async function createStatusAttestation(
 ): Promise<Attestation> {
   const keyPair = await getOrCreateTodaysKey();
 
-  const claimData: StatusClaimData = {
+  // Use the actual record field name for the timestamp so signedFields maps directly to record fields
+  const timestampField =
+    status === "verified" ? "lastVerifiedAt" : status === "retracted" ? "retractedAt" : "failedAt";
+
+  const claimData: Record<string, string> = {
     claimUri,
     did,
     status,
-    statusAt,
+    [timestampField]: statusAt,
   };
 
   const sig = signClaim(claimData, keyPair.privateKey);

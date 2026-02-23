@@ -47,10 +47,12 @@ export interface ClaimRecord {
 }
 
 /**
- * Get the primary signature from a claim record (supports both old and new format).
+ * Get the attestation signature from a claim record.
+ * Looks for a sig with kid starting with "attest:", falls back to sigs[0] or legacy sig field.
  */
 export function getPrimarySig(record: { sigs?: ClaimSignature[]; sig?: ClaimSignature }): ClaimSignature | undefined {
-  return record.sigs?.[0] ?? record.sig;
+  const attestSig = record.sigs?.find((s) => s.kid?.startsWith("attest:"));
+  return attestSig ?? record.sigs?.[0] ?? record.sig;
 }
 
 /**
@@ -75,14 +77,11 @@ export interface ES256PublicJwk {
 }
 
 /**
- * Claim data that is signed (canonical form)
+ * Claim data that is signed (canonical form).
+ * New format uses record field names: claimUri, did, identity.subject, type.
+ * Legacy format used: did, subject, type, verifiedAt.
  */
-export interface SignedClaimData {
-  did: string;
-  subject: string;
-  type: string;
-  verifiedAt: string;
-}
+export type SignedClaimData = Record<string, string>;
 
 /**
  * Verification step detail for debugging/auditing

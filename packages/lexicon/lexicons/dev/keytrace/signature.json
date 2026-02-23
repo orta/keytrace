@@ -34,6 +34,11 @@
           "type": "array",
           "items": { "type": "string" },
           "description": "Ordered list of field names included in the signed payload (e.g., ['did', 'subject', 'type', 'verifiedAt'])"
+        },
+        "comment": {
+          "type": "string",
+          "maxGraphemes": 512,
+          "description": "Optional comment or description."
         }
       }
     }

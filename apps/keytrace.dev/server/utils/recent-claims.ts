@@ -42,6 +42,10 @@ export async function addRecentClaim(claim: RecentClaim): Promise<void> {
     return;
   }
 
+  // Deduplicate: remove any existing entry for the same DID + type + subject
+  const dupeIdx = feed.findIndex((c) => c.did === claim.did && c.type === claim.type && c.subject === claim.subject);
+  if (dupeIdx >= 0) feed.splice(dupeIdx, 1);
+
   feed.unshift(claim);
   if (feed.length > MAX_ITEMS) feed.length = MAX_ITEMS;
   lastKnownFeedSize = feed.length;

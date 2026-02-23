@@ -56,8 +56,8 @@ yarn format:check     # Check formatting
 - **Algorithm:** ES256 (ECDSA P-256 + SHA-256), JWS compact serialization
 - **Key rotation:** Daily keys stored in S3 (prod) or `.data/` (dev), published to keytrace's ATProto repo as `dev.keytrace.serverPublicKey` records
 - **`sigs`** array on each claim holds one or more `dev.keytrace.signature` objects, each with a `kid` discriminator:
-  - `kid: "attest:<provider>"` — attestation sig, signs `{ did, subject, type, verifiedAt }`
-  - `kid: "status"` — status-change sig, signs `{ claimUri, did, status, statusAt }`
+  - `kid: "attest:<provider>"` — attestation sig, signs `{ claimUri, createdAt, did, identity.subject, type }`
+  - `kid: "status"` — status-change sig, signs `{ claimUri, did, status, lastVerifiedAt|failedAt|retractedAt }`
 - **Backwards compat:** Old records may have a single `sig` object instead of `sigs` array. Use `getPrimarySig()` from `@keytrace/claims` to normalize.
 - **`signedFields`** in each signature lists what fields are covered, making signatures self-documenting
 - Server utils: `attestation.ts` (high-level), `signing.ts` (ES256 JWS), `keys.ts` (key management)

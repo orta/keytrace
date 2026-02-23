@@ -140,17 +140,40 @@ async function verifySingleClaim(did: string, uri: string, rkey: string, claim: 
       return buildResult(uri, rkey, claim, false, steps, error);
     }
 
-    // Step 5: Reconstruct the signed claim data
-    const signedData: SignedClaimData = {
-      did,
-      subject: claim.identity.subject,
-      type: claim.type,
-      verifiedAt: sig.signedAt,
-    };
+    // Step 5: Reconstruct the signed claim data.
+    // Use signedFields to determine which fields were signed and reconstruct them.
+    const fields = sig.signedFields ?? [];
+    const isNewFormat = fields.includes("identity.subject");
+    let signedData: SignedClaimData;
+    if (isNewFormat) {
+      // New format: signedFields tells us exactly which fields to include.
+      // Map each field name to its value from the record.
+      const valueMap: Record<string, string> = {
+        claimUri: claim.claimUri,
+        createdAt: sig.signedAt, // createdAt was set to signedAt during attestation
+        did,
+        "identity.subject": claim.identity.subject,
+        type: claim.type,
+      };
+      signedData = {};
+      for (const field of fields) {
+        if (field in valueMap) {
+          signedData[field] = valueMap[field];
+        }
+      }
+    } else {
+      // Legacy format: { did, subject, type, verifiedAt }
+      signedData = {
+        did,
+        subject: claim.identity.subject,
+        type: claim.type,
+        verifiedAt: sig.signedAt,
+      };
+    }
     steps.push({
       step: "reconstruct_data",
       success: true,
-      detail: `Reconstructed signed data for ${claim.type}:${claim.identity.subject}`,
+      detail: `Reconstructed signed data for ${claim.type}:${claim.identity.subject} (${isNewFormat ? "new" : "legacy"} format)`,
     });
 
     // Step 6: Verify the signature

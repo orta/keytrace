@@ -54,7 +54,7 @@
               <!-- validate_claim: Show signature structure -->
               <template v-if="step.step === 'validate_claim'">
                 <div class="bg-zinc-900 border border-zinc-800 rounded p-2 overflow-x-auto">
-                  <pre class="text-xs font-mono text-zinc-400"><span class="text-zinc-500">claim.sigs[0] = </span>{
+                  <pre class="text-xs font-mono text-zinc-400"><span class="text-zinc-500">attestSig = </span>{
   <span class="text-violet-400">src</span>: <span class="text-green-400">"{{ truncate(primarySig?.src ?? '', 50) }}"</span>,
   <span class="text-violet-400">signedAt</span>: <span class="text-green-400">"{{ primarySig?.signedAt }}"</span>,
   <span class="text-violet-400">attestation</span>: <span class="text-green-400">"{{ truncate(primarySig?.attestation ?? '', 40) }}..."</span>
@@ -98,11 +98,8 @@
                 <div class="bg-zinc-900 border border-zinc-800 rounded p-2 overflow-x-auto">
                   <pre class="text-xs font-mono text-zinc-400"><span class="text-zinc-500">// Canonical data that was signed:</span>
 <span class="text-violet-400">SignedClaimData</span> = {
-  <span class="text-violet-400">did</span>: <span class="text-green-400">"{{ did }}"</span>,
-  <span class="text-violet-400">subject</span>: <span class="text-green-400">"{{ claim.identity.subject }}"</span>,
-  <span class="text-violet-400">type</span>: <span class="text-green-400">"{{ claim.type }}"</span>,
-  <span class="text-violet-400">verifiedAt</span>: <span class="text-green-400">"{{ primarySig?.signedAt }}"</span>
-}</pre>
+<template v-for="(field, i) in reconstructedFields" :key="field.key">  <span class="text-violet-400">{{ field.key }}</span>: <span class="text-green-400">"{{ field.value }}"</span>{{ i < reconstructedFields.length - 1 ? ',' : '' }}
+</template>}</pre>
                 </div>
               </template>
 
@@ -156,6 +153,34 @@ const keyLoading = ref(false);
 
 /** Primary signature from the claim record (supports both old sig and new sigs format) */
 const primarySig = computed(() => getPrimarySig(props.claim.claim));
+
+/** Reconstruct the signed fields from the sig's signedFields, mapping to actual record values */
+const reconstructedFields = computed(() => {
+  const sig = primarySig.value;
+  const claim = props.claim.claim;
+  const fields = sig?.signedFields ?? [];
+  const isNewFormat = fields.includes("identity.subject");
+
+  if (isNewFormat) {
+    // New format: signedFields tells us exactly which fields were signed
+    const valueMap: Record<string, string> = {
+      claimUri: claim.claimUri,
+      createdAt: sig?.signedAt ?? claim.createdAt,
+      did: props.did,
+      "identity.subject": claim.identity.subject,
+      type: claim.type,
+    };
+    return fields.sort().map((key) => ({ key, value: valueMap[key] ?? "?" }));
+  }
+
+  // Legacy format
+  return [
+    { key: "did", value: props.did },
+    { key: "subject", value: claim.identity.subject },
+    { key: "type", value: claim.type },
+    { key: "verifiedAt", value: sig?.signedAt ?? "" },
+  ];
+});
 
 // Fetch the key when expanded
 watch(expanded, async (isExpanded) => {

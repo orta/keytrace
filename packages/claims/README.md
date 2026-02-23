@@ -92,7 +92,7 @@ interface ClaimVerificationResult {
 2. Fetches the user's PDS endpoint from their DID document
 3. Lists all `dev.keytrace.claim` records from their repo
 4. For each claim:
-   - Fetches the signing key from the `sig.src` AT URI
+   - Fetches the signing key from the primary signature's `src` AT URI
    - Reconstructs the signed claim data
    - Verifies the ES256 signature using Web Crypto API
 

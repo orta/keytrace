@@ -23,6 +23,11 @@
             "type": "string",
             "format": "datetime",
             "description": "Datetime until which this key is valid (ISO 8601)."
+          },
+         "comment": {
+            "type": "string",
+            "maxGraphemes": 512,
+            "description": "Optional comment or description."
           }
         }
       }

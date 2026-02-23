@@ -55,7 +55,7 @@
       <div v-if="profile.claims && profile.claims.length > 0" class="mt-8 space-y-3">
         <ClaimCard v-for="claim in profile.claims" :key="claim.uri" :claim="mapClaim(claim)">
           <template #actions>
-            <VerifyPopover :claim-uri="claim.uri" :did="profile.did" :display-name="mapClaim(claim).displayName" :provider-name="claim.matches?.[0]?.providerName" />
+            <VerifyPopover :claim-uri="claim.uri" :did="profile.did" :display-name="mapClaim(claim).displayName" :provider-name="claim.matches?.[0]?.providerName" :rkey="isOwnProfile ? claim.rkey : undefined" @updated="() => refresh()" />
             <button
               v-if="isOwnProfile"
               class="p-1.5 rounded-lg text-zinc-500 hover:text-failed hover:bg-failed/10 transition-colors"

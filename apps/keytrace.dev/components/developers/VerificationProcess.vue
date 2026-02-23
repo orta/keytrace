@@ -94,10 +94,11 @@
       <!-- Step explanations -->
       <div class="bg-zinc-900/50 border border-zinc-800/50 rounded p-4 text-xs text-zinc-500 space-y-2">
         <div class="font-semibold text-zinc-400 mb-2">Verification steps:</div>
-        <div><span class="font-mono text-zinc-400">validate_claim</span> - Check signature fields exist (sig.src, sig.attestation, sig.signedAt)</div>
-        <div><span class="font-mono text-zinc-400">fetch_key</span> - Fetch the ES256 public key from the sig.src AT URI</div>
+        <div><span class="font-mono text-zinc-400">validate_claim</span> - Find attestation sig (kid starting with "attest:") and check required fields (src, attestation, signedAt)</div>
+        <div><span class="font-mono text-zinc-400">validate_signer</span> - Verify the signing key is from a trusted signer</div>
+        <div><span class="font-mono text-zinc-400">fetch_key</span> - Fetch the ES256 public key from the attestation sig's src AT URI</div>
         <div><span class="font-mono text-zinc-400">parse_key</span> - Parse the JWK and verify it's a P-256 ECDSA key</div>
-        <div><span class="font-mono text-zinc-400">reconstruct_data</span> - Rebuild the canonical data: {'{'}did, subject, type, verifiedAt{'}'}</div>
+        <div><span class="font-mono text-zinc-400">reconstruct_data</span> - Rebuild the canonical data from the attestation sig's signedFields</div>
         <div><span class="font-mono text-zinc-400">verify_signature</span> - Verify the ES256 signature using Web Crypto</div>
       </div>
     </div>

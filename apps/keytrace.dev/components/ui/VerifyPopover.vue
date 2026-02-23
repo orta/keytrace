@@ -74,10 +74,13 @@ const props = defineProps<{
   did: string;
   displayName: string;
   providerName?: string;
+  /** When provided, also calls PATCH to update the record's status sig after verification */
+  rkey?: string;
 }>();
 
 const emit = defineEmits<{
   verified: [];
+  updated: [status: string];
 }>();
 
 const isVisible = ref(false);
@@ -203,6 +206,29 @@ async function runVerification() {
         expandable: verifyExpandable,
       };
       result.value = { status: "failed", errors: apiResult.errors || [] };
+    }
+
+    // If rkey is provided, persist the result by updating the record's status sig
+    if (props.rkey) {
+      steps.value.push({ action: "Updating record", status: "running" });
+      try {
+        const patchResult = await $fetch(`/api/claims/${props.rkey}`, {
+          method: "PATCH",
+          body: { action: apiResult.status === "verified" ? "reverify" : "retract" },
+        });
+        steps.value[steps.value.length - 1] = {
+          ...steps.value[steps.value.length - 1],
+          status: "success",
+          detail: `Status: ${(patchResult as any).status}`,
+        };
+        emit("updated", (patchResult as any).status);
+      } catch {
+        steps.value[steps.value.length - 1] = {
+          ...steps.value[steps.value.length - 1],
+          status: "error",
+          detail: "Failed to update record",
+        };
+      }
     }
   } catch (err) {
     steps.value[1] = { ...steps.value[1], status: "error" };

@@ -77,7 +77,7 @@ export interface ClaimData {
   /** @deprecated Use sigs instead. Retained for backwards compat with old records. */
   sig?: { src?: string };
   /** Signing key references from the claim record (new format) */
-  sigs?: Array<{ src?: string }>;
+  sigs?: Array<{ kid?: string; src?: string }>;
   /** Current verification status. Absent on legacy records, treated as "verified". */
   status?: "verified" | "failed" | "retracted";
   /** Timestamp of the most recent successful re-verification */
