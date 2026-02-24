@@ -10,12 +10,10 @@
 </template>
 
 <script setup lang="ts">
-import { Github, Globe, AtSign, Cloud, Shield } from "lucide-vue-next";
-import NpmIcon from "~/components/icons/NpmIcon.vue";
-import TangledIcon from "~/components/icons/TangledIcon.vue";
 import type { ServiceOption } from "~/components/ui/ServicePicker.vue";
 
 const { session } = useSession();
+const { services: servicesData, iconMap } = useServiceRegistry();
 
 // Redirect to home if not authenticated
 watch(
@@ -28,38 +26,13 @@ watch(
   { immediate: true },
 );
 
-// Fetch services from API
-const { data: servicesData } = await useFetch("/api/services");
-
-// Map icon names to components
-const iconMap: Record<string, unknown> = {
-  github: Github,
-  globe: Globe,
-  "at-sign": AtSign,
-  cloud: Cloud,
-  npm: NpmIcon,
-  tangled: TangledIcon,
-  shield: Shield,
-};
-
-// Transform API response into ServiceOption format
-interface ServiceFromAPI {
-  id: string;
-  name: string;
-  homepage: string;
-  ui: {
-    description: string;
-    icon: string;
-  };
-}
-
 const services = computed<ServiceOption[]>(() => {
   if (!servicesData.value) return [];
-  return (servicesData.value as ServiceFromAPI[]).map((s) => ({
+  return servicesData.value.map((s) => ({
     id: s.id,
     name: s.name,
     description: s.ui.description,
-    icon: iconMap[s.ui.icon] ?? Globe,
+    icon: iconMap[s.ui.icon] ?? iconMap.globe,
   }));
 });
 

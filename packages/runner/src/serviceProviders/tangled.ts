@@ -21,6 +21,7 @@ const tangled: ServiceProvider = {
   ui: {
     description: "Link via a Tangled string",
     icon: "tangled",
+    iconDisplay: "raw",
     inputLabel: "String URL",
     inputPlaceholder: "https://tangled.org/strings/username/abc123...",
     instructions: [

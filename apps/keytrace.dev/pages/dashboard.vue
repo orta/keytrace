@@ -43,7 +43,7 @@
           <div class="flex items-center justify-between px-4 py-3">
             <div class="flex items-center gap-3 min-w-0">
               <div class="w-8 h-8 rounded-lg bg-zinc-800 flex items-center justify-center">
-                <component :is="getServiceIcon(claim.uri)" class="w-4 h-4 text-zinc-300" />
+                <component :is="getServiceIcon(claim.type ?? '')" class="w-4 h-4 text-zinc-300" />
               </div>
               <div class="min-w-0">
                 <div class="flex items-center gap-2">
@@ -103,10 +103,10 @@
 </template>
 
 <script setup lang="ts">
-import { Plus as PlusIcon, AlertCircle as AlertCircleIcon, Link as LinkIcon, RefreshCw as RefreshCwIcon, Trash2 as Trash2Icon, Ban as BanIcon, Github, Globe, AtSign, Key, Shield } from "lucide-vue-next";
-import type { Component } from "vue";
+import { Plus as PlusIcon, AlertCircle as AlertCircleIcon, Link as LinkIcon, RefreshCw as RefreshCwIcon, Trash2 as Trash2Icon, Ban as BanIcon } from "lucide-vue-next";
 
 const { session } = useSession();
+const { getServiceIcon } = useServiceRegistry();
 
 // Redirect to home if not authenticated
 watch(
@@ -120,22 +120,6 @@ watch(
 );
 
 const { data: claims, pending, error, refresh } = await useFetch("/api/claims");
-
-const serviceIcons: Record<string, Component> = {
-  github: Github,
-  domain: Globe,
-  dns: Globe,
-  mastodon: AtSign,
-  pgp: Shield,
-};
-
-function getServiceIcon(uri: string): Component {
-  if (uri.includes("github.com")) return serviceIcons.github;
-  if (uri.startsWith("dns:")) return serviceIcons.dns;
-  if (uri.includes("mastodon")) return serviceIcons.mastodon;
-  if (uri.startsWith("pgp:")) return serviceIcons.pgp;
-  return Key;
-}
 
 function handlePatchError(err: unknown) {
   const status = (err as any)?.response?.status ?? (err as any)?.statusCode;

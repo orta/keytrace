@@ -28,6 +28,7 @@ const npm: ServiceProvider = {
   ui: {
     description: "Link via an npm package",
     icon: "npm",
+    iconDisplay: "raw",
     inputLabel: "npm Package URL",
     inputPlaceholder: "https://www.npmjs.com/package/keytrace-yourhandle",
     inputDefaultTemplate: "https://www.npmjs.com/package/keytrace-{slugHandle}",
