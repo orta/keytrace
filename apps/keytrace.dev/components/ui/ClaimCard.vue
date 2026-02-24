@@ -10,7 +10,7 @@
           :alt="claim.identity.displayName || claim.identity.subject || 'Avatar'"
           class="w-8 h-8 rounded-full object-cover"
         />
-        <component v-else-if="claim.serviceType === 'npm' || claim.serviceType === 'tangled'" :is="serviceIcon" class="w-7 h-7 text-zinc-300" />
+        <component v-else-if="iconDisplay === 'raw'" :is="serviceIcon" class="w-7 h-7 text-zinc-300" />
         <div v-else class="w-8 h-8 rounded-full bg-zinc-800 flex items-center justify-center">
           <component :is="serviceIcon" class="w-4 h-4 text-zinc-300" />
         </div>
@@ -95,9 +95,6 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { Github, Globe, AtSign, Key, Shield } from "lucide-vue-next";
-import NpmIcon from "~/components/icons/NpmIcon.vue";
-import TangledIcon from "~/components/icons/TangledIcon.vue";
 
 export interface ClaimIdentity {
   subject?: string;
@@ -131,18 +128,10 @@ const props = defineProps<{
   claim: ClaimData;
 }>();
 
-const serviceIcons: Record<string, any> = {
-  github: Github,
-  domain: Globe,
-  dns: Globe,
-  mastodon: AtSign,
-  fediverse: AtSign,
-  npm: NpmIcon,
-  tangled: TangledIcon,
-  pgp: Shield,
-};
+const { getServiceIcon, getIconDisplay } = useServiceRegistry();
 
-const serviceIcon = computed(() => serviceIcons[props.claim.serviceType ?? ""] ?? Key);
+const serviceIcon = computed(() => getServiceIcon(props.claim.serviceType ?? ""));
+const iconDisplay = computed(() => getIconDisplay(props.claim.serviceType ?? ""));
 
 const isPgp = computed(() => props.claim.serviceType === "pgp");
 

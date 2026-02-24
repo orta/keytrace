@@ -46,9 +46,7 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { Github, Globe, AtSign, Key, User as UserIcon } from "lucide-vue-next";
-import NpmIcon from "~/components/icons/NpmIcon.vue";
-import TangledIcon from "~/components/icons/TangledIcon.vue";
+import { User as UserIcon } from "lucide-vue-next";
 
 export interface RecentClaimIdentity {
   subject?: string;
@@ -70,32 +68,13 @@ const props = defineProps<{
   claim: RecentClaim;
 }>();
 
-const serviceIcons: Record<string, any> = {
-  github: Github,
-  "github-gist": Github,
-  domain: Globe,
-  dns: Globe,
-  mastodon: AtSign,
-  fediverse: AtSign,
-  npm: NpmIcon,
-  tangled: TangledIcon,
-};
+const { getServiceIcon, getServiceName } = useServiceRegistry();
 
-const serviceIcon = computed(() => serviceIcons[props.claim.serviceType ?? ""] ?? Key);
-
-const serviceNames: Record<string, string> = {
-  github: "GitHub",
-  "github-gist": "GitHub",
-  domain: "DNS",
-  dns: "DNS",
-  mastodon: "Mastodon",
-  fediverse: "Fediverse",
-  npm: "npm",
-  tangled: "Tangled",
-  bsky: "Bluesky",
-};
-
-const serviceName = computed(() => serviceNames[props.claim.serviceType ?? ""]);
+const serviceIcon = computed(() => getServiceIcon(props.claim.serviceType ?? ""));
+const serviceName = computed(() => {
+  const type = props.claim.serviceType;
+  return type ? getServiceName(type) : undefined;
+});
 
 const iconClass = "w-5 h-5";
 

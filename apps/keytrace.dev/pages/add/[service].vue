@@ -110,9 +110,7 @@
 </template>
 
 <script setup lang="ts">
-import { Github, Globe, AtSign, Cloud, Shield, CheckCircle as CheckCircleIcon, XCircle as XCircleIcon } from "lucide-vue-next";
-import NpmIcon from "~/components/icons/NpmIcon.vue";
-import TangledIcon from "~/components/icons/TangledIcon.vue";
+import { CheckCircle as CheckCircleIcon, XCircle as XCircleIcon } from "lucide-vue-next";
 import type { ServiceOption } from "~/components/ui/ServicePicker.vue";
 import type { VerificationStep, ExpandableContent } from "~/components/ui/VerificationLog.vue";
 import type { ProofDetails } from "@keytrace/runner";
@@ -121,6 +119,7 @@ const route = useRoute();
 const serviceId = computed(() => route.params.service as string);
 
 const { session } = useSession();
+const { services: servicesData, iconMap } = useServiceRegistry();
 
 // Redirect to home if not authenticated
 watch(
@@ -133,43 +132,14 @@ watch(
   { immediate: true },
 );
 
-// Fetch services from API
-const { data: servicesData, pending: loading } = await useFetch("/api/services");
+const loading = computed(() => !servicesData.value);
 
-// Map icon names to components
-const iconMap: Record<string, unknown> = {
-  github: Github,
-  globe: Globe,
-  "at-sign": AtSign,
-  cloud: Cloud,
-  npm: NpmIcon,
-  tangled: TangledIcon,
-  shield: Shield,
-};
-
-// Transform API response into ServiceOption format
 interface ExtraInputFromAPI {
   key: string;
   label: string;
   placeholder: string;
   pattern?: string;
   patternError?: string;
-}
-
-interface ServiceFromAPI {
-  id: string;
-  name: string;
-  homepage: string;
-  ui: {
-    description: string;
-    icon: string;
-    inputLabel: string;
-    inputPlaceholder: string;
-    inputDefaultTemplate?: string;
-    instructions: string[];
-    proofTemplate: string;
-    extraInputs?: ExtraInputFromAPI[];
-  };
 }
 
 interface ServiceWithUI extends ServiceOption {
@@ -183,11 +153,11 @@ interface ServiceWithUI extends ServiceOption {
 
 const services = computed<ServiceWithUI[]>(() => {
   if (!servicesData.value) return [];
-  return (servicesData.value as ServiceFromAPI[]).map((s) => ({
+  return servicesData.value.map((s) => ({
     id: s.id,
     name: s.name,
     description: s.ui.description,
-    icon: iconMap[s.ui.icon] ?? Globe,
+    icon: iconMap[s.ui.icon] ?? iconMap.globe,
     inputLabel: s.ui.inputLabel,
     inputPlaceholder: s.ui.inputPlaceholder,
     inputDefaultTemplate: s.ui.inputDefaultTemplate,

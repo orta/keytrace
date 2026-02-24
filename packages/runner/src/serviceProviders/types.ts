@@ -89,6 +89,8 @@ export interface ServiceProviderUI {
   proofTemplate: string;
   /** Additional input fields beyond the main claim URI */
   extraInputs?: ExtraInput[];
+  /** How to render the icon: "badge" (in circle bg, default) or "raw" (standalone SVG) */
+  iconDisplay?: "badge" | "raw";
 }
 
 /**

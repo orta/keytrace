@@ -109,6 +109,23 @@ Good proof locations include: public gists/snippets, profile bios, DNS TXT recor
 
 You need to be careful that it's a place where only the identity can post. For example you can post a GitHub gist with a keytrace DID but the comments can also contain keytrace DIDs for other people. This could be used to make a false claim.
 
+### What You Need to Create
+
+All you need to touch is the `packages/runner/` package — the web app picks up new providers automatically via the `/api/services` endpoint and a shared `useServiceRegistry` composable.
+
+1. **Create a provider file** in `packages/runner/src/serviceProviders/` implementing the `ServiceProvider` interface:
+   - `id`, `name`, `homepage` — basic metadata
+   - `reUri` — regex to match claim URIs
+   - `ui` — wizard configuration (icon, instructions, proof template, input labels)
+   - `processURI()` — converts a matched URI into fetch + verification config
+   - `postprocess()` — extracts identity metadata (username, avatar, profile URL)
+   - `getProofText()` — generates the proof string for the user
+   - `tests` — URI match test cases
+
+2. **Register it** in `packages/runner/src/serviceProviders/index.ts`
+
+3. **Icon**: Set `ui.icon` to a [Lucide](https://lucide.dev/icons/) icon name (e.g., `"github"`, `"globe"`, `"shield"`) and the web app renders it automatically. If your service needs a custom SVG icon, add a component to `apps/keytrace.dev/components/icons/` and register it in the `iconMap` in `apps/keytrace.dev/composables/useServiceRegistry.ts`. Set `ui.iconDisplay: "raw"` for standalone SVGs (like npm/tangled) that shouldn't be wrapped in a circular badge.
+
 ### Using Claude Code to Add a Provider
 
 From the repo root, try a prompt like:
@@ -116,6 +133,7 @@ From the repo root, try a prompt like:
 > Add a new service provider for [ServiceName]. Users will prove their identity by [describe the proof location, e.g. "creating a public snippet on GitLab containing their DID", or "adding their DID to their Codeberg profile bio"]. The proof URL format is [e.g. "https://gitlab.com/-/snippets/:id"]. Look at the existing providers in `packages/runner/src/serviceProviders/` for the pattern — especially `github.ts` for an HTTP+JSON example or `dns.ts` for a simpler one. Register the new provider in the index file and add URI match tests.
 
 That should give Claude Code enough to:
+
 - Create a new file in `packages/runner/src/serviceProviders/`
 - Implement the `ServiceProvider` interface (URI regex, `processURI`, `ui` config, `getProofText`, test cases)
 - Register it in `packages/runner/src/serviceProviders/index.ts`
@@ -128,8 +146,6 @@ When you open your PR, please include:
 - **Example proof URL**: A real or realistic example URL so I can test the flow
 - **Any API quirks**: Rate limits, auth requirements, non-standard response formats, CORS issues, etc.
 - **Fetcher needs**: The existing fetchers are `http`, `dns`, and `activitypub`. If your service needs something different, note that
-
-I ([@orta](https://github.com/orta)) will handle wiring up the integration into the web app UI, adding the service icon, and any server-side proxy configuration that might be needed.
 
 ## License
 

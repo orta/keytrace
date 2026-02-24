@@ -121,6 +121,7 @@ import { AlertCircle as AlertCircleIcon, Share2 as ShareIcon, Link as LinkIcon, 
 
 const route = useRoute();
 const { session } = useSession();
+const { getServiceName } = useServiceRegistry();
 
 const rawHandle = computed(() => {
   const param = route.params.handle as string;
@@ -146,10 +147,11 @@ const profileClaims = computed(() => (profile.value?.claims ?? []).map((c: any) 
 // Map API claim to ClaimCard data shape
 function mapClaim(claim: any) {
   const match = claim.matches?.[0];
+  const serviceType = claim.type ?? match?.provider ?? "";
   return {
-    displayName: match?.providerName ?? guessDisplayName(claim.uri),
+    displayName: match?.providerName ?? getServiceName(serviceType),
     status: claim.status,
-    serviceType: claim.type ?? match?.provider ?? guessServiceType(claim.uri),
+    serviceType,
     subject: claim.uri,
     recipeName: match?.provider,
     comment: claim.comment,
@@ -160,22 +162,6 @@ function mapClaim(claim: any) {
     attestation: undefined,
     recipe: undefined,
   };
-}
-
-function guessDisplayName(uri: string) {
-  if (uri.includes("github.com")) return "GitHub Account";
-  if (uri.startsWith("dns:")) return "Domain";
-  if (uri.includes("mastodon")) return "Mastodon Account";
-  if (uri.startsWith("pgp:")) return "PGP Key";
-  return "Identity Claim";
-}
-
-function guessServiceType(uri: string) {
-  if (uri.includes("github.com")) return "github";
-  if (uri.startsWith("dns:")) return "dns";
-  if (uri.includes("mastodon")) return "mastodon";
-  if (uri.startsWith("pgp:")) return "pgp";
-  return "";
 }
 
 function shareProfile() {
