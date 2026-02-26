@@ -5,6 +5,7 @@ import bsky from "./bsky.js";
 import npm from "./npm.js";
 import tangled from "./tangled.js";
 import pgp from "./pgp.js";
+import twitter from "./twitter.js";
 import type { ServiceProvider, ServiceProviderMatch } from "./types.js";
 
 export type { ServiceProvider, ServiceProviderMatch, ServiceProviderUI, ExtraInput, ProofTarget, ProofRequest, ProcessedURI } from "./types.js";
@@ -17,6 +18,7 @@ const providers: Record<string, ServiceProvider> = {
   npm,
   tangled,
   pgp,
+  twitter,
 };
 
 /**
