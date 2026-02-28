@@ -30,8 +30,8 @@ const hackernews: ServiceProvider = {
     inputPlaceholder: "https://news.ycombinator.com/user?id=username",
     instructions: [
       "**Option 1:** Add to your profile's about field at [profile settings](https://news.ycombinator.com/user)",
-      "**Option 2:** Create a comment or post (e.g., in a [verification thread](https://news.ycombinator.com)) containing the verification content",
-      "Copy the URL of your profile or post/comment",
+      "**Option 2:** Create a comment in the [Keytrace Verification Thread](https://news.ycombinator.com/item?id=47194380) containing the verification content",
+      "Copy the URL of your profile or comment",
       "Paste the URL below",
     ],
     proofTemplate: "I'm linking my keytrace.dev: {did}",
