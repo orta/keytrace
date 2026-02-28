@@ -61,8 +61,8 @@
             </div>
             <span class="text-xs text-zinc-500">keytrace.dev</span>
           </div>
-          <NuxtLink to="/recipes" class="text-xs text-zinc-600 hover:text-zinc-400 transition-colors">
-            How it works
+          <NuxtLink to="/services" class="text-xs text-zinc-600 hover:text-zinc-400 transition-colors">
+            Services
           </NuxtLink>
           <NuxtLink to="/developers" class="text-xs text-zinc-600 hover:text-zinc-400 transition-colors">
             For Developers

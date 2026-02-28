@@ -1,7 +1,7 @@
 /**
- * GET /api/recipes/:provider
+ * GET /api/services/:provider
  *
- * Get verification recipe details for a service provider.
+ * Get verification details for a service provider.
  * Returns the provider info and verification steps.
  */
 

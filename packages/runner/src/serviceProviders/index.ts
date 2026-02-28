@@ -7,6 +7,7 @@ import tangled from "./tangled.js";
 import pgp from "./pgp.js";
 import twitter from "./twitter.js";
 import linkedin from "./linkedin.js";
+import instagram from "./instagram.js";
 import type { ServiceProvider, ServiceProviderMatch } from "./types.js";
 
 export type { ServiceProvider, ServiceProviderMatch, ServiceProviderUI, ExtraInput, ProofTarget, ProofRequest, ProcessedURI } from "./types.js";
@@ -21,6 +22,7 @@ const providers: Record<string, ServiceProvider> = {
   pgp,
   twitter,
   linkedin,
+  instagram,
 };
 
 /**
@@ -70,4 +72,4 @@ export function getProofTextForProvider(providerId: string, did: string, handle?
   return provider?.getProofText(did, handle);
 }
 
-export { github, dns, activitypub, bsky, npm, tangled, pgp, twitter, linkedin };
+export { github, dns, activitypub, bsky, npm, tangled, pgp, twitter, linkedin, instagram };

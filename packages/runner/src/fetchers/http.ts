@@ -2,7 +2,7 @@ import { DEFAULT_TIMEOUT } from "../constants.js";
 import * as cheerio from "cheerio";
 
 export interface HttpFetchOptions {
-  format: "json" | "text" | "json-ld";
+  format: "json" | "text" | "json-ld" | "og-meta";
   headers?: Record<string, string>;
   timeout?: number;
 }
@@ -48,6 +48,29 @@ export async function fetch(url: string, options: HttpFetchOptions): Promise<unk
       } catch (err) {
         throw new Error(`Failed to parse JSON-LD: ${err instanceof Error ? err.message : 'Unknown error'}`);
       }
+    }
+
+    if (options.format === "og-meta") {
+      const html = await response.text();
+      const $ = cheerio.load(html);
+      const ogData: Record<string, string> = {};
+
+      // Extract all Open Graph meta tags
+      $('meta[property^="og:"]').each((_, elem) => {
+        const property = $(elem).attr('property');
+        const content = $(elem).attr('content');
+        if (property && content) {
+          // Convert og:title to title, og:description to description, etc.
+          const key = property.replace('og:', '');
+          ogData[key] = content;
+        }
+      });
+
+      if (Object.keys(ogData).length === 0) {
+        throw new Error('No Open Graph meta tags found in HTML');
+      }
+
+      return ogData;
     }
 
     return await response.text();

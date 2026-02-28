@@ -58,7 +58,7 @@
       </a>
 
       <div class="flex items-center flex-wrap gap-x-3 gap-y-1 text-xs text-zinc-500">
-        <NuxtLink v-if="claim.serviceType" :to="`/recipes/${claim.serviceType}`" class="hover:text-zinc-300 transition-colors">
+        <NuxtLink v-if="claim.serviceType" :to="`/services/${claim.serviceType}`" class="hover:text-zinc-300 transition-colors">
           via {{ claim.recipeName || claim.serviceType }}
         </NuxtLink>
         <span v-else-if="claim.recipeName">via {{ claim.recipeName }}</span>

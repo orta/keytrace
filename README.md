@@ -1,6 +1,6 @@
 # Keytrace
 
-Identity verification for ATProto. Link your decentralized identity (DID) to external accounts like GitHub, LinkedIn, DNS, and Mastodon with cryptographically signed attestations.
+Identity verification for ATProto. Link your decentralized identity (DID) to external accounts like GitHub, LinkedIn, Instagram, DNS, and Mastodon with cryptographically signed attestations.
 
 ## What is Keytrace?
 

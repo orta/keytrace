@@ -9,7 +9,7 @@
       </p>
       <p class="text-zinc-400 text-md-start mt-4">
         All of the identity claims are public and can be independently verified by anyone using the same steps using an npm module or by re-running them in this website. Below are
-        our recipes for how we verify whether you have access to an identity:
+        the services we support for verifying your identity:
       </p>
     </div>
 
@@ -20,24 +20,40 @@
       </div>
     </div>
 
-    <div v-else-if="recipes" class="space-y-4">
+    <div v-else-if="services" class="space-y-4">
       <NuxtLink
-        v-for="recipe in recipes"
-        :key="recipe.id"
-        :to="`/recipes/${recipe.id}`"
+        v-for="service in services"
+        :key="service.id"
+        :to="`/services/${service.id}`"
         class="block bg-kt-card border border-zinc-800 rounded-lg p-5 hover:border-zinc-700 transition-colors group"
       >
         <div class="flex items-start justify-between">
-          <div>
-            <h2 class="text-lg font-semibold text-zinc-200 group-hover:text-violet-400 transition-colors">
-              {{ recipe.name }}
-            </h2>
-            <p class="text-sm text-zinc-500 mt-1">
-              {{ recipe.description }}
-            </p>
+          <div class="flex items-start gap-3">
+            <GithubIcon
+              v-if="service.id === 'github'"
+              class="w-6 h-6 mt-0.5 text-zinc-400"
+            />
+            <FileCodeIcon
+              v-else-if="service.id === 'tangled'"
+              class="w-6 h-6 mt-0.5 text-zinc-400"
+            />
+            <img
+              v-else-if="service.homepage"
+              :src="`https://www.google.com/s2/favicons?domain=${getDomain(service.homepage)}&sz=32`"
+              :alt="`${service.name} favicon`"
+              class="w-6 h-6 mt-0.5 rounded"
+            />
+            <div>
+              <h2 class="text-lg font-semibold text-zinc-200 group-hover:text-violet-400 transition-colors">
+                {{ service.name }}
+              </h2>
+              <p class="text-sm text-zinc-500 mt-1">
+                {{ service.description }}
+              </p>
+            </div>
           </div>
           <div class="flex items-center gap-2 text-zinc-500">
-            <span v-if="recipe.homepage" class="text-xs">{{ getDomain(recipe.homepage) }}</span>
+            <span v-if="service.homepage" class="text-xs">{{ getDomain(service.homepage) }}</span>
             <ArrowRightIcon class="w-4 h-4 group-hover:text-violet-400 transition-colors" />
           </div>
         </div>
@@ -48,7 +64,7 @@
     <div class="mt-12 bg-kt-card border border-zinc-800 rounded-lg p-6">
       <h2 class="text-sm font-semibold text-zinc-300 mb-3">How Verification Works</h2>
       <div class="text-sm text-zinc-400 space-y-3">
-        <p>Each Keytrace recipe defines a specific way to verify ownership of an external identity. The process is fully transparent and reproducible:</p>
+        <p>Each Keytrace service defines a specific way to verify ownership of an external identity. The process is fully transparent and reproducible:</p>
         <ol class="list-decimal list-inside space-y-2 text-zinc-500">
           <li>You create a proof at the external service (e.g., a GitHub gist, DNS TXT record)</li>
           <li>The proof contains your ATProto DID to link the identities</li>
@@ -65,9 +81,9 @@
 </template>
 
 <script setup lang="ts">
-import { ArrowRight as ArrowRightIcon } from "lucide-vue-next";
+import { ArrowRight as ArrowRightIcon, Github as GithubIcon, FileCode as FileCodeIcon } from "lucide-vue-next";
 
-const { data: recipes, pending } = await useFetch("/api/recipes");
+const { data: services, pending } = await useFetch("/api/services");
 
 function getDomain(url: string): string {
   try {

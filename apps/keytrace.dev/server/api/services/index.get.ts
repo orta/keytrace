@@ -1,19 +1,19 @@
 /**
  * GET /api/services
  *
- * Get all available service providers with their UI configuration.
- * Used by the add claim wizard to display service options and instructions.
+ * List all available service providers.
  */
 
 import { serviceProviders } from "@keytrace/runner";
 
-export default defineEventHandler(() => {
+export default defineEventHandler(async () => {
   const providers = serviceProviders.getAllProviders();
 
   return providers.map((provider) => ({
     id: provider.id,
     name: provider.name,
+    description: provider.ui.description,
     homepage: provider.homepage,
-    ui: provider.ui,
+    isAmbiguous: provider.isAmbiguous ?? false,
   }));
 });

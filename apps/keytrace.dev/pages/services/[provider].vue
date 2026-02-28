@@ -1,9 +1,9 @@
 <template>
   <div class="max-w-3xl mx-auto px-4 py-12">
     <!-- Back link -->
-    <NuxtLink to="/recipes" class="text-sm text-zinc-500 hover:text-zinc-300 mb-6 inline-flex items-center gap-1">
+    <NuxtLink to="/services" class="text-sm text-zinc-500 hover:text-zinc-300 mb-6 inline-flex items-center gap-1">
       <ArrowLeftIcon class="w-4 h-4" />
-      All recipes
+      All services
     </NuxtLink>
 
     <div v-if="pending" class="space-y-6 mt-6">
@@ -22,9 +22,9 @@
     </div>
 
     <div v-else-if="error" class="text-center py-12">
-      <p class="text-zinc-400">Recipe not found</p>
-      <NuxtLink to="/recipes" class="text-violet-400 hover:text-violet-300 mt-2 inline-block">
-        View all recipes
+      <p class="text-zinc-400">Service not found</p>
+      <NuxtLink to="/services" class="text-violet-400 hover:text-violet-300 mt-2 inline-block">
+        View all services
       </NuxtLink>
     </div>
 
@@ -199,7 +199,7 @@ import { ArrowLeft as ArrowLeftIcon, CheckCircle as CheckCircleIcon, XCircle as 
 const route = useRoute();
 const providerId = computed(() => route.params.provider as string);
 
-const { data: recipe, pending, error } = await useFetch(`/api/recipes/${providerId.value}`);
+const { data: recipe, pending, error } = await useFetch(`/api/services/${providerId.value}`);
 
 const testUri = ref("");
 const testDid = ref("");

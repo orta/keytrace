@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Keytrace is an identity verification system for ATProto. Users link their decentralized identities (DIDs) to external accounts (GitHub, DNS, ActivityPub, Bluesky, npm, PGP, Tangled, Twitter, LinkedIn) by creating claims that are cryptographically verified and stored as ATProto records.
+Keytrace is an identity verification system for ATProto. Users link their decentralized identities (DIDs) to external accounts (GitHub, DNS, ActivityPub, Bluesky, npm, PGP, Tangled, Twitter, LinkedIn, Instagram) by creating claims that are cryptographically verified and stored as ATProto records.
 
 ## Workflow
 
@@ -36,7 +36,7 @@ yarn format:check     # Check formatting
 
 ### Monorepo Structure
 
-- **`packages/runner`** - Core verification library (`@keytrace/runner`). Recipe-based claim verification with service providers for GitHub, DNS, ActivityPub, Bluesky, npm, PGP, Tangled, Twitter, LinkedIn.
+- **`packages/runner`** - Core verification library (`@keytrace/runner`). Recipe-based claim verification with service providers for GitHub, DNS, ActivityPub, Bluesky, npm, PGP, Tangled, Twitter, LinkedIn, Instagram.
 - **`packages/claims`** - Client-side claim verification library (`@keytrace/claims`). ES256 signature verification, ATProto record fetching.
 - **`packages/lexicon`** - ATProto lexicon JSON schemas and generated TypeScript types. Lexicons: `dev.keytrace.claim`, `dev.keytrace.signature`, `dev.keytrace.serverPublicKey`, `dev.keytrace.statement`, `dev.keytrace.userPublicKey`, `dev.keytrace.recipe`, `dev.keytrace.profile`. Run `yarn codegen` in this package after editing lexicon JSON to regenerate `types/`.
 - **`apps/keytrace.dev`** - Nuxt 3 full-stack web application with OAuth, API, and SSR.

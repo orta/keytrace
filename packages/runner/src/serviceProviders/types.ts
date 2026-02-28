@@ -28,7 +28,7 @@ export interface ProofRequest {
   /** Fetcher to use: 'http', 'dns', 'activitypub' */
   fetcher: string;
   /** Expected response format */
-  format: "json" | "text" | "json-ld";
+  format: "json" | "text" | "json-ld" | "og-meta";
   /** Additional fetch options */
   options?: {
     headers?: Record<string, string>;
