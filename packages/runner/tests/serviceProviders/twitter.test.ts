@@ -21,9 +21,10 @@ describe("twitter service provider", () => {
 
       expect(result.profile.display).toBe("@alice");
       expect(result.profile.uri).toBe("https://x.com/alice");
-      expect(result.proof.request.fetcher).toBe("twitter");
-      expect(result.proof.request.uri).toBe(uri);
+      expect(result.proof.request.fetcher).toBe("http");
+      expect(result.proof.request.uri).toBe("https://api.fxtwitter.com/alice/status/1234567890");
       expect(result.proof.request.format).toBe("json");
+      expect(result.proof.request.options?.headers?.["User-Agent"]).toBe("keytrace-runner/1.0");
     });
 
     it("extracts username from x.com URL", () => {
@@ -33,56 +34,47 @@ describe("twitter service provider", () => {
 
       expect(result.profile.display).toBe("@bob_dev");
       expect(result.profile.uri).toBe("https://x.com/bob_dev");
+      expect(result.proof.request.uri).toBe("https://api.fxtwitter.com/bob_dev/status/9876543210");
     });
 
-    it("sets proof target to tweet full_text", () => {
+    it("sets proof target to tweet text", () => {
       const uri = "https://x.com/alice/status/1234567890";
       const match = uri.match(twitter.reUri)!;
       const result = twitter.processURI(uri, match);
 
       expect(result.proof.target).toHaveLength(1);
-      expect(result.proof.target[0].path).toEqual(["data", "tweetResult", "result", "legacy", "full_text"]);
+      expect(result.proof.target[0].path).toEqual(["tweet", "text"]);
       expect(result.proof.target[0].relation).toBe("contains");
     });
   });
 
   describe("postprocess", () => {
-    it("extracts screen name and avatar from GraphQL response", () => {
+    it("extracts screen name and avatar from FxEmbed response", () => {
       const uri = "https://x.com/alice/status/1234567890";
       const match = uri.match(twitter.reUri)!;
 
-      const graphqlResponse = {
-        data: {
-          tweetResult: {
-            result: {
-              legacy: { full_text: "did:plc:abc123" },
-              core: {
-                user_results: {
-                  result: {
-                    core: { screen_name: "Alice" },
-                    legacy: {
-                      screen_name: "Alice",
-                      profile_image_url_https: "https://pbs.twimg.com/profile_images/123/photo_normal.jpg",
-                      name: "Alice Smith",
-                    },
-                  },
-                },
-              },
-            },
+      const fxEmbedResponse = {
+        code: 200,
+        message: "OK",
+        tweet: {
+          text: "did:plc:abc123",
+          author: {
+            screen_name: "Alice",
+            name: "Alice Smith",
+            avatar_url: "https://pbs.twimg.com/profile_images/123/photo.jpg",
           },
         },
       };
 
-      const result = twitter.postprocess!(graphqlResponse, match);
+      const result = twitter.postprocess!(fxEmbedResponse, match);
 
       expect(result.subject).toBe("Alice");
       expect(result.displayName).toBe("Alice Smith");
       expect(result.profileUrl).toBe("https://x.com/Alice");
-      // _normal. should be stripped from avatar URL
       expect(result.avatarUrl).toBe("https://pbs.twimg.com/profile_images/123/photo.jpg");
     });
 
-    it("falls back to URL username when GraphQL data is absent", () => {
+    it("falls back to URL username when FxEmbed data is absent", () => {
       const uri = "https://x.com/fallback_user/status/111";
       const match = uri.match(twitter.reUri)!;
 
@@ -100,39 +92,27 @@ describe("twitter service provider", () => {
     });
 
     function mockFetch(tweetText: string) {
-      const graphqlResponse = {
-        data: {
-          tweetResult: {
-            result: {
-              __typename: "Tweet",
-              legacy: { full_text: tweetText },
-              core: {
-                user_results: {
-                  result: {
-                    core: { screen_name: "alice" },
-                    legacy: { screen_name: "alice", profile_image_url_https: "https://pbs.twimg.com/photo_normal.jpg", name: "Alice" },
-                  },
-                },
-              },
-            },
+      const fxEmbedResponse = {
+        code: 200,
+        message: "OK",
+        tweet: {
+          text: tweetText,
+          id: "1234567890",
+          url: "https://x.com/alice/status/1234567890",
+          author: {
+            screen_name: "alice",
+            name: "Alice",
+            avatar_url: "https://pbs.twimg.com/profile_images/123/photo.jpg",
           },
         },
       };
 
       vi.stubGlobal(
         "fetch",
-        vi
-          .fn()
-          // First call: guest token activation
-          .mockResolvedValueOnce({
-            ok: true,
-            json: () => Promise.resolve({ guest_token: "mock_guest_token_123" }),
-          })
-          // Second call: GraphQL tweet fetch
-          .mockResolvedValueOnce({
-            ok: true,
-            json: () => Promise.resolve(graphqlResponse),
-          }),
+        vi.fn().mockResolvedValueOnce({
+          ok: true,
+          json: () => Promise.resolve(fxEmbedResponse),
+        }),
       );
     }
 

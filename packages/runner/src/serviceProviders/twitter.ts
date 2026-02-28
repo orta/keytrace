@@ -6,9 +6,8 @@ import type { ServiceProvider } from "./types.js";
  * Users prove ownership of their Twitter/X account by posting a tweet
  * containing their DID. The tweet URL is used as the claim URI.
  *
- * Fetching uses the `twitter` fetcher which authenticates with Twitter's
- * public bearer token + guest token to call the GraphQL TweetResultByRestId
- * endpoint server-side.
+ * Fetching uses the FxEmbed API (https://api.fxtwitter.com/) which provides
+ * public tweet data without authentication.
  */
 const twitter: ServiceProvider = {
   id: "twitter",
@@ -35,7 +34,7 @@ const twitter: ServiceProvider = {
   },
 
   processURI(uri, match) {
-    const [, , username] = match;
+    const [, , username, tweetId] = match;
 
     return {
       profile: {
@@ -44,15 +43,20 @@ const twitter: ServiceProvider = {
       },
       proof: {
         request: {
-          // The twitter fetcher accepts the canonical tweet URL and handles auth
-          uri,
-          fetcher: "twitter",
+          // Use FxEmbed API to fetch tweet data
+          uri: `https://api.fxtwitter.com/${username}/status/${tweetId}`,
+          fetcher: "http",
           format: "json",
+          options: {
+            headers: {
+              "User-Agent": "keytrace-runner/1.0",
+            },
+          },
         },
         target: [
-          // The tweet's full text must contain the DID
+          // The tweet's text must contain the DID
           {
-            path: ["data", "tweetResult", "result", "legacy", "full_text"],
+            path: ["tweet", "text"],
             relation: "contains",
             format: "text",
           },
@@ -64,28 +68,24 @@ const twitter: ServiceProvider = {
   postprocess(data, match) {
     const [, , username] = match;
 
-    type GraphQLData = {
-      data?: {
-        tweetResult?: {
-          result?: {
-            core?: {
-              user_results?: {
-                result?: {
-                  core?: { screen_name?: string };
-                  legacy?: { screen_name?: string; profile_image_url_https?: string; name?: string };
-                };
-              };
-            };
-          };
+    type FxEmbedResponse = {
+      code?: number;
+      message?: string;
+      tweet?: {
+        text?: string;
+        author?: {
+          screen_name?: string;
+          name?: string;
+          avatar_url?: string;
         };
       };
     };
 
-    const gql = data as GraphQLData;
-    const userResult = gql?.data?.tweetResult?.result?.core?.user_results?.result;
-    const screenName = userResult?.core?.screen_name ?? userResult?.legacy?.screen_name ?? username;
-    const avatarUrl = userResult?.legacy?.profile_image_url_https?.replace(/_normal\./, ".");
-    const displayName = userResult?.legacy?.name;
+    const response = data as FxEmbedResponse;
+    const author = response?.tweet?.author;
+    const screenName = author?.screen_name ?? username;
+    const avatarUrl = author?.avatar_url;
+    const displayName = author?.name;
 
     return {
       subject: screenName,
