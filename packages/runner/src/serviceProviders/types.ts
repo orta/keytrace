@@ -12,11 +12,13 @@ export interface ServiceProviderMatch {
  */
 export interface ProofTarget {
   /** JSON path to search for proof (e.g., ['description'], ['files', '*', 'content']) */
-  path: string[];
+  path?: string[];
   /** How to match: 'contains', 'equals', 'startsWith' */
   relation: "contains" | "equals" | "startsWith";
   /** Format of data at path */
   format: "text" | "uri" | "json";
+  /** Optional CSS selector for HTML extraction (when fetcher format is 'html') */
+  css?: string;
 }
 
 /**
@@ -28,7 +30,7 @@ export interface ProofRequest {
   /** Fetcher to use: 'http', 'dns', 'activitypub' */
   fetcher: string;
   /** Expected response format */
-  format: "json" | "text" | "json-ld" | "og-meta";
+  format: "json" | "text" | "json-ld" | "og-meta" | "html";
   /** Additional fetch options */
   options?: {
     headers?: Record<string, string>;

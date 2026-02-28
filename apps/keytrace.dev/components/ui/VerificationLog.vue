@@ -67,7 +67,7 @@
               <div class="flex items-center gap-2">
                 <CheckCircleIcon v-if="target.matched" class="w-3 h-3 text-verified flex-shrink-0" />
                 <XCircleIcon v-else class="w-3 h-3 text-zinc-600 flex-shrink-0" />
-                <span class="text-zinc-400">{{ target.path.join('.') }}</span>
+                <span class="text-zinc-400">{{ target.css || target.path.join('.') }}</span>
                 <span class="text-zinc-600">({{ target.relation }})</span>
               </div>
               <div v-if="target.valuesFound.length > 0" class="ml-5 mt-1 text-zinc-500 break-all">
@@ -101,6 +101,7 @@ export interface ExpandableContent {
     relation: string;
     valuesFound: string[];
     matched: boolean;
+    css?: string;
   }>;
   patterns?: string[];
 }
