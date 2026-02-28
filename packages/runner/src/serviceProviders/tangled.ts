@@ -68,7 +68,7 @@ const tangled: ServiceProvider = {
   },
 
   getProofText(did) {
-    return `Verifying my identity on keytrace: ${did}`;
+    return `I'm linking my keytrace.dev: ${did}`;
   },
 
   getProofLocation() {

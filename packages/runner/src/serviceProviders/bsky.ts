@@ -28,7 +28,7 @@ const bsky: ServiceProvider = {
       "Save your profile changes",
       "Paste the profile URL below",
     ],
-    proofTemplate: "{did}",
+    proofTemplate: "I'm linking my keytrace.dev: {did}",
   },
 
   processURI(uri, match) {
@@ -54,7 +54,7 @@ const bsky: ServiceProvider = {
   },
 
   getProofText(did) {
-    return did;
+    return `I'm linking my keytrace.dev: ${did}`;
   },
 
   getProofLocation() {

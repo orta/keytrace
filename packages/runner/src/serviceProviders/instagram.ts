@@ -33,7 +33,7 @@ const instagram: ServiceProvider = {
       "Copy the URL of the post (tap ... → Copy link)",
       "Paste the post URL below",
     ],
-    proofTemplate: "Linking my keytrace.dev - {did}",
+    proofTemplate: "I'm linking my keytrace.dev: {did}",
   },
 
   processURI(uri, match) {
@@ -128,7 +128,7 @@ const instagram: ServiceProvider = {
   },
 
   getProofText(did) {
-    return `Linking my keytrace.dev - ${did}`;
+    return `I'm linking my keytrace.dev: ${did}`;
   },
 
   getProofLocation() {
