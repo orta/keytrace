@@ -64,6 +64,8 @@ interface ServiceFromAPI {
 export function useServiceRegistry() {
   const { data: services } = useFetch<ServiceFromAPI[]>("/api/services", {
     key: "service-registry",
+    dedupe: "defer", // Deduplicate concurrent requests
+    lazy: true, // Don't block rendering
   });
 
   function findProvider(typeId: string): ServiceFromAPI | undefined {

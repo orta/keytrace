@@ -2,7 +2,7 @@ import { DEFAULT_TIMEOUT } from "../constants.js";
 import * as cheerio from "cheerio";
 
 export interface HttpFetchOptions {
-  format: "json" | "text" | "json-ld" | "og-meta";
+  format: "json" | "text" | "json-ld" | "og-meta" | "html";
   headers?: Record<string, string>;
   timeout?: number;
 }
@@ -71,6 +71,11 @@ export async function fetch(url: string, options: HttpFetchOptions): Promise<unk
       }
 
       return ogData;
+    }
+
+    if (options.format === "html") {
+      // Return raw HTML text - CSS selector extraction happens in claim verification
+      return await response.text();
     }
 
     return await response.text();

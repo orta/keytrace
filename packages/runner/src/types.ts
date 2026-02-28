@@ -20,6 +20,8 @@ export interface ProofTargetResult {
   relation: string;
   valuesFound: string[];
   matched: boolean;
+  /** CSS selector used for HTML extraction (when applicable) */
+  css?: string;
 }
 
 /**

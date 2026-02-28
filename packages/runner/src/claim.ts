@@ -3,6 +3,7 @@ import { DEFAULT_TIMEOUT } from "./constants.js";
 import { matchUri, type ServiceProviderMatch, type ProofRequest, type ProofTarget } from "./serviceProviders/index.js";
 import * as fetchers from "./fetchers/index.js";
 import type { VerifyOptions, ClaimVerificationResult, IdentityMetadata, ProofDetails, ProofTargetResult } from "./types.js";
+import * as cheerio from "cheerio";
 
 // did:plc identifiers are base32-encoded, lowercase
 const DID_PLC_RE = /^did:plc:[a-z2-7]{24}$/;
@@ -166,28 +167,30 @@ async function fetchProof(request: ProofRequest, opts: VerifyOptions): Promise<u
 
 function checkProofWithDetails(data: unknown, targets: ProofTarget[], patterns: string[]): ProofTargetResult[] {
   console.log(`[runner] Checking proof, patterns: ${JSON.stringify(patterns)}`);
-  console.log(`[runner] Proof targets: ${JSON.stringify(targets.map((t) => t.path.join(".")))}`);
+  console.log(`[runner] Proof targets: ${JSON.stringify(targets.map((t) => t.css || t.path?.join(".") || ""))}`);
 
   const results: ProofTargetResult[] = [];
 
   for (const target of targets) {
-    const values = extractValues(data, target.path);
-    console.log(`[runner] Target ${target.path.join(".")}: found ${values.length} value(s)${values.length > 0 ? `: ${JSON.stringify(values.map((v) => v.slice(0, 100)))}` : ""}`);
+    const values = extractValues(data, target);
+    const targetDesc = target.css || target.path?.join(".") || "";
+    console.log(`[runner] Target ${targetDesc}: found ${values.length} value(s)${values.length > 0 ? `: ${JSON.stringify(values.map((v) => v.slice(0, 100)))}` : ""}`);
 
     let matched = false;
     for (const value of values) {
       if (matchesPattern(value, patterns, target.relation)) {
-        console.log(`[runner] Match found at ${target.path.join(".")} (relation: ${target.relation})`);
+        console.log(`[runner] Match found at ${targetDesc} (relation: ${target.relation})`);
         matched = true;
         break;
       }
     }
 
     results.push({
-      path: target.path,
+      path: target.path || [],
       relation: target.relation,
       valuesFound: values.map((v) => v.slice(0, 500)), // Truncate long values
       matched,
+      css: target.css,
     });
   }
 
@@ -232,9 +235,28 @@ function generateProofPatterns(did: string): string[] {
   return patterns;
 }
 
-function extractValues(data: unknown, path: string[]): string[] {
+function extractValues(data: unknown, target: ProofTarget): string[] {
+  // If target has a CSS selector, use cheerio to extract from HTML
+  if (target.css && typeof data === "string") {
+    try {
+      const $ = cheerio.load(data);
+      const results: string[] = [];
+      $(target.css).each((_, elem) => {
+        const text = $(elem).text().trim();
+        if (text) {
+          results.push(text);
+        }
+      });
+      return results;
+    } catch (err) {
+      console.error(`[runner] CSS selector extraction failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      return [];
+    }
+  }
+
+  // Otherwise use JSON path extraction
   const results: string[] = [];
-  extractValuesRecursive(data, path, 0, results);
+  extractValuesRecursive(data, target.path || [], 0, results);
   return results;
 }
 
