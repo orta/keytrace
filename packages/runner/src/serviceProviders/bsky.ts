@@ -22,7 +22,7 @@ const bsky: ServiceProvider = {
     inputLabel: "Profile URL",
     inputPlaceholder: "https://bsky.app/profile/username.bsky.social",
     instructions: [
-      "Log into the Bluesky account you want to link",
+      "Log into the Bluesky account you want to link at [bsky.app](https://bsky.app)",
       "Go to **Settings** → **Edit Profile**",
       "Add your DID to your **bio** (the verification DID, not this account's DID)",
       "Save your profile changes",
