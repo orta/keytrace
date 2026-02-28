@@ -12,8 +12,8 @@ export default defineEventHandler(async () => {
   return providers.map((provider) => ({
     id: provider.id,
     name: provider.name,
-    description: provider.ui.description,
     homepage: provider.homepage,
     isAmbiguous: provider.isAmbiguous ?? false,
+    ui: provider.ui,
   }));
 });

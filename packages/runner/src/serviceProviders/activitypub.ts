@@ -29,7 +29,7 @@ const activitypub: ServiceProvider = {
       "Save your profile changes",
       "Paste your full profile URL below (e.g., `https://mastodon.social/@username`)",
     ],
-    proofTemplate: "{did}",
+    proofTemplate: "I'm linking my keytrace.dev: {did}",
   },
 
   processURI(uri, match) {
@@ -65,7 +65,7 @@ const activitypub: ServiceProvider = {
   },
 
   getProofText(did) {
-    return did;
+    return `I'm linking my keytrace.dev: ${did}`;
   },
 
   getProofLocation() {

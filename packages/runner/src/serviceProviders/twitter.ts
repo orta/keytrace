@@ -30,7 +30,7 @@ const twitter: ServiceProvider = {
       "Copy the URL of the tweet (click the tweet timestamp → copy link)",
       "Paste the tweet URL below",
     ],
-    proofTemplate: "{did}",
+    proofTemplate: "I'm linking my keytrace.dev: {did}",
   },
 
   processURI(uri, match) {
@@ -96,7 +96,7 @@ const twitter: ServiceProvider = {
   },
 
   getProofText(did) {
-    return did;
+    return `I'm linking my keytrace.dev: ${did}`;
   },
 
   getProofLocation() {

@@ -1,5 +1,16 @@
 import type { Component } from "vue";
-import { Github, Globe, AtSign, Cloud, Shield, Key } from "lucide-vue-next";
+import {
+  Github,
+  Globe,
+  AtSign,
+  Cloud,
+  Shield,
+  Key,
+  Twitter,
+  Linkedin,
+  Instagram,
+  MessageSquare,
+} from "lucide-vue-next";
 import NpmIcon from "~/components/icons/NpmIcon.vue";
 import TangledIcon from "~/components/icons/TangledIcon.vue";
 
@@ -16,6 +27,10 @@ const iconMap: Record<string, Component> = {
   shield: Shield,
   npm: NpmIcon,
   tangled: TangledIcon,
+  twitter: Twitter,
+  linkedin: Linkedin,
+  instagram: Instagram,
+  "message-square": MessageSquare,
 };
 
 interface ServiceFromAPI {
