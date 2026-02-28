@@ -1,7 +1,8 @@
 import { DEFAULT_TIMEOUT } from "../constants.js";
+import * as cheerio from "cheerio";
 
 export interface HttpFetchOptions {
-  format: "json" | "text";
+  format: "json" | "text" | "json-ld";
   headers?: Record<string, string>;
   timeout?: number;
 }
@@ -18,7 +19,7 @@ export async function fetch(url: string, options: HttpFetchOptions): Promise<unk
     const response = await globalThis.fetch(url, {
       headers: {
         "User-Agent": "keytrace-runner/1.0",
-        Accept: options.format === "json" ? "application/json" : "text/plain",
+        Accept: options.format === "json" ? "application/json" : "text/html",
         ...options.headers,
       },
       signal: controller.signal,
@@ -31,6 +32,24 @@ export async function fetch(url: string, options: HttpFetchOptions): Promise<unk
     if (options.format === "json") {
       return await response.json();
     }
+
+    if (options.format === "json-ld") {
+      const html = await response.text();
+      const $ = cheerio.load(html);
+      const jsonLdScript = $('script[type="application/ld+json"]').first();
+
+      if (jsonLdScript.length === 0) {
+        throw new Error('No JSON-LD script tag found in HTML');
+      }
+
+      const jsonLdText = jsonLdScript.text().trim();
+      try {
+        return JSON.parse(jsonLdText);
+      } catch (err) {
+        throw new Error(`Failed to parse JSON-LD: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      }
+    }
+
     return await response.text();
   } finally {
     clearTimeout(timeoutId);
