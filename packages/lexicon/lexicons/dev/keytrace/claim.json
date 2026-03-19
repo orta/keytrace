@@ -12,7 +12,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "knownValues": ["github", "dns", "mastodon", "twitter", "website", "pgp"],
+            "knownValues": ["github", "dns", "activitypub", "bsky", "npm", "pgp", "tangled", "twitter", "linkedin", "instagram", "reddit", "hackernews"],
             "description": "The claim type identifier"
           },
           "claimUri": {
@@ -70,7 +70,29 @@
             "type": "string",
             "format": "datetime",
             "description": "Datetime when this claim was retracted. Present only if the claim has been retracted (ISO 8601)."
+          },
+          "selfSig": {
+            "type": "ref",
+            "ref": "#selfSignature",
+            "description": "Optional cryptographic self-signature by the claim owner using one of their published public keys (dev.keytrace.userPublicKey)."
           }
+        }
+      }
+    },
+    "selfSignature": {
+      "type": "object",
+      "description": "A declaration linking this claim to one of the owner's published public keys. Cryptographic proof of authorship comes from the ATProto repo commit signature (verifiable via the DID document), making an explicit record-level signature unnecessary.",
+      "required": ["keyRef", "createdAt"],
+      "properties": {
+        "keyRef": {
+          "type": "string",
+          "format": "at-uri",
+          "description": "AT URI of the dev.keytrace.userPublicKey record associated with this claim (e.g., at://did:plc:xxx/dev.keytrace.userPublicKey/3k4...)"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "datetime",
+          "description": "Datetime when this association was recorded (ISO 8601)."
         }
       }
     },
