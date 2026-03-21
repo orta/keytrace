@@ -1,5 +1,5 @@
 import { getOrCreateTodaysKey, getTodaysKeyRef } from "./keys";
-import { signClaim, canonicalize } from "./signing";
+import { signClaim } from "./signing";
 
 export interface ClaimData {
   claimUri: string;
@@ -19,7 +19,6 @@ export interface ClaimRecord {
   $type: "dev.keytrace.claim";
   type: string;
   subject: string;
-  recipe: { uri: string; cid: string };
   attestation: Attestation;
   createdAt: string;
 }
@@ -92,12 +91,11 @@ export async function createStatusAttestation(
 /**
  * Build a complete dev.keytrace.claim record ready to write to a user's ATProto repo.
  */
-export function buildClaimRecord(type: string, subject: string, recipeRef: { uri: string; cid: string }, attestation: Attestation): ClaimRecord {
+export function buildClaimRecord(type: string, subject: string, attestation: Attestation): ClaimRecord {
   return {
     $type: "dev.keytrace.claim",
     type,
     subject,
-    recipe: recipeRef,
     attestation,
     createdAt: new Date().toISOString(),
   };

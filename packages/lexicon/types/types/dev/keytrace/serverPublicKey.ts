@@ -18,6 +18,8 @@ export interface Main {
   validFrom: string
   /** Datetime until which this key is valid (ISO 8601). */
   validUntil: string
+  /** Optional comment or description. */
+  comment?: string
   [k: string]: unknown
 }
 

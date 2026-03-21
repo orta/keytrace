@@ -1,13 +1,5 @@
-// Core runner
-export { runRecipe } from "./runner.js";
-
 // Types
 export type {
-  Recipe,
-  RecipeParam,
-  RecipeInstructions,
-  RecipeVerification,
-  VerificationStep,
   ClaimContext,
   VerificationResult,
   StepResult,
@@ -36,11 +28,6 @@ export { jsonPath } from "./actions/json-path.js";
 export { cssSelect } from "./actions/css-select.js";
 export { regexMatch } from "./actions/regex-match.js";
 export { dnsTxt } from "./actions/dns-txt.js";
-
-// Built-in recipes
-export { githubGistRecipe } from "./recipes/github-gist.js";
-export { dnsTxtRecipe } from "./recipes/dns-txt.js";
-export { tangledRecipe } from "./recipes/tangled.js";
 
 // Claim & Profile (from runner)
 export { createClaim, matchClaim, verifyClaim, isClaimAmbiguous, getMatchedProvider, isValidDid } from "./claim.js";

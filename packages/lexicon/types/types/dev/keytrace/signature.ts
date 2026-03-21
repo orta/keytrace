@@ -25,6 +25,8 @@ export interface Main {
   retractedAt?: string
   /** Ordered list of field names included in the signed payload (e.g., ['did', 'subject', 'type', 'verifiedAt']) */
   signedFields: string[]
+  /** Optional comment or description. */
+  comment?: string
 }
 
 const hashMain = 'main'

@@ -17,15 +17,21 @@ export interface Main {
   type:
     | 'github'
     | 'dns'
-    | 'mastodon'
-    | 'twitter'
-    | 'website'
+    | 'activitypub'
+    | 'bsky'
+    | 'npm'
+    | 'tangled'
     | 'pgp'
+    | 'twitter'
+    | 'linkedin'
+    | 'instagram'
+    | 'reddit'
+    | 'hackernews'
     | (string & {})
   /** The identity claim URI (e.g., for github: https://gist.github.com/username/id, dns:example.com) */
   claimUri: string
   identity: Identity
-  /** One or more cryptographic attestation signatures from verification services. */
+  /** Cryptographic attestation signatures from verification services, for example from @keytrace.dev. These are optional, and so you can pass an empty array. Keytrace will place its attestation signature in the claim here so that the library @keytrace/claims can be used by external developers to not have to implement their own verification logic. */
   sigs: DevKeytraceSignature.Main[]
   /** Optional user-provided label for this claim */
   comment?: string
@@ -37,7 +43,7 @@ export interface Main {
   failedAt?: string
   /** Datetime when this claim was created (ISO 8601). */
   createdAt: string
-  /** Random one-time value embedded in the challenge text posted to the external service. Used by verifiers to confirm the proof was created specifically for this claim session. */
+  /** Random one-time value embedded in the challenge text posted to the external service. Used by verifiers to confirm the proof was created specifically for this claim session. Keytrace itself does not use this, but other services making claims may require it for their verification process. */
   nonce?: string
   /** Whether this claim was created during the prerelease/alpha period */
   prerelease?: boolean

@@ -5,14 +5,15 @@
     "main": {
       "type": "record",
       "key": "any",
-      "description": "A daily signing key for claim attestations. Record key is the date in YYYY-MM-DD format.",
+      "description": "A signing key for claim attestations. It effectively hosts a JWK on a user's ATProto repo.",
       "record": {
         "type": "object",
         "required": ["publicJwk", "validFrom", "validUntil"],
         "properties": {
           "publicJwk": {
             "type": "string",
-            "description": "JWK public key as a JSON string (RFC 7517 format)"
+            "description": "JWK public key as a JSON string (RFC 7517 format)",
+            "maxLength": 512
           },
           "validFrom": {
             "type": "string",
@@ -24,7 +25,7 @@
             "format": "datetime",
             "description": "Datetime until which this key is valid (ISO 8601)."
           },
-         "comment": {
+          "comment": {
             "type": "string",
             "maxGraphemes": 512,
             "description": "Optional comment or description."

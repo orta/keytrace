@@ -36,7 +36,7 @@
     <div class="bg-amber-950 border-b border-amber-500/20 px-4 py-2">
       <p class="max-w-5xl mx-auto text-xs text-amber-300/90 text-center">
         <TriangleAlertIcon class="w-3 h-3 inline-block mr-1 -mt-0.5" />
-        Keytrace is in beta. You likely will need to re-verify your claims when it goes live.
+        Keytrace has just launched. Read more on <a href="/blog/introducing-keytrace" class="underline">the blog</a>.
       </p>
     </div>
   </div>

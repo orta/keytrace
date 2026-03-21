@@ -28,10 +28,16 @@ export const schemaDict = {
               knownValues: [
                 'github',
                 'dns',
-                'mastodon',
-                'twitter',
-                'website',
+                'activitypub',
+                'bsky',
+                'npm',
+                'tangled',
                 'pgp',
+                'twitter',
+                'linkedin',
+                'instagram',
+                'reddit',
+                'hackernews',
               ],
               description: 'The claim type identifier',
             },
@@ -43,7 +49,8 @@ export const schemaDict = {
             identity: {
               type: 'ref',
               ref: 'lex:dev.keytrace.claim#identity',
-              description: 'Structured data about the claimed identity',
+              description:
+                'Structured data about the claimed identity, dervied from the claimUri and knowledge from the verification process. This is not the raw claim data, but a normalized set of fields that can be used for display and more.',
             },
             sigs: {
               type: 'array',
@@ -52,7 +59,7 @@ export const schemaDict = {
                 ref: 'lex:dev.keytrace.signature#main',
               },
               description:
-                'One or more cryptographic attestation signatures from verification services.',
+                'Cryptographic attestation signatures from verification services, for example from @keytrace.dev. These are optional, and so you can pass an empty array. Keytrace will place its attestation signature in the claim here so that the library @keytrace/claims can be used by external developers to not have to implement their own verification logic.',
             },
             comment: {
               type: 'string',
@@ -86,7 +93,7 @@ export const schemaDict = {
               type: 'string',
               maxGraphemes: 128,
               description:
-                'Random one-time value embedded in the challenge text posted to the external service. Used by verifiers to confirm the proof was created specifically for this claim session.',
+                'Random one-time value embedded in the challenge text posted to the external service. Used by verifiers to confirm the proof was created specifically for this claim session. Keytrace itself does not use this, but other services making claims may require it for their verification process.',
             },
             prerelease: {
               type: 'boolean',
@@ -189,6 +196,11 @@ export const schemaDict = {
               format: 'datetime',
               description: 'Datetime until which this key is valid (ISO 8601).',
             },
+            comment: {
+              type: 'string',
+              maxGraphemes: 512,
+              description: 'Optional comment or description.',
+            },
           },
         },
       },
@@ -235,6 +247,11 @@ export const schemaDict = {
             },
             description:
               "Ordered list of field names included in the signed payload (e.g., ['did', 'subject', 'type', 'verifiedAt'])",
+          },
+          comment: {
+            type: 'string',
+            maxGraphemes: 512,
+            description: 'Optional comment or description.',
           },
         },
       },

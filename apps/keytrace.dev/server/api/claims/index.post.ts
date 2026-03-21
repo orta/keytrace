@@ -100,7 +100,6 @@ export default defineEventHandler(async (event) => {
       status: "verified",
       lastVerifiedAt: now,
       createdAt: now,
-      prerelease: true,
     };
 
     console.log(`[claims] Creating record: repo=${did} collection=${COLLECTION_NSID}`);
