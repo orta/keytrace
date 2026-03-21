@@ -9,7 +9,13 @@ export default defineNuxtConfig({
     inlineStyles: false,
   },
 
-  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/google-fonts", "nuxt-og-image"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/google-fonts", "nuxt-og-image", "@nuxt/content"],
+
+  content: {
+    highlight: {
+      theme: "github-dark",
+    },
+  },
 
   ogImage: {
     fonts: [
