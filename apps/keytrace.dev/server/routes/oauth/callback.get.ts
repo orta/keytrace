@@ -26,7 +26,7 @@ export default defineEventHandler(async (event) => {
       httpOnly: true,
       sameSite: "lax",
       secure: getPublicUrl().startsWith("https"),
-      maxAge: 60 * 60 * 24, // 24 hours
+      maxAge: 60 * 60 * 24 * 90, // 90 days, matching ATProto refresh token lifetime
       path: "/",
     });
 
