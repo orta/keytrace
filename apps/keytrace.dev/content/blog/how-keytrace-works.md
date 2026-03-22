@@ -13,23 +13,23 @@ So how does Keytrace work? First off, lets set up our Keytrace vocabulary:
 
 Next, some Bluesky/atproto terminology:
 
-- `atproto` - the tech foundation which Bluesky is built on, which Keytrace is built on
-- `did` - Your unique identifier on the atproto network
-- `account repository` - A set of JSON blobs attached to your DID which makes up the data for your account
-- `document` - The name of those JSON blogs
-- `collection` - A subset of your repository where the documents all have the same file format, they look like inverse URLs: e.g. `dev.keytrace.claim`.
+- `atproto` - the tech foundation which Bluesky is built on, which Keytrace is also built on
+- `DID` - A unique identifier on the atproto network, you have one
+- `repository` - A set of JSON blobs attached to your DID which makes up the data for your account
+- `document` - The name of an individual JSON blob in your registry
+- `collection` - A subset of your repository where the documents all have the same file format (`$type`), these collections are based on inverse URLs: e.g. `dev.keytrace.claim`.
 
 ## Walkthrough
 
-OK, lets talk you through the process of making a single claim, and ideally you'll have a good understanding of claim-making and verification process.
+OK, lets talk you through the process of making a single claim, and ideally you'll have a good understanding of claim-making and verification process by going step-by-step.
 
 ### Signing Up
 
 When you sign in to Keytrace, we ask for access to be able to make read/write changes to the collection `dev.keytrace.claim` on your atproto account.
 
-Signing in gives the Keytrace server a way to store your claim in your own account's repository. Keytrace does not operate with a database, almost everything stored is in users atproto repositories, or the keytrace.dev's atproto repository (except private keys.)
+Signing in gives the Keytrace server a way to store your claim in your own account's repository. Today, Keytrace does not operate with a database, almost everything stored exists in a user's atproto repository, or the keytrace.dev's atproto repository (except private keys.)
 
-Clicking 'Add claim' would take you to a page showing a lot of different server providers, for example GitHub, Mastodon, npm, Twitter, LinkedIn etc. Note: I am a maximalist here, if we can figure a way to publicly prove you own an account (e.g. you can create public content,) I'm happy to have support for that service provider.
+Clicking 'Add claim' on the website would take you to a page showing a lot of different server providers, for example GitHub, Mastodon, npm, Twitter, LinkedIn etc. Note: I am a maximalist here, if we can figure a way to publicly prove you own an account (e.g. you can create public content,) I'm happy to have support for that service provider.
 
 ### Making a Claim
 
@@ -40,9 +40,9 @@ Lets use Instagram as a reference point, it's a tricky platform to get data from
 
 So, we require you to make a public post, and include a very specific string: `I'm linking my keytrace.dev: did:plc:t732otzqvkch7zz5d37537ry`. The essential bit of information here is `did:plc:t732otzqvkch7zz5d37537ry` which is my personal DID.
 
-I would then go to Instagram's app, or the web interface and [create an image post](https://www.instagram.com/p/DVS8Tm6DWzP/) including that text. After I post the URL `https://www.instagram.com/p/DVS8Tm6DWzP/` to that form, then the Keytrace runner will start.
+I would then go to Instagram's app, or the web interface and [create an image post](https://www.instagram.com/p/DVS8Tm6DWzP/) which includes that text. After I come back to Keytrace, I give the post URL `https://www.instagram.com/p/DVS8Tm6DWzP/` to the form, which triggers the Keytrace runner to start.
 
-In this case, the runner will download the HTML of the file and then extract out the og-meta tags from the HTML for that page:
+In this case, the runner will download the HTML of the post and then extract out the [meta tags](https://developer.mozilla.org/en-US/docs/Web/HTML/Reference/Elements/meta) from the content of the page:
 
 ```html
 <!DOCTYPE html>
@@ -58,9 +58,9 @@ In this case, the runner will download the HTML of the file and then extract out
 </html>
 ```
 
-Luckily for us, that message is short enough to be included in full via the meta tag `"description"` by instagram on their web client.
+Luckily for us, that message is short enough to be included in full via the meta tag `"description"` on the Instagram website.
 
-The runner's service provider looks for your DID in the tag. If it is there, then the runner considers the proof valid. We only accept certain URL formats, so you can't leave a comment on someone elses post with your DID to claim their accounts etc.
+The runner's service provider for Instagram knows to look for your DID in that tag. If it is there, then the runner considers the proof valid. We only accept certain Instagram URL formats, so you can't leave a comment on someone elses post with your DID to claim their accounts etc.
 
 The Instagram provider uses the metadata from the HTML, but other providers use:
 
