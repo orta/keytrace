@@ -1,7 +1,12 @@
 {
   "name": "@keytrace/claims",
   "version": "0.2.0",
-  "description": "Verify keytrace identity claims",
+  "description": "Get Keytrace identity claims, and also verify their signatures. Works in both browser and Node.js.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orta/keytrace",
+    "directory": "packages/claims"
+  },
   "files": [
     "src",
     "dist"
@@ -29,11 +34,6 @@
     "@types/node": "^22.0.0",
     "typescript": "^5.7.0",
     "vitest": "^2.1.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/orta/keytrace",
-    "directory": "packages/claims"
   },
   "engines": {
     "node": ">=18"

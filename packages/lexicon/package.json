@@ -12,7 +12,8 @@
     "./types/*": "./types/*"
   },
   "scripts": {
-    "codegen": "lex gen-api --yes ./types ./lexicons/dev/keytrace/*"
+    "codegen": "lex gen-api --yes ./types ./lexicons/dev/keytrace/*",
+    "validate": "node scripts/validate.mjs"
   },
   "repository": {
     "type": "git",

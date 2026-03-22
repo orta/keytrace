@@ -60,7 +60,7 @@ const reddit: ServiceProvider = {
       proof: {
         request: {
           uri: jsonUri,
-          fetcher: "http",
+          fetcher: "reddit",
           format: "json",
           options: {
             headers: {

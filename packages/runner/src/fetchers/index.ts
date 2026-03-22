@@ -1,6 +1,7 @@
 import * as http from "./http.js";
 import * as dns from "./dns.js";
 import * as activitypub from "./activitypub.js";
+import * as reddit from "./reddit.js";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 export interface Fetcher {
@@ -11,6 +12,7 @@ const fetchers: Record<string, Fetcher> = {
   http,
   dns,
   activitypub,
+  reddit,
 };
 
 /**
@@ -27,4 +29,4 @@ export function getAll(): Record<string, Fetcher> {
   return { ...fetchers };
 }
 
-export { http, dns, activitypub };
+export { http, dns, activitypub, reddit };

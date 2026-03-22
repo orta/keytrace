@@ -22,7 +22,7 @@
           "identity": {
             "type": "ref",
             "ref": "#identity",
-            "description": "Structured data about the claimed identity, dervied from the claimUri and knowledge from the verification process. This is not the raw claim data, but a normalized set of fields that can be used for display and more."
+            "description": "Structured data about the claimed identity, derived from the claimUri and knowledge inside the verification process. This is not the raw claim data, but a normalized set of fields that can be used for display and more."
           },
           "sigs": {
             "type": "array",

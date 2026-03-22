@@ -92,14 +92,6 @@ const instagram: ServiceProvider = {
     // Extract username from various sources
     let username = usernameFromUrl || ogData.username;
 
-    // Try to extract from og:title (format: "Author Name on Instagram: ...")
-    if (!username && ogData.title) {
-      const titleMatch = ogData.title.match(/^([^:]+) on Instagram:/);
-      if (titleMatch) {
-        username = titleMatch[1];
-      }
-    }
-
     // Try to extract from og:description (format: "... - username on ...")
     if (!username && ogData.description) {
       const descMatch = ogData.description.match(/- ([a-zA-Z0-9._]+) on /);

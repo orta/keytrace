@@ -118,15 +118,23 @@ const howItWorks = [
 
 // Fetch recent verifications from the API (show 20 on home page)
 const { data: recentClaims } = await useFetch("/api/recent-claims", {
-  transform: (claims: any[]) =>
-    claims.map((claim) => ({
-      handle: claim.handle,
-      avatar: claim.avatar,
-      displayName: claim.displayName,
-      serviceType: claim.type,
-      createdAt: claim.createdAt,
-      identity: claim.identity,
-    })),
+  transform: (claims: any[]) => {
+    const seen = new Set<string>();
+    return claims
+      .filter((claim) => {
+        if (seen.has(claim.handle)) return false;
+        seen.add(claim.handle);
+        return true;
+      })
+      .map((claim) => ({
+        handle: claim.handle,
+        avatar: claim.avatar,
+        displayName: claim.displayName,
+        serviceType: claim.type,
+        createdAt: claim.createdAt,
+        identity: claim.identity,
+      }));
+  },
   default: () => [],
 });
 
