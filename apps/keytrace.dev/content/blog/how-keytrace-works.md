@@ -1,7 +1,7 @@
 ---
 title: How Keytrace works
-description: Keytrace's technical details
-date: 2026-03-23
+description: A technical write-up of how the parts of Keytrace come together to validate account claims, and allow third-parties to trust our validations without verifying every claim themselves
+date: 2026-03-22
 author: orta
 ---
 

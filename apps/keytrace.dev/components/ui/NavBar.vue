@@ -8,7 +8,6 @@
             <span class="font-mono text-sm font-bold text-violet-400">kt</span>
           </div>
           <span class="font-semibold text-zinc-200 text-sm hidden sm:block"> keytrace </span>
-          <span class="px-1.5 py-0.5 text-[10px] font-medium uppercase tracking-wider text-amber-400 bg-amber-500/15 border border-amber-500/30 rounded">beta</span>
         </NuxtLink>
 
         <!-- Mobile: icon buttons. Desktop: full nav -->
