@@ -13,7 +13,7 @@ So how does Keytrace work? First off, lets set up our Keytrace vocabulary:
 
 Next, some Bluesky/atproto terminology:
 
-- `atproto` - the tech foundation which Bluesky is built on
+- `atproto` - the tech foundation which Bluesky is built on, which Keytrace is built on
 - `did` - Your unique identifier on the atproto network
 - `account repository` - A set of JSON blobs attached to your DID which makes up the data for your account
 - `document` - The name of those JSON blogs
@@ -33,9 +33,10 @@ Clicking 'Add claim' would take you to a page showing a lot of different server 
 
 ### Making a Claim
 
-Lets use Instagram as a reference point, it's a tricky platform to get data from! Today the steps to create a proof for looks like:
+Lets use Instagram as a reference point, it's a tricky platform to get data from! Today the steps to create a claim for Instagram looks like:
 
-![Screenshot of the Instagram proof verification example](/proof-example.png)
+::BlogProofDemo
+::
 
 So, we require you to make a public post, and include a very specific string: `I'm linking my keytrace.dev: did:plc:t732otzqvkch7zz5d37537ry`. The essential bit of information here is `did:plc:t732otzqvkch7zz5d37537ry` which is my personal DID.
 
@@ -99,11 +100,12 @@ It's quite simple, it declares the URL you used to make the claim, gives a verif
 
 All in all, quite simple!
 
-This data on your account is enough to re-trigger the Keytrace runner: `https://www.instagram.com/p/DVS8Tm6DWzP` and look for the Claim owner's DID: `did:plc:t732otzqvkch7zz5d37537ry`.
+This data on your account is enough to re-trigger the Keytrace runner: `https://www.instagram.com/p/DVS8Tm6DWzP` and look for the Claim owner's DID: `did:plc:t732otzqvkch7zz5d37537ry`. Clicking the spinner below will run the real code.
 
-![Screenshot of the Instagram proof being re-ran](/re-running.png)
+::BlogClaimDemo
+::
 
-Given the nature of atproto, while Keytrace was in alpha, I had long conversations with both [kt-tools](https://codeberg.org/uwedeportivo/kt-tool) and [attestfor.me](https://attestfor.me/) and we all shipped using the same data structures, making us all compatible.
+Given the small-world nature of atproto, while Keytrace was in alpha, I had long conversations with both [kt-tools](https://codeberg.org/uwedeportivo/kt-tool) and [attestfor.me](https://attestfor.me/) and we all shipped using the same data structures, making us all compatible.
 
 So, you can verify a claim from any three system on the CLI via:
 
