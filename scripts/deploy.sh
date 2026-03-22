@@ -58,7 +58,7 @@ yarn build
 echo "==> Validating and publishing lexicons to ATProto..."
 # Load credentials from .env
 if [ -f "apps/keytrace.dev/.env" ]; then
-  export GOAT_USERNAME=$(grep '^KEYTRACE_EMAIL=' apps/keytrace.dev/.env | cut -d'=' -f2- | tr -d "'\"")
+  export GOAT_USERNAME=keytrace.dev
   export GOAT_PASSWORD=$(grep '^KEYTRACE_EMAIL_PASSWORD=' apps/keytrace.dev/.env | cut -d'=' -f2- | tr -d "'\"")
 else
   echo "    Warning: apps/keytrace.dev/.env not found, skipping lexicon publish"
