@@ -59,6 +59,10 @@ export default defineEventHandler(async (event) => {
     if (result.status === ClaimStatus.VERIFIED) {
       record.status = "verified";
       record.lastVerifiedAt = now;
+      if (record.prerelease) {
+        delete record.prerelease;
+        console.log(`[claims] Removed prerelease flag from upgraded claim: rkey=${rkey}`);
+      }
     } else {
       record.status = "failed";
       record.failedAt = now;
