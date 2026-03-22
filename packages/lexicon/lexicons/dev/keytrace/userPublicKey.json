@@ -8,7 +8,7 @@
       "description": "A user-published public key.",
       "record": {
         "type": "object",
-        "required": ["keyType", "publicKey", "createdAt"],
+        "required": ["keyType", "publicKeyArmored", "createdAt"],
         "properties": {
           "keyType": {
             "type": "string",
