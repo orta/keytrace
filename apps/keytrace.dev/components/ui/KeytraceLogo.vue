@@ -1,5 +1,5 @@
 <template>
-  <svg :width="width" :height="height" :viewBox="`0 0 ${viewW} ${viewH}`" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <svg :width="width" :height="height" :viewBox="`0 0 ${viewW} ${viewH}`" fill="none" xmlns="http://www.w3.org/2000/svg" class="kt-logo">
     <path d="M183.816 58L341.416 58L380.816 58L380.816 97L341.416 123L315.15 110L288.883 123L275.75 110L249.483 123L223.216 123L183.816 110L183.816 58Z" fill="#7C3AED"/>
     <path d="M184.406 41.3794L156.318 41L155.002 138.431L183.09 138.81L197.322 125.081L198.259 55.6895L184.406 41.3794Z" fill="#7C3AED"/>
     <path d="M178.816 71H380.816V82H188.109L178.816 76.5V71Z" fill="black"/>
@@ -17,3 +17,20 @@ const viewH = 176;
 const height = computed(() => props.height);
 const width = computed(() => Math.round((props.height / viewH) * viewW));
 </script>
+
+<style scoped>
+.kt-logo {
+  transition:
+    filter 0.15s ease,
+    transform 0.15s ease;
+}
+
+.kt-logo:hover {
+  filter: brightness(1.25) drop-shadow(0 0 6px rgba(124, 58, 237, 0.5));
+}
+
+.kt-logo:active {
+  filter: brightness(0.9);
+  transform: scale(0.96);
+}
+</style>
