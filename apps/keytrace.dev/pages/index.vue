@@ -57,10 +57,7 @@
 
       <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
         <div v-for="step in howItWorks" :key="step.number" class="text-center">
-          <div
-            class="w-12 h-12 mx-auto mb-4 rounded-full flex items-center justify-center text-sm font-mono font-bold"
-            :class="step.number === 3 ? 'bg-verified/10 text-verified' : 'bg-violet-600/10 text-violet-400'"
-          >
+          <div class="w-12 h-12 mx-auto mb-4 rounded-full flex items-center justify-center text-sm font-mono font-bold" :class="'bg-violet-600/10 text-violet-400'">
             {{ step.number }}
           </div>
           <h3 class="text-sm font-semibold text-zinc-200 mb-1">
@@ -123,7 +120,7 @@ const howItWorks = [
   },
   {
     number: 2,
-    title: "Add your proof",
+    title: "Add your proof elsewhere",
     description: "Post a small verification token to your GitHub, domain DNS, or other account.",
   },
   {
