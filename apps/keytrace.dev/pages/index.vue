@@ -18,7 +18,7 @@
         <!-- Tagline pill -->
         <div class="mb-8 inline-flex items-center gap-2 px-3 py-1.5 rounded-full border border-zinc-800 bg-zinc-900/50 text-xs text-zinc-400">
           <span class="w-2 h-2 rounded-full bg-verified animate-pulse" />
-          Identity verification for ATProto
+          Identity verification for internet handles
         </div>
 
         <h1 class="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-zinc-100 leading-[1.1]">
@@ -27,7 +27,7 @@
         </h1>
 
         <p class="mt-6 text-lg text-zinc-400 max-w-xl mx-auto leading-relaxed">
-          Link your GitHub, domain, and other accounts to your Bluesky identity. Cryptographically signed, user-owned, and portable.
+          Link your GitHub, domain, and other accounts to your internet handle. Cryptographically signed, user-owned, and portable.
         </p>
 
         <!-- CTA group -->
@@ -75,10 +75,27 @@
 
     <!-- Recent verifications feed -->
     <section v-if="recentClaims && recentClaims.length > 0" class="max-w-4xl mx-auto px-6 py-16">
-      <h2 class="text-lg font-semibold text-zinc-300 mb-6">Recent verifications</h2>
+      <h2 class="text-lg font-semibold text-zinc-300 mb-6">Recent proofs</h2>
 
       <div class="space-y-2">
         <RecentClaimRow v-for="claim in recentClaims" :key="claim.handle + claim.displayName" :claim="claim" />
+      </div>
+
+      <div class="mt-8 text-center">
+        <NuxtLink
+          v-if="session?.authenticated"
+          to="/add"
+          class="px-6 py-2.5 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium rounded-lg transition-all hover:shadow-glow-brand"
+        >
+          Claim an account &rarr;
+        </NuxtLink>
+        <button
+          v-else
+          class="px-6 py-2.5 bg-violet-600 hover:bg-violet-500 text-white text-sm font-medium rounded-lg transition-all hover:shadow-glow-brand"
+          @click="openLoginModal"
+        >
+          OK, I get it! Sign in
+        </button>
       </div>
     </section>
   </div>
@@ -91,8 +108,8 @@ const { open: openLoginModal } = useLoginModal();
 useSeoMeta({
   title: "Keytrace - Identity Verification for ATProto",
   ogTitle: "Keytrace - You be you, everywhere.",
-  description: "Link your GitHub, domain, and other accounts to your Bluesky identity. Cryptographically signed, user-owned, and portable.",
-  ogDescription: "Link your GitHub, domain, and other accounts to your Bluesky identity. Cryptographically signed, user-owned, and portable.",
+  description: "Link your GitHub, domain, and other accounts to your internet handle. Cryptographically signed, user-owned, and portable.",
+  ogDescription: "Link your GitHub, domain, and other accounts to your internet handle. Cryptographically signed, user-owned, and portable.",
   twitterCard: "summary_large_image",
 });
 
@@ -101,8 +118,8 @@ const gridSvg = `<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg">
 const howItWorks = [
   {
     number: 1,
-    title: "Sign in with Bluesky",
-    description: "Authenticate with your ATProto identity. No new accounts, no key generation.",
+    title: "Sign in with your internet handle",
+    description: "No need for another account, and you will not have to generate PGP keys.",
   },
   {
     number: 2,
@@ -111,8 +128,8 @@ const howItWorks = [
   },
   {
     number: 3,
-    title: "Get linked",
-    description: "Keytrace verifies the proof and signs an attestation stored in your ATProto repo.",
+    title: "Make a claim",
+    description: "Keytrace verifies the proof and signs the proof into your account for other apps to use.",
   },
 ];
 

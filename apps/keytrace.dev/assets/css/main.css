@@ -72,8 +72,9 @@
 @layer utilities {
   .kt-gradient-hero {
     background:
-      radial-gradient(ellipse at 20% 50%, rgba(139, 92, 246, 0.15) 0%, transparent 50%), radial-gradient(ellipse at 80% 20%, rgba(34, 197, 94, 0.08) 0%, transparent 40%),
-      radial-gradient(ellipse at 50% 100%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+      radial-gradient(ellipse at 20% 50%, rgba(139, 92, 246, 0.12) 0%, rgba(139, 92, 246, 0.04) 40%, transparent 70%),
+      radial-gradient(ellipse at 80% 20%, rgba(34, 197, 94, 0.06) 0%, rgba(34, 197, 94, 0.02) 35%, transparent 65%),
+      radial-gradient(ellipse at 50% 100%, rgba(59, 130, 246, 0.08) 0%, rgba(59, 130, 246, 0.02) 40%, transparent 70%);
   }
 
   .kt-glow-card:hover {

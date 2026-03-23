@@ -82,7 +82,7 @@
           }"
         >
           <div :style="{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#22c55e' }" />
-          Identity verification for ATProto
+          Identity verification for internet handles
         </div>
       </div>
 
@@ -104,9 +104,7 @@
       </div>
 
       <!-- Subtitle -->
-      <p :style="{ fontSize: '20px', color: '#a1a1aa', marginTop: '20px', lineHeight: '1.5' }">
-        Link your GitHub, domain, and other accounts to your Bluesky identity.
-      </p>
+      <p :style="{ fontSize: '20px', color: '#a1a1aa', marginTop: '20px', lineHeight: '1.5' }">Link your GitHub, domain, and other accounts to your Bluesky identity.</p>
 
       <!-- Recent claims -->
       <div

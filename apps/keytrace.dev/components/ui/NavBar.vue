@@ -3,11 +3,7 @@
     <nav class="backdrop-blur-lg bg-kt-root/80 border-b border-zinc-800/50">
       <div class="max-w-5xl mx-auto flex items-center justify-between px-4 h-14">
         <NuxtLink to="/" class="flex items-center gap-2">
-          <!-- Logomark -->
-          <div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-violet-600/15 border border-violet-500/20">
-            <span class="font-mono text-sm font-bold text-violet-400">kt</span>
-          </div>
-          <span class="font-semibold text-zinc-200 text-sm hidden sm:block"> keytrace </span>
+          <KeytraceLogo :height="32" />
         </NuxtLink>
 
         <!-- Mobile: icon buttons. Desktop: full nav -->
