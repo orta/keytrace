@@ -214,4 +214,4 @@ The whole thing is open source at [orta/keytrace](https://github.com/orta/keytra
 
 One of the side-projects I'm not sure if I will build, but I have a prototype is a public relay chat system for Keytrace. So, Keytrace hosts a bot on lots of different platforms (Signal, Whatsapp, Telegram, etc) and any messages sent to that bot are posted to a public page we host via web socket. Then any messages containing a DID are stored in our backend, Keytrace would then have a public API for looking up those messages. Which I think gives us a way to crack into a set of account systems which have no public presence.
 
-Other than that, it's been fun having a side project, I haven't really had a new one since I started working on Puzzmo 5 years ago!
+Other than that, it's been fun having a side project! I started thinking about Keytrace back in [Jan 2025](https://bsky.app/profile/orta.io/post/3mdkzofxkf22n) and have been working on it on the side a 2 months now. It's been a bit of a cultural change to have a real side-project I haven't really had a new one since I started working on [Puzzmo](https://www.puzzmo.com) 5 years ago.
