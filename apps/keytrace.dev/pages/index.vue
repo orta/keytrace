@@ -108,6 +108,16 @@ useSeoMeta({
   description: "Link your GitHub, domain, and other accounts to your internet handle. Cryptographically signed, user-owned, and portable.",
   ogDescription: "Link your GitHub, domain, and other accounts to your internet handle. Cryptographically signed, user-owned, and portable.",
   twitterCard: "summary_large_image",
+  ogImage: "https://keytrace.dev/__og-image__/image/_/og.png",
+  ogUrl: "https://keytrace.dev",
+  twitterTitle: "Keytrace - You be you, everywhere.",
+  twitterDescription: "Link your GitHub, domain, and other accounts to your internet handle. Cryptographically signed, user-owned, and portable.",
+  twitterImage: "https://keytrace.dev/__og-image__/image/_/og.png",
+});
+
+useHead({
+  htmlAttrs: { lang: "en" },
+  link: [{ rel: "icon", type: "image/png", href: "/favicon.png" }],
 });
 
 const gridSvg = `<svg width="32" height="32" xmlns="http://www.w3.org/2000/svg"><path d="M32 0H0v32" fill="none" stroke="white" stroke-width="0.5"/></svg>`;
