@@ -99,15 +99,18 @@ export async function verifyClaim(claim: ClaimState, opts: VerifyOptions = {}): 
       const patterns = generateProofPatterns(claim.did);
       const targetResults = checkProofWithDetails(proofData, config.proof.target, patterns);
 
+      const verified = targetResults.some((t) => t.matched);
+
       proofDetails = {
         fetchUrl: config.proof.request.uri,
         fetcher: config.proof.request.fetcher,
         content: truncateContent(proofData),
         targets: targetResults,
         patterns,
+        recommendations: !verified && match.provider.getRecommendations
+          ? match.provider.getRecommendations(proofData, match.match)
+          : undefined,
       };
-
-      const verified = targetResults.some((t) => t.matched);
 
       if (verified) {
         claim.status = ClaimStatus.VERIFIED;

@@ -38,6 +38,8 @@ export interface ProofDetails {
   targets: ProofTargetResult[];
   /** The patterns used for matching (DID variations) */
   patterns: string[];
+  /** Optional hints from the service provider about why the proof failed */
+  recommendations?: string[];
 }
 
 /**

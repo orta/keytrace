@@ -320,6 +320,7 @@ async function startVerification() {
       ? {
           targets: result.proofDetails.targets,
           patterns: result.proofDetails.patterns,
+          recommendations: result.proofDetails.recommendations,
         }
       : undefined;
 

@@ -101,6 +101,22 @@ const github: ServiceProvider = {
     return `Create a public gist with a file named keytrace.json, keytrace.md, or proof.md containing the proof text`;
   },
 
+  getRecommendations(data) {
+    const gist = data as { files?: Record<string, unknown> };
+    if (!gist.files) return [];
+
+    const actualFiles = Object.keys(gist.files);
+    const expectedFiles = ["keytrace.json", "proof.md", "keytrace.md", "openpgp.md"];
+    const foundExpected = expectedFiles.filter((f) => actualFiles.includes(f));
+
+    if (foundExpected.length === 0) {
+      const fileList = actualFiles.length > 0 ? `Found: ${actualFiles.join(", ")}` : "The gist appears to be empty";
+      return [`No recognized proof file found (expected keytrace.json, proof.md, or keytrace.md).<br /> ${fileList}`];
+    }
+
+    return [];
+  },
+
   tests: [
     { uri: "https://gist.github.com/alice/abc123def456", shouldMatch: true },
     { uri: "https://gist.github.com/alice/abc123def456/", shouldMatch: true },

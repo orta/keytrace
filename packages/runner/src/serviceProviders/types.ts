@@ -135,6 +135,9 @@ export interface ServiceProvider {
   /** Human-readable instructions for where to place the proof */
   getProofLocation?(match: RegExpMatchArray): string;
 
+  /** Return hints explaining why proof verification failed (called only on failure) */
+  getRecommendations?(data: unknown, match: RegExpMatchArray): string[];
+
   /** Test cases for validation */
   tests: {
     uri: string;

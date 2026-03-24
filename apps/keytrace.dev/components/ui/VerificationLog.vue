@@ -85,6 +85,14 @@
               {{ step.expandable.patterns.join(' or ') }}
             </div>
           </div>
+          <!-- Recommendations -->
+          <div v-if="step.expandable.recommendations && step.expandable.recommendations.length > 0" class="border-t border-zinc-800 p-3 space-y-1">
+            <div class="text-xs text-zinc-500 font-medium mb-1">Suggestions:</div>
+            <div v-for="(rec, ri) in step.expandable.recommendations" :key="ri" class="flex items-start gap-2 text-xs text-amber-400/80">
+              <span class="mt-0.5 flex-shrink-0">→</span>
+              <span>{{ rec }}</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -104,6 +112,7 @@ export interface ExpandableContent {
     css?: string;
   }>;
   patterns?: string[];
+  recommendations?: string[];
 }
 
 export interface VerificationStep {
@@ -116,14 +125,26 @@ export interface VerificationStep {
 </script>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, watch } from "vue";
 import { CheckCircle as CheckCircleIcon, XCircle as XCircleIcon, ChevronRight as ChevronRightIcon } from "lucide-vue-next";
 
-defineProps<{
+const props = defineProps<{
   steps: VerificationStep[];
 }>();
 
 const expandedSteps = ref<Set<number>>(new Set());
+
+watch(
+  () => props.steps,
+  (steps) => {
+    steps.forEach((step, i) => {
+      if (step.status === "error" && step.expandable) {
+        expandedSteps.value = new Set([...expandedSteps.value, i]);
+      }
+    });
+  },
+  { deep: true },
+);
 
 function toggleExpand(index: number) {
   if (expandedSteps.value.has(index)) {
