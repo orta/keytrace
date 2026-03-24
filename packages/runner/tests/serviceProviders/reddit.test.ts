@@ -21,7 +21,7 @@ describe("reddit service provider", () => {
 
       expect(result.profile.display).toBe("r/test");
       expect(result.profile.uri).toBe("https://www.reddit.com/r/test");
-      expect(result.proof.request.fetcher).toBe("http");
+      expect(result.proof.request.fetcher).toBe("reddit");
       expect(result.proof.request.uri).toContain(".json");
       expect(result.proof.request.format).toBe("json");
       expect(result.proof.request.options?.headers?.["User-Agent"]).toContain("keytrace-runner");

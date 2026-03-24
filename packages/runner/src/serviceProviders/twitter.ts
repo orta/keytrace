@@ -15,7 +15,7 @@ const twitter: ServiceProvider = {
   homepage: "https://x.com",
 
   // Match twitter.com or x.com status URLs
-  reUri: /^https:\/\/(twitter\.com|x\.com)\/([a-zA-Z0-9_]{1,15})\/status\/(\d+)\/?$/,
+  reUri: /^https:\/\/(twitter\.com|x\.com)\/([a-zA-Z0-9_]{1,15})\/status\/(\d+)\/?(\?.*)?$/,
 
   isAmbiguous: false,
 
@@ -108,6 +108,7 @@ const twitter: ServiceProvider = {
     { uri: "https://x.com/alice/status/1234567890", shouldMatch: true },
     { uri: "https://x.com/alice/status/1234567890/", shouldMatch: true },
     { uri: "https://x.com/Alice_Dev123/status/9876543210", shouldMatch: true },
+    { uri: "https://x.com/alice/status/1234567890?t=-JdYJnwCHMbHmTjpRQ0-Ag", shouldMatch: true },
     // No status path
     { uri: "https://twitter.com/alice", shouldMatch: false },
     { uri: "https://x.com/alice", shouldMatch: false },

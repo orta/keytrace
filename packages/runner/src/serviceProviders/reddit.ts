@@ -20,7 +20,7 @@ const reddit: ServiceProvider = {
   // User:    https://www.reddit.com/user/{username}/comments/{postId}/{slug}/
   // Share:   https://www.reddit.com/u/{username}/s/{shareId}
   // Also supports old.reddit.com
-  reUri: /^https:\/\/(www\.|old\.)?reddit\.com\/(?:(r\/[a-zA-Z0-9_]+|user\/[a-zA-Z0-9_-]+)\/comments\/([a-z0-9]+)(?:\/([^/?]+)(?:\/([a-z0-9]+))?)?\/?\??[^/]*|(u\/[a-zA-Z0-9_-]+)\/s\/([a-zA-Z0-9]+))$/,
+  reUri: /^https:\/\/(www\.|old\.)?reddit\.com\/(?:(r\/[a-zA-Z0-9_]+|user\/[a-zA-Z0-9_-]+)\/comments\/([a-z0-9]+)(?:\/([^/?]+)(?:\/([a-z0-9]+))?)?\/?\??[^/]*|(u\/[a-zA-Z0-9_-]+)\/s\/([a-zA-Z0-9]+)\/?(\?.*)?)$/,
 
   isAmbiguous: false,
 
