@@ -175,13 +175,19 @@
               <span :style="{ fontSize: '18px', fontWeight: '600', color: '#e4e4e7', lineHeight: '1' }">
                 {{ serviceNames[claim.type] ?? claim.type }}
               </span>
-              <span :style="{ fontSize: '22px', color: '#8b5cf6', lineHeight: '1', overflow: 'hidden' }">{{ claim.identity }}</span>
+              <span :style="{ fontSize: '22px', color: '#8b5cf6', lineHeight: '1', overflow: 'hidden' }">{{ truncate(claim.identity) }}</span>
             </div>
 
             <!-- Verified dot -->
             <div :style="{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#22c55e', flexShrink: '0' }" />
           </div>
         </div>
+
+        <!-- More claims note -->
+        <span
+          v-if="claims.length > 5"
+          :style="{ fontSize: '14px', color: '#52525b', marginTop: '12px' }"
+        >and {{ claims.length - 5 }} more…</span>
       </div>
     </div>
   </div>
@@ -206,4 +212,9 @@ withDefaults(
     claims: () => [],
   },
 );
+
+function truncate(s?: string, max = 24) {
+  if (!s) return "";
+  return s.length > max ? s.slice(0, max) + "…" : s;
+}
 </script>

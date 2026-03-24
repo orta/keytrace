@@ -211,7 +211,6 @@ defineOgImageComponent("Profile", {
   claims: computed(() =>
     (profile.value?.claims ?? [])
       .filter((c: any) => c.status === "verified" || c.status === "init")
-      .slice(0, 5)
       .map((c: any) => ({
         type: c.type || c.matches?.[0]?.provider || "",
         identity: c.identity?.displayName || c.identity?.subject || "",
