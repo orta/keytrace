@@ -21,9 +21,9 @@ Your PGP key was used to make a cryptographically signed message on the other ac
 
 Keytrace evolves this model:
 
-- Data isn't stored on Keytrace's servers, so, no risk of me getting bored and stopping the project
-- Data can be posted by other people's systems, anyone can verify or check other people's verifications
-- Keytrace's system for the proof verification is open-source and available for others to use on [npm](https://npmx.dev/package/@keytrace/runner)
+- Data isn't stored on Keytrace's servers, so, no risk of me stopping the project
+- Data can be posted by other people's systems, anyone can verify a proof and create a claim
+- Keytrace's system for the proof verification is open-source and you can get it [npm](https://npmx.dev/package/@keytrace/runner)
 - The data is structured so that Keytrace can offer an API which only requires GET requests and the capacity to handle some web standards to prove that the data was 100% verified by Keytrace, and hasn't been touched since
 
 That said, I make a pretty big breaking change though:
