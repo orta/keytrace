@@ -29,7 +29,8 @@
           <form @submit.prevent="handleLogin">
             <input
               ref="handleInput"
-              v-model="handle"
+              :value="handle"
+              @input="handle = ($event.target as HTMLInputElement).value.replace(/^@/, '')"
               type="text"
               placeholder="you.bsky.social"
               class="w-full px-4 py-2.5 rounded-lg bg-kt-inset border border-zinc-800 text-sm text-zinc-200 font-mono placeholder:text-zinc-600 focus:outline-none focus:border-violet-500 focus:ring-1 focus:ring-violet-500 transition-all"
@@ -116,7 +117,7 @@ watch(isOpen, (open) => {
 
 function handleLogin() {
   if (handle.value) {
-    login(handle.value);
+    login(handle.value.replace(/^@/, ""));
     close();
   }
 }
