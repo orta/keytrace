@@ -214,7 +214,7 @@ async function runVerification() {
       try {
         const patchResult = await $fetch(`/api/claims/${props.rkey}`, {
           method: "PATCH",
-          body: { action: apiResult.status === "verified" ? "reverify" : "retract" },
+          body: { action: "reverify" },
         });
         steps.value[steps.value.length - 1] = {
           ...steps.value[steps.value.length - 1],
