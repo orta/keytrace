@@ -136,7 +136,7 @@ const howItWorks = [
   {
     number: 3,
     title: "Make a claim",
-    description: "Keytrace verifies the proof and signs the proof into your account for other apps to use.",
+    description: "Keytrace verifies the proof and creates a claim in your account for other apps to use.",
   },
 ];
 
