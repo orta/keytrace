@@ -198,18 +198,23 @@ useSeoMeta({
   twitterCard: "summary_large_image",
 });
 
+const ogAvatar = computed(() => {
+  const url = profile.value?.avatar || "";
+  return url.includes("cdn.bsky.app") ? `${url}@jpeg` : url;
+});
+
 defineOgImageComponent("Profile", {
   displayName: computed(() => profile.value?.displayName || ""),
   handle: computed(() => profile.value?.handle || ""),
-  avatar: computed(() => profile.value?.avatar || ""),
+  avatar: ogAvatar,
   verifiedCount: computed(() => profile.value?.summary?.verified || 0),
   claims: computed(() =>
     (profile.value?.claims ?? [])
       .filter((c: any) => c.status === "verified" || c.status === "init")
-      .slice(0, 6)
+      .slice(0, 5)
       .map((c: any) => ({
         type: c.type || c.matches?.[0]?.provider || "",
-        subject: c.identity?.subject || c.identity?.displayName || "",
+        identity: c.identity?.displayName || c.identity?.subject || "",
       })),
   ),
 });

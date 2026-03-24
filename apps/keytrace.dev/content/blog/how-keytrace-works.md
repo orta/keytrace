@@ -193,7 +193,8 @@ Open [jwt.io](https://www.jwt.io/):
 - In **JWT Signature Verification** change the Public Key Format from PEM to JWK
 - Set the public key to the one from the Server Public Key:
 
-::CopySnippet{value='{"kty":"EC","x":"F9YcOywzrNapbegB-\_ZM_9jYJzGrGj5PjH-DrUTySQs","y":"vN0rBTAPYwmsOJqc7ndcpa-PEFmPsksBcKxx2X-Nc9I","crv":"P-256"}'}
+<!-- prettier-ignore -->
+::CopySnippet{value='{"kty":"EC","x":"F9YcOywzrNapbegB-_ZM_9jYJzGrGj5PjH-DrUTySQs","y":"vN0rBTAPYwmsOJqc7ndcpa-PEFmPsksBcKxx2X-Nc9I","crv":"P-256"}'}
 ::
 
 - See the tick! (Then verify it fails by changing the JWK or the JWT)

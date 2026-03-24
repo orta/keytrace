@@ -15,10 +15,10 @@
     <div
       :style="{
         position: 'absolute',
-        top: '-120px',
-        right: '-80px',
-        width: '500px',
-        height: '500px',
+        top: '-150px',
+        right: '-150px',
+        width: '600px',
+        height: '600px',
         borderRadius: '50%',
         background: 'radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)',
       }"
@@ -26,8 +26,8 @@
     <div
       :style="{
         position: 'absolute',
-        bottom: '-100px',
-        left: '-60px',
+        bottom: '-80px',
+        left: '-80px',
         width: '400px',
         height: '400px',
         borderRadius: '50%',
@@ -35,37 +35,55 @@
       }"
     />
 
-    <!-- Main content: claims front and center -->
+    <!-- Two-column layout -->
     <div
-      :style="{
-        display: 'flex',
-        flexDirection: 'column',
-        flex: '1',
-        padding: '50px 60px',
-        position: 'relative',
-      }"
+      class="flex-row"
+      :style="{ display: 'flex', flexDirection: 'row', flex: '1', position: 'relative' }"
     >
-      <!-- Top: Keytrace branding + verified count -->
-      <div class="flex-row" :style="{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }">
-        <div class="flex-row" :style="{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '14px' }">
-          <div
-            :style="{
-              width: '40px',
-              height: '40px',
-              borderRadius: '10px',
-              backgroundColor: '#8B5CF6',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              color: 'white',
-              fontSize: '20px',
-              fontWeight: '700',
-            }"
-          >
-            K
-          </div>
-          <span :style="{ fontSize: '24px', fontWeight: '600', color: '#71717a' }">keytrace.dev</span>
+      <!-- Left column: profile -->
+      <div
+        :style="{
+          display: 'flex',
+          flexDirection: 'column',
+          width: '480px',
+          padding: '60px',
+          justifyContent: 'center',
+          gap: '0px',
+        }"
+      >
+        <!-- Avatar -->
+        <img
+          v-if="avatar"
+          :src="avatar"
+          width="96"
+          height="96"
+          :style="{ width: '96px', height: '96px', borderRadius: '50%', border: '3px solid #27272a', marginBottom: '24px' }"
+        />
+        <div
+          v-else
+          :style="{
+            width: '96px',
+            height: '96px',
+            borderRadius: '50%',
+            backgroundColor: '#1c1929',
+            border: '3px solid #27272a',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            color: '#8b5cf6',
+            fontSize: '40px',
+            fontWeight: '700',
+            marginBottom: '24px',
+          }"
+        >
+          {{ (displayName || handle || '?')[0].toUpperCase() }}
         </div>
+
+        <!-- Name + handle -->
+        <span :style="{ fontSize: '52px', fontWeight: '700', color: '#f4f4f5', lineHeight: '1.05' }">{{ displayName || handle }}</span>
+        <span :style="{ fontSize: '26px', color: '#52525b', marginTop: '8px' }">@{{ handle }}</span>
+
+        <!-- Verified count badge -->
         <div
           v-if="verifiedCount > 0"
           class="flex-row"
@@ -73,116 +91,112 @@
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            gap: '10px',
-            padding: '10px 20px',
-            borderRadius: '9999px',
-            backgroundColor: 'rgba(34,197,94,0.1)',
-            border: '1px solid rgba(34,197,94,0.25)',
+            gap: '8px',
+            marginTop: '28px',
           }"
         >
-          <div :style="{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#22c55e' }" />
-          <span :style="{ fontSize: '20px', fontWeight: '600', color: '#4ade80' }">{{ verifiedCount }} verified</span>
+          <div :style="{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#22c55e' }" />
+          <span :style="{ fontSize: '20px', color: '#4ade80', fontWeight: '600' }">{{ verifiedCount }} verified {{ verifiedCount === 1 ? 'identity' : 'identities' }}</span>
         </div>
+
+        <!-- keytrace.dev label -->
+        <span :style="{ fontSize: '14px', color: '#3f3f46', marginTop: 'auto', paddingTop: '32px' }">keytrace.dev</span>
       </div>
 
-      <!-- Heading -->
-      <span :style="{ fontSize: '40px', fontWeight: '700', color: '#f4f4f5', marginTop: '40px' }">
-        Verified Identities
-      </span>
+      <!-- Column divider -->
+      <div :style="{ width: '1px', backgroundColor: '#27272a', alignSelf: 'stretch', margin: '48px 0' }" />
 
-      <!-- Claims grid -->
+      <!-- Right column: claims -->
       <div
-        v-if="claims && claims.length > 0"
-        class="flex-row"
         :style="{
           display: 'flex',
-          flexDirection: 'row',
-          gap: '16px',
-          marginTop: '28px',
-          flexWrap: 'wrap',
-        }"
-      >
-        <div
-          v-for="(claim, i) in claims.slice(0, 6)"
-          :key="i"
-          class="flex-row"
-          :style="{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: '12px',
-            padding: '16px 24px',
-            borderRadius: '14px',
-            backgroundColor: '#13111c',
-            border: '1px solid #27272a',
-          }"
-        >
-          <div :style="{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: '#22c55e' }" />
-          <span :style="{ fontSize: '24px', fontWeight: '600', color: '#f4f4f5' }">{{ formatType(claim.type) }}</span>
-          <span v-if="claim.subject" :style="{ fontSize: '22px', color: '#a1a1aa' }">{{ truncate(claim.subject, 28) }}</span>
-        </div>
-      </div>
-    </div>
-
-    <!-- Footer: avatar + name -->
-    <div
-      class="flex-row"
-      :style="{
-        display: 'flex',
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: '18px',
-        padding: '24px 60px 36px',
-        borderTop: '1px solid #1c1c22',
-        position: 'relative',
-      }"
-    >
-      <img
-        v-if="avatar"
-        :src="avatar"
-        :style="{
-          width: '56px',
-          height: '56px',
-          borderRadius: '50%',
-          border: '2px solid #27272a',
-        }"
-      />
-      <div
-        v-else
-        :style="{
-          width: '56px',
-          height: '56px',
-          borderRadius: '50%',
-          backgroundColor: '#1c1929',
-          border: '2px solid #27272a',
-          display: 'flex',
-          alignItems: 'center',
+          flexDirection: 'column',
+          flex: '1',
+          padding: '52px 52px',
           justifyContent: 'center',
-          color: '#71717a',
-          fontSize: '24px',
-          fontWeight: '700',
         }"
       >
-        {{ (displayName || handle || '?')[0].toUpperCase() }}
-      </div>
-      <div class="flex-col" :style="{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }">
-        <span :style="{ fontSize: '26px', fontWeight: '700', color: '#f4f4f5', lineHeight: '1.2' }">
-          {{ displayName || handle }}
-        </span>
-        <span :style="{ fontSize: '20px', color: '#71717a', marginTop: '2px' }">@{{ handle }}</span>
+        <span
+          :style="{
+            fontSize: '13px',
+            fontWeight: '600',
+            color: '#52525b',
+            marginBottom: '18px',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+          }"
+        >Verified Claims</span>
+
+        <div :style="{ display: 'flex', flexDirection: 'column', gap: '10px' }">
+          <div
+            v-for="(claim, i) in claims.slice(0, 5)"
+            :key="i"
+            class="flex-row"
+            :style="{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: '16px',
+              paddingTop: '8px',
+              paddingBottom: '8px',
+            }"
+          >
+            <!-- Service icon -->
+            <div
+              class="flex-row"
+              :style="{
+                width: '44px',
+                height: '44px',
+                borderRadius: '50%',
+                backgroundColor: '#1a1727',
+                border: '1px solid #3f3f46',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                flexShrink: '0',
+                alignSelf: 'center',
+              }"
+            >
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#a1a1aa"
+                stroke-width="1.5"
+                stroke-linecap="round"
+                stroke-linejoin="round"
+                v-html="serviceIconPaths[claim.type] ?? serviceIconPaths.default"
+              />
+            </div>
+
+            <!-- Two-line text -->
+            <div :style="{ display: 'flex', flexDirection: 'column', justifyContent: 'center', gap: '4px', flex: '1', minWidth: '0', height: '44px' }">
+              <span :style="{ fontSize: '18px', fontWeight: '600', color: '#e4e4e7', lineHeight: '1' }">
+                {{ serviceNames[claim.type] ?? claim.type }}
+              </span>
+              <span :style="{ fontSize: '22px', color: '#8b5cf6', lineHeight: '1', overflow: 'hidden' }">{{ claim.identity }}</span>
+            </div>
+
+            <!-- Verified dot -->
+            <div :style="{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#22c55e', flexShrink: '0' }" />
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script setup lang="ts">
+import { serviceNames, serviceIconPaths } from "~/utils/serviceData";
+
 withDefaults(
   defineProps<{
     displayName?: string;
     handle?: string;
     avatar?: string;
     verifiedCount?: number;
-    claims?: { type: string; subject?: string }[];
+    claims?: { type: string; identity?: string }[];
   }>(),
   {
     displayName: "",
@@ -192,20 +206,4 @@ withDefaults(
     claims: () => [],
   },
 );
-
-function formatType(type: string) {
-  const names: Record<string, string> = {
-    github: "GitHub",
-    dns: "DNS",
-    mastodon: "Mastodon",
-    fediverse: "Fediverse",
-    npm: "npm",
-    bluesky: "Bluesky",
-  };
-  return names[type] || type;
-}
-
-function truncate(str: string, len: number) {
-  return str.length > len ? str.slice(0, len) + "…" : str;
-}
 </script>
