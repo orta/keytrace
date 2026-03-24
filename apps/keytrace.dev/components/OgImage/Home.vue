@@ -15,12 +15,12 @@
     <div
       :style="{
         position: 'absolute',
-        top: '-100px',
-        right: '-100px',
-        width: '500px',
-        height: '500px',
+        top: '-150px',
+        right: '-150px',
+        width: '600px',
+        height: '600px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(139,92,246,0.15) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(139,92,246,0.12) 0%, transparent 70%)',
       }"
     />
     <div
@@ -31,115 +31,193 @@
         width: '400px',
         height: '400px',
         borderRadius: '50%',
-        background: 'radial-gradient(circle, rgba(34,197,94,0.08) 0%, transparent 70%)',
+        background: 'radial-gradient(circle, rgba(34,197,94,0.06) 0%, transparent 70%)',
       }"
     />
 
-    <!-- Main content -->
-    <div
-      :style="{
-        display: 'flex',
-        flexDirection: 'column',
-        flex: '1',
-        padding: '60px',
-        position: 'relative',
-      }"
-    >
-      <!-- Top bar: logo + tagline pill -->
-      <div class="flex-row" :style="{ display: 'flex', flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', width: '100%' }">
-        <div class="flex-row" :style="{ display: 'flex', flexDirection: 'row', alignItems: 'center' }">
-          <svg width="130" height="60" viewBox="0 0 381 176" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M183.816 58L341.416 58L380.816 58L380.816 97L341.416 123L315.15 110L288.883 123L275.75 110L249.483 123L223.216 123L183.816 110L183.816 58Z" fill="#7C3AED"/>
-            <path d="M184.406 41.3794L156.318 41L155.002 138.431L183.09 138.81L197.322 125.081L198.259 55.6895L184.406 41.3794Z" fill="#7C3AED"/>
-            <path d="M178.816 71H380.816V82H188.109L178.816 76.5V71Z" fill="#0c0a13"/>
-            <path d="M357.077 109.534H320.21L314.942 106.9L309.675 109.534H278.074L275.44 106.9L270.173 109.534H187.328L178 104.267V99H372.879L357.077 109.534Z" fill="#0c0a13"/>
-            <path d="M90.704 176C76.3928 176 63.6275 174.066 52.4082 170.197C41.1889 166.372 31.6923 160.745 23.9183 153.316C16.1443 145.93 10.2255 136.94 6.16178 126.345C2.0981 115.751 0.0441709 103.683 0 90.143C0.0441709 76.7348 2.0981 64.5354 6.16178 53.5451C10.2696 42.5107 16.2547 33.0151 24.1171 25.058C32.0236 17.057 41.6969 10.8805 53.137 6.52829C64.6214 2.1761 77.7179 0 92.4267 0C105.855 0 117.913 1.89034 128.602 5.67103C139.292 9.45171 148.391 14.9029 155.9 22.0247C163.453 29.1465 169.217 37.7409 173.192 47.8081C177.168 57.8753 179.133 69.2393 179.089 81.9003C179.133 90.5607 178.294 98.3199 176.571 105.178C174.849 112.036 172.221 117.905 168.687 122.785C165.198 127.664 160.78 131.511 155.436 134.324C150.135 137.094 143.885 138.743 136.685 139.27C130.855 139.754 126.438 139.402 123.434 138.215C120.431 137.028 118.311 135.314 117.074 133.071C115.837 130.785 114.976 128.236 114.49 125.422H113.695C112.679 128.104 110.448 130.5 107.003 132.61C103.602 134.676 99.5381 136.237 94.8119 137.292C90.0856 138.391 85.2269 138.787 80.2356 138.479C75.2002 138.127 70.2972 136.94 65.5268 134.918C60.7564 132.852 56.4498 129.84 52.607 125.884C48.8083 121.883 45.7827 116.85 43.53 110.783C41.3214 104.716 40.1951 97.5725 40.1509 89.3517C40.1951 81.1309 41.3435 74.0751 43.5962 68.1843C45.8931 62.2495 48.8746 57.3258 52.5407 53.4132C56.2511 49.4567 60.3147 46.4014 64.7318 44.2472C69.1488 42.0492 73.4775 40.6204 77.7179 39.961C82.8417 39.0818 87.7888 39.0158 92.5592 39.7632C97.3296 40.5105 101.349 41.7195 104.618 43.39C107.931 45.0605 109.984 46.8629 110.779 48.7972H111.773V41.4117H134.698V107.354C134.786 110.212 135.36 112.278 136.42 113.553C137.481 114.827 138.85 115.465 140.528 115.465C143.09 115.465 145.343 114.212 147.286 111.706C149.274 109.156 150.798 105.266 151.858 100.034C152.962 94.759 153.492 88.0549 153.448 79.922C153.492 70.8659 152.3 63.1287 149.87 56.7103C147.485 50.248 144.239 44.9067 140.131 40.6863C136.023 36.466 131.341 33.1689 126.085 30.795C120.872 28.3771 115.351 26.6846 109.521 25.7175C103.69 24.7503 97.948 24.2667 92.2942 24.2667C81.0307 24.2667 71.2911 25.9593 63.0754 29.3443C54.8597 32.6854 48.0575 37.3233 42.6687 43.2581C37.2799 49.1929 33.2603 56.0729 30.6101 63.898C28.004 71.6792 26.679 80.0319 26.6348 88.9561C26.679 99.1112 28.1366 108.101 31.0077 115.927C33.8787 123.708 38.097 130.236 43.6625 135.511C49.228 140.787 56.0965 144.765 64.268 147.447C72.4837 150.173 81.892 151.535 92.4929 151.535C97.6609 151.535 102.696 151.206 107.599 150.546C112.502 149.887 116.963 149.052 120.983 148.04C125.047 147.029 126.509 145.81 130.987 144.875C135.466 143.94 141.102 142.33 145.172 140.8C149.242 139.27 147.579 140.01 162.002 129.969C176.425 119.928 141.107 157.046 127.012 171.054C122.153 172.549 116.588 173.736 110.316 174.615C104.088 175.538 97.5504 176 90.704 176ZM89.1139 114.014C94.3702 114.014 98.5222 113.047 101.57 111.113C104.618 109.134 106.782 106.233 108.063 102.408C109.344 98.5837 109.918 93.9018 109.786 88.3626C109.786 83.7906 109.211 79.7461 108.063 76.2292C106.915 72.7123 104.839 69.9427 101.835 67.9205C98.8314 65.8983 94.5027 64.8872 88.8489 64.8872C83.9901 64.8872 79.8602 65.8323 76.4591 67.7227C73.1021 69.613 70.5181 72.3166 68.7071 75.8336C66.9403 79.3505 66.0569 83.5928 66.0569 88.5604C66.0569 92.9126 66.7857 97.045 68.2433 100.958C69.701 104.826 72.1083 107.969 75.4652 110.387C78.8222 112.805 83.3717 114.014 89.1139 114.014Z" fill="#7C3AED"/>
-            <path d="M176.838 122.455C180.902 111.465 182.956 99.2652 183 85.8569L156.365 87.0439C156.321 95.9681 154.996 104.321 152.39 112.102C149.74 119.927 145.72 126.807 140.331 132.742C134.943 138.677 128.14 143.315 119.925 146.656C111.709 150.041 101.969 151.733 90.7059 151.733C85.052 151.733 79.3099 151.25 73.4794 150.283C67.6489 149.315 62.1276 147.623 56.9155 145.205L90.5733 176C105.282 176 118.379 173.824 129.863 169.472C141.303 165.12 150.976 158.943 158.883 150.942C166.745 142.985 172.73 133.489 176.838 122.455Z" fill="#7C3AED"/>
-          </svg>
-        </div>
-        <div
-          class="flex-row"
-          :style="{
-            display: 'flex',
-            flexDirection: 'row',
-            alignItems: 'center',
-            gap: '8px',
-            padding: '6px 14px',
-            borderRadius: '9999px',
-            border: '1px solid #27272a',
-            backgroundColor: 'rgba(24,24,27,0.5)',
-            fontSize: '14px',
-            color: '#a1a1aa',
-          }"
-        >
-          <div :style="{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#22c55e' }" />
-          Identity verification for internet handles
-        </div>
-      </div>
-
-      <!-- Headline -->
-      <div :style="{ display: 'flex', flexDirection: 'column', marginTop: '48px' }">
-        <span :style="{ fontSize: '64px', fontWeight: '700', color: '#f4f4f5', lineHeight: '1.1' }">You be you,</span>
-        <span
-          :style="{
-            fontSize: '64px',
-            fontWeight: '700',
-            lineHeight: '1.1',
-            background: 'linear-gradient(to right, #a78bfa, #34d399)',
-            backgroundClip: 'text',
-            color: 'transparent',
-          }"
-        >
-          everywhere.
-        </span>
-      </div>
-
-      <!-- Subtitle -->
-      <p :style="{ fontSize: '20px', color: '#a1a1aa', marginTop: '20px', lineHeight: '1.5' }">Link your GitHub, domain, and other accounts to your Bluesky identity.</p>
-
-      <!-- Recent claims -->
+    <!-- Two-column layout -->
+    <div class="flex-row" :style="{ display: 'flex', flexDirection: 'row', flex: '1', position: 'relative' }">
+      <!-- Left column: info -->
       <div
-        v-if="claims && claims.length > 0"
-        class="flex-row"
         :style="{
           display: 'flex',
-          flexDirection: 'row',
-          gap: '12px',
-          marginTop: 'auto',
+          flexDirection: 'column',
+          width: '560px',
+          padding: '60px',
+          justifyContent: 'center',
         }"
       >
+        <!-- Logo: rotated key mark + Keytrace wordmark -->
         <div
-          v-for="(claim, i) in claims.slice(0, 4)"
-          :key="i"
           class="flex-row"
           :style="{
             display: 'flex',
             flexDirection: 'row',
             alignItems: 'center',
-            gap: '8px',
-            padding: '8px 14px',
-            borderRadius: '8px',
-            backgroundColor: '#13111c',
-            border: '1px solid #27272a',
+            gap: '14px',
+            marginBottom: '40px',
           }"
         >
-          <div :style="{ width: '6px', height: '6px', borderRadius: '50%', backgroundColor: '#22c55e' }" />
-          <span :style="{ fontSize: '14px', color: '#a1a1aa' }">{{ claim.handle }}</span>
-          <span :style="{ fontSize: '12px', color: '#71717a' }">{{ claim.type }}</span>
+          <div :style="{ transform: 'rotate(-14deg)', display: 'flex', transformOrigin: 'center center' }">
+            <svg width="70" height="33" viewBox="0 0 381 176" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <path d="M183.816 58L341.416 58L380.816 58L380.816 97L341.416 123L315.15 110L288.883 123L275.75 110L249.483 123L223.216 123L183.816 110L183.816 58Z" fill="#7C3AED" />
+              <path d="M184.406 41.3794L156.318 41L155.002 138.431L183.09 138.81L197.322 125.081L198.259 55.6895L184.406 41.3794Z" fill="#7C3AED" />
+              <path d="M178.816 71H380.816V82H188.109L178.816 76.5V71Z" fill="#0c0a13" />
+              <path d="M357.077 109.534H320.21L314.942 106.9L309.675 109.534H278.074L275.44 106.9L270.173 109.534H187.328L178 104.267V99H372.879L357.077 109.534Z" fill="#0c0a13" />
+              <path
+                d="M90.704 176C76.3928 176 63.6275 174.066 52.4082 170.197C41.1889 166.372 31.6923 160.745 23.9183 153.316C16.1443 145.93 10.2255 136.94 6.16178 126.345C2.0981 115.751 0.0441709 103.683 0 90.143C0.0441709 76.7348 2.0981 64.5354 6.16178 53.5451C10.2696 42.5107 16.2547 33.0151 24.1171 25.058C32.0236 17.057 41.6969 10.8805 53.137 6.52829C64.6214 2.1761 77.7179 0 92.4267 0C105.855 0 117.913 1.89034 128.602 5.67103C139.292 9.45171 148.391 14.9029 155.9 22.0247C163.453 29.1465 169.217 37.7409 173.192 47.8081C177.168 57.8753 179.133 69.2393 179.089 81.9003C179.133 90.5607 178.294 98.3199 176.571 105.178C174.849 112.036 172.221 117.905 168.687 122.785C165.198 127.664 160.78 131.511 155.436 134.324C150.135 137.094 143.885 138.743 136.685 139.27C130.855 139.754 126.438 139.402 123.434 138.215C120.431 137.028 118.311 135.314 117.074 133.071C115.837 130.785 114.976 128.236 114.49 125.422H113.695C112.679 128.104 110.448 130.5 107.003 132.61C103.602 134.676 99.5381 136.237 94.8119 137.292C90.0856 138.391 85.2269 138.787 80.2356 138.479C75.2002 138.127 70.2972 136.94 65.5268 134.918C60.7564 132.852 56.4498 129.84 52.607 125.884C48.8083 121.883 45.7827 116.85 43.53 110.783C41.3214 104.716 40.1951 97.5725 40.1509 89.3517C40.1951 81.1309 41.3435 74.0751 43.5962 68.1843C45.8931 62.2495 48.8746 57.3258 52.5407 53.4132C56.2511 49.4567 60.3147 46.4014 64.7318 44.2472C69.1488 42.0492 73.4775 40.6204 77.7179 39.961C82.8417 39.0818 87.7888 39.0158 92.5592 39.7632C97.3296 40.5105 101.349 41.7195 104.618 43.39C107.931 45.0605 109.984 46.8629 110.779 48.7972H111.773V41.4117H134.698V107.354C134.786 110.212 135.36 112.278 136.42 113.553C137.481 114.827 138.85 115.465 140.528 115.465C143.09 115.465 145.343 114.212 147.286 111.706C149.274 109.156 150.798 105.266 151.858 100.034C152.962 94.759 153.492 88.0549 153.448 79.922C153.492 70.8659 152.3 63.1287 149.87 56.7103C147.485 50.248 144.239 44.9067 140.131 40.6863C136.023 36.466 131.341 33.1689 126.085 30.795C120.872 28.3771 115.351 26.6846 109.521 25.7175C103.69 24.7503 97.948 24.2667 92.2942 24.2667C81.0307 24.2667 71.2911 25.9593 63.0754 29.3443C54.8597 32.6854 48.0575 37.3233 42.6687 43.2581C37.2799 49.1929 33.2603 56.0729 30.6101 63.898C28.004 71.6792 26.679 80.0319 26.6348 88.9561C26.679 99.1112 28.1366 108.101 31.0077 115.927C33.8787 123.708 38.097 130.236 43.6625 135.511C49.228 140.787 56.0965 144.765 64.268 147.447C72.4837 150.173 81.892 151.535 92.4929 151.535C97.6609 151.535 102.696 151.206 107.599 150.546C112.502 149.887 116.963 149.052 120.983 148.04C125.047 147.029 126.509 145.81 130.987 144.875C135.466 143.94 141.102 142.33 145.172 140.8C149.242 139.27 147.579 140.01 162.002 129.969C176.425 119.928 141.107 157.046 127.012 171.054C122.153 172.549 116.588 173.736 110.316 174.615C104.088 175.538 97.5504 176 90.704 176ZM89.1139 114.014C94.3702 114.014 98.5222 113.047 101.57 111.113C104.618 109.134 106.782 106.233 108.063 102.408C109.344 98.5837 109.918 93.9018 109.786 88.3626C109.786 83.7906 109.211 79.7461 108.063 76.2292C106.915 72.7123 104.839 69.9427 101.835 67.9205C98.8314 65.8983 94.5027 64.8872 88.8489 64.8872C83.9901 64.8872 79.8602 65.8323 76.4591 67.7227C73.1021 69.613 70.5181 72.3166 68.7071 75.8336C66.9403 79.3505 66.0569 83.5928 66.0569 88.5604C66.0569 92.9126 66.7857 97.045 68.2433 100.958C69.701 104.826 72.1083 107.969 75.4652 110.387C78.8222 112.805 83.3717 114.014 89.1139 114.014Z"
+                fill="#7C3AED"
+              />
+              <path
+                d="M176.838 122.455C180.902 111.465 182.956 99.2652 183 85.8569L156.365 87.0439C156.321 95.9681 154.996 104.321 152.39 112.102C149.74 119.927 145.72 126.807 140.331 132.742C134.943 138.677 128.14 143.315 119.925 146.656C111.709 150.041 101.969 151.733 90.7059 151.733C85.052 151.733 79.3099 151.25 73.4794 150.283C67.6489 149.315 62.1276 147.623 56.9155 145.205L90.5733 176C105.282 176 118.379 173.824 129.863 169.472C141.303 165.12 150.976 158.943 158.883 150.942C166.745 142.985 172.73 133.489 176.838 122.455Z"
+                fill="#7C3AED"
+              />
+            </svg>
+          </div>
+          <span :style="{ fontSize: '38px', fontWeight: '700', color: '#8B5CF6' }">Keytrace</span>
+        </div>
+
+        <!-- Headline -->
+        <div :style="{ display: 'flex', flexDirection: 'column' }">
+          <span :style="{ fontSize: '72px', fontWeight: '700', color: '#f4f4f5', lineHeight: '1.05' }">You be you,</span>
+          <span
+            :style="{
+              fontSize: '72px',
+              fontWeight: '700',
+              lineHeight: '1.05',
+              background: 'linear-gradient(to right, #a78bfa, #34d399)',
+              backgroundClip: 'text',
+              color: 'transparent',
+            }"
+            >everywhere.</span
+          >
+        </div>
+
+        <!-- Subtitle -->
+        <p :style="{ fontSize: '24px', color: '#a1a1aa', marginTop: '22px', lineHeight: '1.45', maxWidth: '440px' }">
+          Link your GitHub, domain, and other accounts to your internet handle.
+        </p>
+      </div>
+
+      <!-- Column divider -->
+      <div :style="{ width: '1px', backgroundColor: '#27272a', alignSelf: 'stretch', margin: '48px 0' }" />
+
+      <!-- Right column: recent claims -->
+      <div
+        :style="{
+          display: 'flex',
+          flexDirection: 'column',
+          flex: '1',
+          padding: '52px 52px',
+          justifyContent: 'center',
+        }"
+      >
+        <span
+          :style="{
+            fontSize: '13px',
+            fontWeight: '600',
+            color: '#52525b',
+            marginBottom: '18px',
+            letterSpacing: '0.08em',
+            textTransform: 'uppercase',
+          }"
+          >Recent Claims</span
+        >
+
+        <div :style="{ display: 'flex', flexDirection: 'column', gap: '10px' }">
+          <div
+            v-for="(claim, i) in claims.slice(0, 5)"
+            :key="i"
+            class="flex-row"
+            :style="{
+              display: 'flex',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: '16px',
+              padding: '10px 4px',
+              marginTop: i === 0 ? '16px' : '0px',
+            }"
+          >
+            <!-- Icon + avatar composite -->
+            <div :style="{ position: 'relative', width: '68px', height: '56px', flexShrink: '0' }">
+              <!-- Service icon circle -->
+              <div
+                :style="{
+                  position: 'absolute',
+                  top: '0',
+                  left: '0',
+                  width: '48px',
+                  height: '48px',
+                  borderRadius: '50%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                }"
+              >
+                <!-- eslint-disable vue/no-v-html -->
+                <svg
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="#a1a1aa"
+                  stroke-width="1.5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  v-html="serviceIconPaths[claim.type] ?? serviceIconPaths.default"
+                />
+              </div>
+              <!-- User avatar badge (bottom-right overlap) -->
+              <img
+                v-if="claim.avatar"
+                :src="claim.avatar"
+                width="36"
+                height="36"
+                :style="{
+                  position: 'absolute',
+                  bottom: '0',
+                  right: '0',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  border: '2px solid #0c0a13',
+                }"
+              />
+              <div
+                v-else
+                :style="{
+                  position: 'absolute',
+                  bottom: '0',
+                  right: '0',
+                  width: '36px',
+                  height: '36px',
+                  borderRadius: '50%',
+                  backgroundColor: '#27272a',
+                  border: '2px solid #0c0a13',
+                }"
+              />
+            </div>
+
+            <!-- Two-line text -->
+            <div :style="{ display: 'flex', flexDirection: 'column', gap: '5px', flex: '1', minWidth: '0' }">
+              <span :style="{ fontSize: '18px', fontWeight: '600', color: '#e4e4e7', lineHeight: '1' }"> @{{ claim.handle }} </span>
+              <div class="flex-row" :style="{ display: 'flex', flexDirection: 'row', alignItems: 'center', gap: '6px', fontSize: '18px' }">
+                <span :style="{ color: '#9d9da5' }">verified</span>
+                <span :style="{ color: '#8b5cf6', overflow: 'hidden' }">{{ claim.identity ?? claim.type }}</span>
+                <span :style="{ color: '#9d9da5' }">on {{ serviceNames[claim.type] ?? claim.type }}</span>
+              </div>
+            </div>
+
+            <!-- Verified dot -->
+            <div :style="{ width: '7px', height: '7px', borderRadius: '50%', backgroundColor: '#22c55e', flexShrink: '0' }" />
+          </div>
+        </div>
+
+        <!-- keytrace.dev label -->
+        <div :style="{ marginTop: 'auto', paddingTop: '16px', display: 'flex', justifyContent: 'flex-end' }">
+          <span :style="{ fontSize: '14px', color: '#3f3f46' }">keytrace.dev</span>
         </div>
       </div>
-    </div>
-
-    <!-- Footer -->
-    <div
-      :style="{
-        display: 'flex',
-        justifyContent: 'flex-end',
-        padding: '0 60px 30px',
-        position: 'relative',
-      }"
-    >
-      <span :style="{ fontSize: '16px', color: '#71717a' }">keytrace.dev</span>
     </div>
   </div>
 </template>
@@ -147,10 +225,43 @@
 <script setup lang="ts">
 withDefaults(
   defineProps<{
-    claims?: { handle: string; type: string }[];
+    claims?: { handle: string; type: string; avatar?: string; identity?: string }[];
   }>(),
   {
     claims: () => [],
   },
 );
+
+const serviceNames: Record<string, string> = {
+  github: "GitHub",
+  dns: "DNS",
+  activitypub: "ActivityPub",
+  bluesky: "Bluesky",
+  bsky: "Bluesky",
+  npm: "npm",
+  pgp: "PGP",
+  tangled: "Tangled",
+  twitter: "Twitter",
+  linkedin: "LinkedIn",
+  instagram: "Instagram",
+  reddit: "Reddit",
+  hackernews: "Hacker News",
+};
+
+// Inline SVG path strings for each service type (Lucide 24x24 viewBox, stroke-based)
+const serviceIconPaths: Record<string, string> = {
+  github: `<path d="M15 22v-4a4.8 4.8 0 0 0-1-3.5c3 0 6-2 6-5.5.08-1.25-.27-2.48-1-3.5.28-1.15.28-2.35 0-3.5 0 0-1 0-3 1.5-2.64-.5-5.36-.5-8 0C6 2 5 2 5 2c-.3 1.15-.3 2.35 0 3.5A5.403 5.403 0 0 0 4 9c0 3.5 3 5.5 6 5.5-.39.49-.68 1.05-.85 1.65-.17.6-.22 1.23-.15 1.85v4"/><path d="M9 18c-4.51 2-5-2-7-2"/>`,
+  dns: `<circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>`,
+  activitypub: `<circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/>`,
+  bluesky: `<circle cx="12" cy="12" r="4"/><path d="M16 8v5a3 3 0 0 0 6 0v-1a10 10 0 1 0-3.92 7.94"/>`,
+  twitter: `<path d="M22 4s-.7 2.1-2 3.4c1.6 10-9.4 17.3-18 11.6 2.2.1 4.4-.6 6-2C3 15.5.5 9.6 3 5c2.2 2.6 5.6 4.1 9 4-.9-4.2 4-6.6 7-3.8 1.1 0 3-1.2 3-1.2z"/>`,
+  linkedin: `<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>`,
+  instagram: `<rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>`,
+  npm: `<path d="M2 12h20M2 6h20M2 18h20"/>`,
+  pgp: `<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>`,
+  reddit: `<path d="M12 8c2.648 0 5.028.826 6.675 2.14a2.5 2.5 0 0 1 2.326-1.64 2.5 2.5 0 0 1 .33 4.979c.04.298.06.6.06.906 0 3.868-3.979 7-8.882 7H11.49C6.586 21.385 2.607 18.253 2.607 14.385c0-.306.02-.608.06-.906A2.5 2.5 0 0 1 3 8.5a2.5 2.5 0 0 1 2.325 1.64C6.972 8.826 9.352 8 12 8z"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/><path d="M9.5 17.5s1 1 2.5 1 2.5-1 2.5-1"/>`,
+  hackernews: `<path d="M4 6l4 6 4-6"/><path d="M12 12v6"/><rect x="2" y="3" width="20" height="18" rx="2"/>`,
+  tangled: `<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>`,
+  default: `<circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>`,
+};
 </script>

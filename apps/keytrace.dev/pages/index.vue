@@ -103,16 +103,16 @@ const { session } = useSession();
 const { open: openLoginModal } = useLoginModal();
 
 useSeoMeta({
-  title: "Keytrace - Identity Verification for ATProto",
+  title: "Keytrace - Identity Verification for internet handles",
   ogTitle: "Keytrace - You be you, everywhere.",
   description: "Link your GitHub, domain, and other accounts to your internet handle. Cryptographically signed, user-owned, and portable.",
   ogDescription: "Link your GitHub, domain, and other accounts to your internet handle. Cryptographically signed, user-owned, and portable.",
   twitterCard: "summary_large_image",
-  ogImage: "https://keytrace.dev/__og-image__/image/_/og.png",
+  ogImage: "/__og-image__/image/og.png",
   ogUrl: "https://keytrace.dev",
   twitterTitle: "Keytrace - You be you, everywhere.",
   twitterDescription: "Link your GitHub, domain, and other accounts to your internet handle. Cryptographically signed, user-owned, and portable.",
-  twitterImage: "https://keytrace.dev/__og-image__/image/_/og.png",
+  twitterImage: "/__og-image__/image/og.png",
 });
 
 useHead({
@@ -164,9 +164,11 @@ const { data: recentClaims } = await useFetch("/api/recent-claims", {
 
 defineOgImageComponent("Home", {
   claims: computed(() =>
-    (recentClaims.value ?? []).slice(0, 4).map((c: any) => ({
+    (recentClaims.value ?? []).slice(0, 5).map((c: any) => ({
       handle: c.handle,
       type: c.serviceType,
+      avatar: c.avatar ? (c.avatar.includes("cdn.bsky.app") ? `${c.avatar}@jpeg` : c.avatar) : undefined,
+      identity: c.identity?.displayName ?? c.identity?.subject,
     })),
   ),
 });

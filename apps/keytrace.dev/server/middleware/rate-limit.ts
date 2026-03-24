@@ -38,9 +38,14 @@ function getClientIp(event: any): string {
 }
 
 export default defineEventHandler((event) => {
+  // Skip rate limiting for OG image rendering and localhost dev traffic
+  const path = getRequestURL(event).pathname;
+  if (path.startsWith("/__og-image__/")) return;
+
   pruneStaleEntries();
 
   const ip = getClientIp(event);
+  if (ip === "unknown" || ip === "127.0.0.1" || ip === "::1") return;
   const now = Date.now();
 
   let entry = store.get(ip);
