@@ -13,6 +13,7 @@ export const serviceNames: Record<string, string> = {
   instagram: "Instagram",
   reddit: "Reddit",
   hackernews: "Hacker News",
+  orcid: "ORCiD",
 };
 
 /** Inline SVG path strings for Satori OG images (Lucide 24x24 viewBox, stroke-based) */
@@ -30,5 +31,6 @@ export const serviceIconPaths: Record<string, string> = {
   reddit: `<path d="M12 8c2.648 0 5.028.826 6.675 2.14a2.5 2.5 0 0 1 2.326-1.64 2.5 2.5 0 0 1 .33 4.979c.04.298.06.6.06.906 0 3.868-3.979 7-8.882 7H11.49C6.586 21.385 2.607 18.253 2.607 14.385c0-.306.02-.608.06-.906A2.5 2.5 0 0 1 3 8.5a2.5 2.5 0 0 1 2.325 1.64C6.972 8.826 9.352 8 12 8z"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/><path d="M9.5 17.5s1 1 2.5 1 2.5-1 2.5-1"/>`,
   hackernews: `<path d="M3 3l9 10 9-10M12 13v8"/>`,
   tangled: `<path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/>`,
+  orcid: `<circle cx="12" cy="12" r="10"/><line x1="8" y1="9" x2="8" y2="17"/><circle cx="8" cy="7" r="1"/><path d="M12 9h2.5a4 4 0 0 1 0 8H12z"/>`,
   default: `<circle cx="12" cy="12" r="10"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/><path d="M2 12h20"/>`,
 };

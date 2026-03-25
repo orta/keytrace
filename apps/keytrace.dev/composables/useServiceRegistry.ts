@@ -13,6 +13,7 @@ import {
 } from "lucide-vue-next";
 import NpmIcon from "~/components/icons/NpmIcon.vue";
 import TangledIcon from "~/components/icons/TangledIcon.vue";
+import OrcidIcon from "~/components/icons/OrcidIcon.vue";
 
 /**
  * Canonical mapping from icon string (as defined in ServiceProviderUI.icon)
@@ -27,6 +28,7 @@ const iconMap: Record<string, Component> = {
   shield: Shield,
   npm: NpmIcon,
   tangled: TangledIcon,
+  orcid: OrcidIcon,
   twitter: Twitter,
   linkedin: Linkedin,
   instagram: Instagram,

@@ -38,6 +38,7 @@ export const schemaDict = {
                 'instagram',
                 'reddit',
                 'hackernews',
+                'orcid',
               ],
               description: 'The claim type identifier',
             },
@@ -50,7 +51,7 @@ export const schemaDict = {
               type: 'ref',
               ref: 'lex:dev.keytrace.claim#identity',
               description:
-                'Structured data about the claimed identity, dervied from the claimUri and knowledge from the verification process. This is not the raw claim data, but a normalized set of fields that can be used for display and more.',
+                'Structured data about the claimed identity, derived from the claimUri and knowledge inside the verification process. This is not the raw claim data, but a normalized set of fields that can be used for display and more.',
             },
             sigs: {
               type: 'array',
@@ -177,7 +178,7 @@ export const schemaDict = {
         type: 'record',
         key: 'any',
         description:
-          'A daily signing key for claim attestations. Record key is the date in YYYY-MM-DD format.',
+          "A signing key for claim attestations. It effectively hosts a JWK on a user's ATProto repo.",
         record: {
           type: 'object',
           required: ['publicJwk', 'validFrom', 'validUntil'],
@@ -185,6 +186,7 @@ export const schemaDict = {
             publicJwk: {
               type: 'string',
               description: 'JWK public key as a JSON string (RFC 7517 format)',
+              maxLength: 512,
             },
             validFrom: {
               type: 'string',
@@ -309,6 +311,66 @@ export const schemaDict = {
       },
     },
   },
+  DevKeytraceUserPublicKey: {
+    lexicon: 1,
+    id: 'dev.keytrace.userPublicKey',
+    defs: {
+      main: {
+        type: 'record',
+        key: 'tid',
+        description: 'A user-published public key.',
+        record: {
+          type: 'object',
+          required: ['keyType', 'publicKeyArmored', 'createdAt'],
+          properties: {
+            keyType: {
+              type: 'string',
+              knownValues: ['pgp', 'ssh-ed25519', 'ssh-ecdsa'],
+              description: 'Format of the public key.',
+            },
+            publicKeyArmored: {
+              type: 'string',
+              maxLength: 16384,
+              maxGraphemes: 16384,
+              description: 'Full public key in standard text armored format.',
+            },
+            fingerprint: {
+              type: 'string',
+              maxGraphemes: 256,
+              description: 'Key fingerprint.',
+            },
+            label: {
+              type: 'string',
+              maxGraphemes: 128,
+              description:
+                "Human-readable label for this key (e.g., 'work laptop', 'signing key').",
+            },
+            comment: {
+              type: 'string',
+              maxGraphemes: 512,
+              description: 'Optional comment or description.',
+            },
+            expiresAt: {
+              type: 'string',
+              format: 'datetime',
+              description: 'Datetime when this key expires (ISO 8601).',
+            },
+            retractedAt: {
+              type: 'string',
+              format: 'datetime',
+              description:
+                'Datetime when this key was retracted. Present only if the key has been retracted (ISO 8601).',
+            },
+            createdAt: {
+              type: 'string',
+              format: 'datetime',
+              description: 'Datetime when this key was created (ISO 8601).',
+            },
+          },
+        },
+      },
+    },
+  },
 } as const satisfies Record<string, LexiconDoc>
 export const schemas = Object.values(schemaDict) satisfies LexiconDoc[]
 export const lexicons: Lexicons = new Lexicons(schemas)
@@ -347,4 +409,5 @@ export const ids = {
   DevKeytraceServerPublicKey: 'dev.keytrace.serverPublicKey',
   DevKeytraceSignature: 'dev.keytrace.signature',
   DevKeytraceStatement: 'dev.keytrace.statement',
+  DevKeytraceUserPublicKey: 'dev.keytrace.userPublicKey',
 } as const

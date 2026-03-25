@@ -10,6 +10,7 @@ import linkedin from "./linkedin.js";
 import instagram from "./instagram.js";
 import reddit from "./reddit.js";
 import hackernews from "./hackernews.js";
+import orcid from "./orcid.js";
 import type { ServiceProvider, ServiceProviderMatch } from "./types.js";
 
 export type { ServiceProvider, ServiceProviderMatch, ServiceProviderUI, ExtraInput, ProofTarget, ProofRequest, ProcessedURI } from "./types.js";
@@ -27,6 +28,7 @@ const providers: Record<string, ServiceProvider> = {
   instagram,
   reddit,
   hackernews,
+  orcid,
 };
 
 /**
@@ -76,4 +78,4 @@ export function getProofTextForProvider(providerId: string, did: string, handle?
   return provider?.getProofText(did, handle);
 }
 
-export { github, dns, activitypub, bsky, npm, tangled, pgp, twitter, linkedin, instagram, reddit, hackernews };
+export { github, dns, activitypub, bsky, npm, tangled, pgp, twitter, linkedin, instagram, reddit, hackernews, orcid };

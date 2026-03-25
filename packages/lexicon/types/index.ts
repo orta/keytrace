@@ -14,12 +14,14 @@ import * as DevKeytraceProfile from './types/dev/keytrace/profile.js'
 import * as DevKeytraceServerPublicKey from './types/dev/keytrace/serverPublicKey.js'
 import * as DevKeytraceSignature from './types/dev/keytrace/signature.js'
 import * as DevKeytraceStatement from './types/dev/keytrace/statement.js'
+import * as DevKeytraceUserPublicKey from './types/dev/keytrace/userPublicKey.js'
 
 export * as DevKeytraceClaim from './types/dev/keytrace/claim.js'
 export * as DevKeytraceProfile from './types/dev/keytrace/profile.js'
 export * as DevKeytraceServerPublicKey from './types/dev/keytrace/serverPublicKey.js'
 export * as DevKeytraceSignature from './types/dev/keytrace/signature.js'
 export * as DevKeytraceStatement from './types/dev/keytrace/statement.js'
+export * as DevKeytraceUserPublicKey from './types/dev/keytrace/userPublicKey.js'
 
 export class AtpBaseClient extends XrpcClient {
   dev: DevNS
@@ -51,6 +53,7 @@ export class DevKeytraceNS {
   profile: DevKeytraceProfileRecord
   serverPublicKey: DevKeytraceServerPublicKeyRecord
   statement: DevKeytraceStatementRecord
+  userPublicKey: DevKeytraceUserPublicKeyRecord
 
   constructor(client: XrpcClient) {
     this._client = client
@@ -58,6 +61,7 @@ export class DevKeytraceNS {
     this.profile = new DevKeytraceProfileRecord(client)
     this.serverPublicKey = new DevKeytraceServerPublicKeyRecord(client)
     this.statement = new DevKeytraceStatementRecord(client)
+    this.userPublicKey = new DevKeytraceUserPublicKeyRecord(client)
   }
 }
 
@@ -381,6 +385,89 @@ export class DevKeytraceStatementRecord {
       'com.atproto.repo.deleteRecord',
       undefined,
       { collection: 'dev.keytrace.statement', ...params },
+      { headers },
+    )
+  }
+}
+
+export class DevKeytraceUserPublicKeyRecord {
+  _client: XrpcClient
+
+  constructor(client: XrpcClient) {
+    this._client = client
+  }
+
+  async list(
+    params: OmitKey<ComAtprotoRepoListRecords.QueryParams, 'collection'>,
+  ): Promise<{
+    cursor?: string
+    records: { uri: string; value: DevKeytraceUserPublicKey.Record }[]
+  }> {
+    const res = await this._client.call('com.atproto.repo.listRecords', {
+      collection: 'dev.keytrace.userPublicKey',
+      ...params,
+    })
+    return res.data
+  }
+
+  async get(
+    params: OmitKey<ComAtprotoRepoGetRecord.QueryParams, 'collection'>,
+  ): Promise<{
+    uri: string
+    cid: string
+    value: DevKeytraceUserPublicKey.Record
+  }> {
+    const res = await this._client.call('com.atproto.repo.getRecord', {
+      collection: 'dev.keytrace.userPublicKey',
+      ...params,
+    })
+    return res.data
+  }
+
+  async create(
+    params: OmitKey<
+      ComAtprotoRepoCreateRecord.InputSchema,
+      'collection' | 'record'
+    >,
+    record: Un$Typed<DevKeytraceUserPublicKey.Record>,
+    headers?: Record<string, string>,
+  ): Promise<{ uri: string; cid: string }> {
+    const collection = 'dev.keytrace.userPublicKey'
+    const res = await this._client.call(
+      'com.atproto.repo.createRecord',
+      undefined,
+      { collection, ...params, record: { ...record, $type: collection } },
+      { encoding: 'application/json', headers },
+    )
+    return res.data
+  }
+
+  async put(
+    params: OmitKey<
+      ComAtprotoRepoPutRecord.InputSchema,
+      'collection' | 'record'
+    >,
+    record: Un$Typed<DevKeytraceUserPublicKey.Record>,
+    headers?: Record<string, string>,
+  ): Promise<{ uri: string; cid: string }> {
+    const collection = 'dev.keytrace.userPublicKey'
+    const res = await this._client.call(
+      'com.atproto.repo.putRecord',
+      undefined,
+      { collection, ...params, record: { ...record, $type: collection } },
+      { encoding: 'application/json', headers },
+    )
+    return res.data
+  }
+
+  async delete(
+    params: OmitKey<ComAtprotoRepoDeleteRecord.InputSchema, 'collection'>,
+    headers?: Record<string, string>,
+  ): Promise<void> {
+    await this._client.call(
+      'com.atproto.repo.deleteRecord',
+      undefined,
+      { collection: 'dev.keytrace.userPublicKey', ...params },
       { headers },
     )
   }
