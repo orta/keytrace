@@ -199,6 +199,15 @@ watch(
   { immediate: true },
 );
 
+// Normalize npm-specific input formats, e.g. "+" @orta/keytrace-claim@0.0.3" → URL
+watch(claimUri, (val) => {
+  if (selectedService.value?.id !== "npm") return;
+  const npmShorthand = /^\+?\s*(@[a-z0-9_-]+\/[a-z0-9_-]+)(?:@[^\s]+)?\s*$/i.exec(val);
+  if (npmShorthand) {
+    claimUri.value = `https://www.npmjs.com/package/${npmShorthand[1]}`;
+  }
+});
+
 const proofContent = computed(() => {
   const template = selectedService.value?.proofTemplate ?? "";
   const handle = session.value?.handle ?? "handle";
