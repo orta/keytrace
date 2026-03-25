@@ -27,7 +27,7 @@ const bsky: ServiceProvider = {
     inputLabel: "Profile or Post URL",
     inputPlaceholder: "https://bsky.app/profile/username.bsky.social",
     instructions: [
-      "**Option 1:** Add to your profile bio at [bsky.app](https://bsky.app) → **Profile** → **Edit Profile**",
+      "**Option 1:** Add to your profile description at [bsky.app](https://bsky.app) → **Profile** → **Edit Profile**",
       "**Option 2:** Create a post containing the verification content",
       "Copy the URL of your profile or post",
       "Paste the URL below",
