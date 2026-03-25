@@ -28,12 +28,14 @@ watch(
 
 const services = computed<ServiceOption[]>(() => {
   if (!servicesData.value) return [];
-  return servicesData.value.map((s) => ({
-    id: s.id,
-    name: s.name,
-    description: s.ui.description,
-    icon: iconMap[s.ui.icon] ?? iconMap.globe,
-  }));
+  return servicesData.value
+    .map((s) => ({
+      id: s.id,
+      name: s.name,
+      description: s.ui.description,
+      icon: iconMap[s.ui.icon] ?? iconMap.globe,
+    }))
+    .sort((a, b) => a.name.localeCompare(b.name));
 });
 
 function selectService(service: ServiceOption) {

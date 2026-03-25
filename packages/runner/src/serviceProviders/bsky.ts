@@ -22,12 +22,12 @@ const bsky: ServiceProvider = {
   isAmbiguous: false,
 
   ui: {
-    description: "Link via your Bluesky profile or post",
+    description: "Link to another Bluesky profile or post",
     icon: "cloud",
     inputLabel: "Profile or Post URL",
     inputPlaceholder: "https://bsky.app/profile/username.bsky.social",
     instructions: [
-      "**Option 1:** Add to your profile bio at [bsky.app](https://bsky.app) → **Settings** → **Edit Profile**",
+      "**Option 1:** Add to your profile bio at [bsky.app](https://bsky.app) → **Profile** → **Edit Profile**",
       "**Option 2:** Create a post containing the verification content",
       "Copy the URL of your profile or post",
       "Paste the URL below",
