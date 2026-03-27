@@ -9,6 +9,7 @@
  */
 
 import { createHash } from "node:crypto";
+import { getKeytraceAgent } from "~/server/utils/keytrace-agent";
 
 const LINKED_CLAIMS_NSID = "com.linkedclaims.claim";
 
@@ -46,7 +47,6 @@ const HOW_KNOWN: Record<string, string> = {
 };
 
 interface PutLinkedClaimOptions {
-  did: string;
   rkey: string;
   /** AT-URI of the keytrace dev.keytrace.claim record */
   keytraceAtUri: string;
@@ -63,8 +63,12 @@ interface PutLinkedClaimOptions {
   createdAt: string;
 }
 
-export async function putLinkedClaim(agent: any, opts: PutLinkedClaimOptions) {
-  const { did, rkey, keytraceAtUri, keytraceRecord, subjectUri, providerId, subjectLabel, confidence, statusAt, createdAt } = opts;
+export async function putLinkedClaim(opts: PutLinkedClaimOptions) {
+  const { rkey, keytraceAtUri, keytraceRecord, subjectUri, providerId, subjectLabel, confidence, statusAt, createdAt } = opts;
+
+  const agent = await getKeytraceAgent();
+  const did = agent.session?.did;
+  if (!did) throw new Error("Keytrace agent has no active session");
 
   const howKnown = HOW_KNOWN[providerId] ?? "WEB_DOCUMENT";
   const digestMultibase = computeDigestMultibase(JSON.stringify(keytraceRecord));

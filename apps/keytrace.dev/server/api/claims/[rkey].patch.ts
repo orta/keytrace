@@ -109,8 +109,7 @@ export default defineEventHandler(async (event) => {
     // Update LinkedClaim record to reflect new status (best-effort)
     try {
       const confidence = record.status === "verified" ? 1.0 : 0.0;
-      await putLinkedClaim(agent, {
-        did,
+      await putLinkedClaim({
         rkey,
         keytraceAtUri: res.data.uri,
         keytraceRecord: record,

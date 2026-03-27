@@ -117,8 +117,7 @@ export default defineEventHandler(async (event) => {
     // Create LinkedClaim record (best-effort, don't fail the request)
     try {
       const rkey = result.data.uri.split("/").pop()!;
-      await putLinkedClaim(agent, {
-        did,
+      await putLinkedClaim({
         rkey,
         keytraceAtUri: result.data.uri,
         keytraceRecord: record,
