@@ -8,7 +8,37 @@
  * https://identity.foundation/labs-linkedclaims/
  */
 
+import { createHash } from "node:crypto";
+
 const LINKED_CLAIMS_NSID = "com.linkedclaims.claim";
+
+const BASE58_ALPHABET = "123456789ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz";
+
+function toBase58(bytes: Uint8Array): string {
+  let num = BigInt("0x" + Buffer.from(bytes).toString("hex"));
+  let result = "";
+  while (num > 0n) {
+    result = BASE58_ALPHABET[Number(num % 58n)] + result;
+    num /= 58n;
+  }
+  for (const byte of bytes) {
+    if (byte !== 0) break;
+    result = "1" + result;
+  }
+  return result;
+}
+
+/**
+ * Compute a multibase base58btc-encoded SHA-256 multihash of the given data.
+ * Format: "z" + base58btc(0x12 + 0x20 + sha256(data))
+ * This is the digestMultibase format used by LinkedClaims.
+ */
+function computeDigestMultibase(data: string): string {
+  const digest = createHash("sha256").update(data, "utf8").digest();
+  // SHA-256 multihash prefix: 0x12 (sha2-256) + 0x20 (32 bytes)
+  const multihash = new Uint8Array([0x12, 0x20, ...digest]);
+  return "z" + toBase58(multihash);
+}
 
 // Map keytrace provider IDs to LinkedClaims howKnown values; defaults to WEB_DOCUMENT
 const HOW_KNOWN: Record<string, string> = {
@@ -20,6 +50,8 @@ interface PutLinkedClaimOptions {
   rkey: string;
   /** AT-URI of the keytrace dev.keytrace.claim record */
   keytraceAtUri: string;
+  /** The keytrace claim record content — hashed to produce source.digestMultibase */
+  keytraceRecord: Record<string, unknown>;
   /** External identity URI (e.g. the GitHub profile URL) */
   subjectUri: string;
   providerId: string;
@@ -32,9 +64,10 @@ interface PutLinkedClaimOptions {
 }
 
 export async function putLinkedClaim(agent: any, opts: PutLinkedClaimOptions) {
-  const { did, rkey, keytraceAtUri, subjectUri, providerId, subjectLabel, confidence, statusAt, createdAt } = opts;
+  const { did, rkey, keytraceAtUri, keytraceRecord, subjectUri, providerId, subjectLabel, confidence, statusAt, createdAt } = opts;
 
   const howKnown = HOW_KNOWN[providerId] ?? "WEB_DOCUMENT";
+  const digestMultibase = computeDigestMultibase(JSON.stringify(keytraceRecord));
 
   const record: Record<string, unknown> = {
     $type: LINKED_CLAIMS_NSID,
@@ -44,6 +77,7 @@ export async function putLinkedClaim(agent: any, opts: PutLinkedClaimOptions) {
     confidence,
     source: {
       uri: keytraceAtUri,
+      digestMultibase,
       howKnown,
       dateObserved: statusAt,
     },

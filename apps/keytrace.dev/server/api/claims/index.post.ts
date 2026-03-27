@@ -121,6 +121,7 @@ export default defineEventHandler(async (event) => {
         did,
         rkey,
         keytraceAtUri: result.data.uri,
+        keytraceRecord: record,
         subjectUri: identity.profileUrl ?? body.claimUri,
         providerId: provider.id,
         subjectLabel: subject,

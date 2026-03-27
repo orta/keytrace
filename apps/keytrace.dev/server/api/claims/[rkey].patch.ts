@@ -112,7 +112,8 @@ export default defineEventHandler(async (event) => {
       await putLinkedClaim(agent, {
         did,
         rkey,
-        ketyraceAtUri: res.data.uri,
+        keytraceAtUri: res.data.uri,
+        keytraceRecord: record,
         subjectUri: record.identity?.profileUrl ?? claimUri,
         providerId: record.type,
         subjectLabel: record.identity?.subject ?? record.type,
