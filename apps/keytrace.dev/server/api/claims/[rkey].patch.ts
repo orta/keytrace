@@ -8,6 +8,7 @@
 import { COLLECTION_NSID, createClaim, verifyClaim, ClaimStatus } from "@keytrace/runner";
 import { getSessionAgent } from "~/server/utils/session";
 import { createStatusAttestation } from "~/server/utils/attestation";
+import { putLinkedClaim } from "~/server/utils/linkedclaims";
 
 export default defineEventHandler(async (event) => {
   const { did, agent } = await getSessionAgent(event);
@@ -104,6 +105,24 @@ export default defineEventHandler(async (event) => {
       rkey,
       record,
     });
+
+    // Update LinkedClaim record to reflect new status (best-effort)
+    try {
+      const confidence = record.status === "verified" ? 1.0 : 0.0;
+      await putLinkedClaim(agent, {
+        did,
+        rkey,
+        ketyraceAtUri: res.data.uri,
+        subjectUri: record.identity?.profileUrl ?? claimUri,
+        providerId: record.type,
+        subjectLabel: record.identity?.subject ?? record.type,
+        confidence,
+        statusAt,
+        createdAt: record.createdAt ?? now,
+      });
+    } catch (error) {
+      console.error("[claims] Failed to update LinkedClaim record:", error);
+    }
 
     return {
       uri: res.data.uri,

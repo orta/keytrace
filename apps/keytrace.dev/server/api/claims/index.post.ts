@@ -9,6 +9,7 @@ import { COLLECTION_NSID, serviceProviders, createClaim, verifyClaim, ClaimStatu
 import { getSessionAgent } from "~/server/utils/session";
 import { createAttestation, createStatusAttestation } from "~/server/utils/attestation";
 import { addRecentClaim } from "~/server/utils/recent-claims";
+import { putLinkedClaim } from "~/server/utils/linkedclaims";
 
 export default defineEventHandler(async (event) => {
   const { did, agent } = await getSessionAgent(event);
@@ -112,6 +113,24 @@ export default defineEventHandler(async (event) => {
     });
 
     console.log(`[claims] Success: uri=${result.data.uri} cid=${result.data.cid}`);
+
+    // Create LinkedClaim record (best-effort, don't fail the request)
+    try {
+      const rkey = result.data.uri.split("/").pop()!;
+      await putLinkedClaim(agent, {
+        did,
+        rkey,
+        keytraceAtUri: result.data.uri,
+        subjectUri: identity.profileUrl ?? body.claimUri,
+        providerId: provider.id,
+        subjectLabel: subject,
+        confidence: 1.0,
+        statusAt: now,
+        createdAt: now,
+      });
+    } catch (error) {
+      console.error("[claims] Failed to create LinkedClaim record:", error);
+    }
 
     // Add to recent claims feed (best-effort, don't fail the request)
     try {
