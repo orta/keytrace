@@ -12,16 +12,16 @@
     "dist"
   ],
   "type": "module",
-  "main": "./src/verify.ts",
-  "types": "./src/verify.ts",
+  "main": "./dist/verify.js",
+  "types": "./dist/verify.d.ts",
   "exports": {
     ".": {
-      "types": "./src/verify.ts",
-      "default": "./src/verify.ts"
+      "types": "./dist/verify.d.ts",
+      "default": "./dist/verify.js"
     },
     "./types": {
-      "types": "./src/types.ts",
-      "default": "./src/types.ts"
+      "types": "./dist/types.d.ts",
+      "default": "./dist/types.js"
     }
   },
   "scripts": {
