@@ -16,8 +16,7 @@ jobs:
 
       - uses: actions/setup-node@v4
         with:
-          node-version: 22.14
-          registry-url: "https://registry.npmjs.org"
+          node-version: 24
 
       - name: Enable Corepack
         run: corepack enable
@@ -32,8 +31,6 @@ jobs:
         run: yarn test
 
       - name: Publish packages
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
         run: |
           for pkg in packages/runner packages/claims packages/lexicon; do
             echo "Publishing $pkg..."
