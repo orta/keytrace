@@ -22,5 +22,5 @@ jobs:
 
       - name: Push to Tangled
         run: |
-          git remote add tangled ssh://git@tangled.org/did:plc:lkxn6cxra5nsivs44z7la6om/keytrace.dev
+          git remote add tangled git@tangled.org:orta.io/keytrace.dev
           git push tangled main --force --tags
