@@ -49,9 +49,9 @@ export default defineEventHandler(async (event) => {
           fetcher: sampleProcessed.proof.request.fetcher,
           format: sampleProcessed.proof.request.format,
           targets: sampleProcessed.proof.target.map((t) => ({
-            path: t.path.join("."),
+            path: t.path ? t.path.join(".") : "",
             relation: t.relation,
-            description: describeTarget(t.path, t.relation),
+            description: describeTarget(t.path ?? [], t.relation),
           })),
         }
       : null,

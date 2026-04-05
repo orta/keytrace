@@ -39,6 +39,7 @@ export const schemaDict = {
                 'reddit',
                 'hackernews',
                 'orcid',
+                'itchio',
               ],
               description: 'The claim type identifier',
             },
