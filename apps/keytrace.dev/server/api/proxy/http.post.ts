@@ -21,6 +21,7 @@ const ALLOWED_DOMAINS = new Set([
   "techhub.social",
   "api.fxtwitter.com",
   "registry.npmjs.org",
+  "discord.com",
 ]);
 
 const PRIVATE_IP_RANGES = [/^127\./, /^10\./, /^172\.(1[6-9]|2\d|3[01])\./, /^192\.168\./, /^169\.254\./, /^0\./, /^::1$/, /^fc00:/, /^fe80:/, /^fd/];
