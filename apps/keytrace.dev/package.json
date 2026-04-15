@@ -4,7 +4,7 @@
   "type": "module",
   "scripts": {
     "dev": "nuxt dev",
-    "build": "nuxt build",
+    "build": "yarn workspace @keytrace/claims build && nuxt build",
     "preview": "nuxt preview",
     "start": "node .output/server/index.mjs",
     "verify": "tsx scripts/verify-claims.ts"
