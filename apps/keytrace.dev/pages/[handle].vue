@@ -203,7 +203,7 @@ const ogAvatar = computed(() => {
   return url.includes("cdn.bsky.app") ? `${url}@jpeg` : url;
 });
 
-defineOgImageComponent("Profile", {
+defineOgImage("Profile", {
   displayName: computed(() => profile.value?.displayName || ""),
   handle: computed(() => profile.value?.handle || ""),
   avatar: ogAvatar,

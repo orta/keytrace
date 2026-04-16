@@ -1,5 +1,6 @@
 export default defineNuxtConfig({
-  compatibilityDate: "2025-01-01",
+  compatibilityDate: "2025-07-15",
+  srcDir: ".",
   devtools: { enabled: true },
 
   // Disable inline SSR styles so <head> stays small enough for
@@ -9,21 +10,12 @@ export default defineNuxtConfig({
     inlineStyles: false,
   },
 
-  modules: ["@nuxtjs/tailwindcss", "@nuxtjs/google-fonts", "nuxt-og-image", "@nuxt/content"],
+  modules: ["@nuxtjs/tailwindcss", "@nuxt/fonts", "nuxt-og-image", "@nuxt/content"],
 
   content: {
     highlight: {
       theme: "github-dark",
     },
-  },
-
-  ogImage: {
-    fonts: [
-      "Inter:400",
-      "Inter:600",
-      "Inter:700",
-      "JetBrains+Mono:400",
-    ],
   },
 
   site: {
@@ -40,12 +32,14 @@ export default defineNuxtConfig({
 
   css: ["~/assets/css/main.css"],
 
-  googleFonts: {
-    families: {
-      Inter: [400, 500, 600, 700],
-      "JetBrains+Mono": [400, 500],
+  fonts: {
+    families: [
+      { name: "Inter", weights: [400, 500, 600, 700] },
+      { name: "JetBrains Mono", weights: [400, 500] },
+    ],
+    defaults: {
+      display: "swap",
     },
-    display: "swap",
   },
 
   devServer: {
