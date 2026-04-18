@@ -162,7 +162,7 @@ const { data: recentClaims } = await useFetch("/api/recent-claims", {
   default: () => [],
 });
 
-defineOgImageComponent("Home", {
+defineOgImage("Home", {
   claims: computed(() =>
     (recentClaims.value ?? []).slice(0, 5).map((c: any) => ({
       handle: c.handle,

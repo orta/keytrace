@@ -166,7 +166,7 @@ useSeoMeta({
   twitterCard: "summary_large_image",
 });
 
-defineOgImageComponent("Developer");
+defineOgImage("Developer");
 
 const handleInput = ref("");
 const copied = ref(false);

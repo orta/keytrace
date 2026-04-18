@@ -21,5 +21,8 @@
     "turbo": "^2.8.20",
     "typescript": "^5.7.0"
   },
-  "packageManager": "yarn@4.12.0"
+  "packageManager": "yarn@4.12.0",
+  "dependencies": {
+    "@takumi-rs/core": "^1.0.9"
+  }
 }
