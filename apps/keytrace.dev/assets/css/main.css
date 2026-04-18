@@ -142,3 +142,13 @@
 .fade-leave-to {
   opacity: 0;
 }
+
+/* ─── Homepage animations ─── */
+@keyframes ktPulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.animate-kt-pulse {
+  animation: ktPulse 2s infinite;
+}
