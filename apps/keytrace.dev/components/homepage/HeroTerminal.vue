@@ -21,7 +21,7 @@
     </div>
 
     <!-- body -->
-    <div class="px-4 pt-4 pb-5" style="min-height: 320px">
+    <div class="px-4 pt-4 pb-5" style="height: 320px; overflow: hidden">
       <!-- target line -->
       <div class="flex items-center gap-2.5 px-3 py-2.5 rounded-lg bg-kt-surface border border-zinc-800 mb-3.5">
         <GithubIcon class="w-4 h-4 text-zinc-300 shrink-0" />
