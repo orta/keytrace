@@ -41,6 +41,7 @@ export const schemaDict = {
                 'orcid',
                 'itchio',
                 'discord',
+                'steam',
               ],
               description: 'The claim type identifier',
             },

@@ -12,7 +12,7 @@
         "properties": {
           "type": {
             "type": "string",
-            "knownValues": ["github", "dns", "activitypub", "bsky", "npm", "tangled", "pgp", "twitter", "linkedin", "instagram", "reddit", "hackernews", "orcid", "itchio", "discord"],
+            "knownValues": ["github", "dns", "activitypub", "bsky", "npm", "tangled", "pgp", "twitter", "linkedin", "instagram", "reddit", "hackernews", "orcid", "itchio", "discord", "steam"],
             "description": "The claim type identifier"
           },
           "claimUri": {

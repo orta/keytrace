@@ -13,6 +13,7 @@ import hackernews from "./hackernews.js";
 import orcid from "./orcid.js";
 import itchio from "./itchio.js";
 import discord from "./discord.js";
+import steam from "./steam.js";
 import type { ServiceProvider, ServiceProviderMatch } from "./types.js";
 
 export type { ServiceProvider, ServiceProviderMatch, ServiceProviderUI, ExtraInput, ProofTarget, ProofRequest, ProcessedURI } from "./types.js";
@@ -33,6 +34,7 @@ const providers: Record<string, ServiceProvider> = {
   orcid,
   itchio,
   discord,
+  steam,
 };
 
 /**
@@ -82,4 +84,4 @@ export function getProofTextForProvider(providerId: string, did: string, handle?
   return provider?.getProofText(did, handle);
 }
 
-export { github, dns, activitypub, bsky, npm, tangled, pgp, twitter, linkedin, instagram, reddit, hackernews, orcid, itchio, discord };
+export { github, dns, activitypub, bsky, npm, tangled, pgp, twitter, linkedin, instagram, reddit, hackernews, orcid, itchio, discord, steam };
