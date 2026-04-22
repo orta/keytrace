@@ -42,6 +42,27 @@ yarn typecheck
 yarn format
 ```
 
+### Developing the API
+
+If you're working on the API, you'll need to install and run [Tap](https://github.com/bluesky-social/indigo/blob/main/cmd/tap/README.md) to maintain a backfilled list of all claim records for us:
+
+```bash
+# Install tap on your machine
+go install github.com/bluesky-social/indigo/cmd/tap@latest
+
+# Run tap, only syncing keytrace claim records
+TAP_SIGNAL_COLLECTION=dev.keytrace.claim TAP_COLLECTION_FILTERS='dev.keytrace.claim' tap run --disable-acks=true
+
+# Run the server with a TAP_URL set
+KEYTRACE_TAP_URL=http://127.0.0.1:2480 yarn dev
+```
+
+If you need to check backfill, or test ingestion, remove both the Keytrace _and_ Tap databases:
+
+```bash
+rm tap.db apps/keytrace.dev/.data/reverse-lookup.sqlite
+```
+
 ## How Verification Works
 
 The runner package implements a recipe-based verification system:

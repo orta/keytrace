@@ -172,6 +172,106 @@ export const schemaDict = {
       },
     },
   },
+  DevKeytraceReverseLookup: {
+    lexicon: 1,
+    id: 'dev.keytrace.reverseLookup',
+    defs: {
+      main: {
+        type: 'query',
+        description:
+          'Find the ATProto DIDs (and the at-uris of their keytrace claim records) that have verifiably claimed a given external identity, keyed by claim type and subject. Matching is exact (case-sensitive) on the subject. Only non-retracted claims whose attestation signatures validate against a known keytrace server key are returned.',
+        parameters: {
+          type: 'params',
+          required: ['type', 'subject'],
+          properties: {
+            type: {
+              type: 'string',
+              description:
+                "The claim type (e.g. 'github', 'dns', 'npm'). Mirrors dev.keytrace.claim#type; keep in sync when adding a new provider.",
+              knownValues: [
+                'github',
+                'dns',
+                'activitypub',
+                'bsky',
+                'npm',
+                'tangled',
+                'pgp',
+                'twitter',
+                'linkedin',
+                'instagram',
+                'reddit',
+                'hackernews',
+                'orcid',
+                'itchio',
+                'discord',
+              ],
+            },
+            subject: {
+              type: 'string',
+              description:
+                'The subject identifier being looked up. Matched exactly (case-sensitive).',
+            },
+          },
+        },
+        output: {
+          encoding: 'application/json',
+          schema: {
+            type: 'object',
+            required: ['total', 'matches'],
+            properties: {
+              total: {
+                type: 'integer',
+                minimum: 0,
+                description: 'Total number of matching claims.',
+              },
+              matches: {
+                type: 'array',
+                items: {
+                  type: 'ref',
+                  ref: 'lex:dev.keytrace.reverseLookup#match',
+                },
+              },
+            },
+          },
+        },
+        errors: [
+          {
+            name: 'UnknownType',
+            description:
+              'The requested claim type is not supported by this server.',
+          },
+        ],
+      },
+      match: {
+        type: 'object',
+        required: ['did', 'claim', 'verifiedAt'],
+        properties: {
+          did: {
+            type: 'string',
+            format: 'did',
+            description: 'The DID of the ATProto account that made the claim.',
+          },
+          claim: {
+            type: 'string',
+            format: 'at-uri',
+            description:
+              'The at-uri of the dev.keytrace.claim record backing this match.',
+          },
+          verifiedAt: {
+            type: 'string',
+            format: 'datetime',
+            description:
+              'Timestamp the claim was most recently verified (lastVerifiedAt if present, otherwise createdAt).',
+          },
+          recheckSuggested: {
+            type: 'boolean',
+            description:
+              'Present (and true) only when the most recent re-verification attempt hit a transient failure (e.g. key-fetch network error). The match is still based on a prior successful verification, but callers who need strong freshness guarantees may wish to re-verify the claim themselves. Absent when the most recent check succeeded.',
+          },
+        },
+      },
+    },
+  },
   DevKeytraceServerPublicKey: {
     lexicon: 1,
     id: 'dev.keytrace.serverPublicKey',
@@ -408,6 +508,7 @@ export function validate(
 export const ids = {
   DevKeytraceClaim: 'dev.keytrace.claim',
   DevKeytraceProfile: 'dev.keytrace.profile',
+  DevKeytraceReverseLookup: 'dev.keytrace.reverseLookup',
   DevKeytraceServerPublicKey: 'dev.keytrace.serverPublicKey',
   DevKeytraceSignature: 'dev.keytrace.signature',
   DevKeytraceStatement: 'dev.keytrace.statement',
