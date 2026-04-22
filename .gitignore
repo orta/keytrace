@@ -24,3 +24,4 @@ node_modules
 .data
 .turbo
 dist
+tap.db*

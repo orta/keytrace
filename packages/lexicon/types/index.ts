@@ -11,6 +11,7 @@ import { CID } from 'multiformats/cid'
 import { type OmitKey, type Un$Typed } from './util.js'
 import * as DevKeytraceClaim from './types/dev/keytrace/claim.js'
 import * as DevKeytraceProfile from './types/dev/keytrace/profile.js'
+import * as DevKeytraceReverseLookup from './types/dev/keytrace/reverseLookup.js'
 import * as DevKeytraceServerPublicKey from './types/dev/keytrace/serverPublicKey.js'
 import * as DevKeytraceSignature from './types/dev/keytrace/signature.js'
 import * as DevKeytraceStatement from './types/dev/keytrace/statement.js'
@@ -18,6 +19,7 @@ import * as DevKeytraceUserPublicKey from './types/dev/keytrace/userPublicKey.js
 
 export * as DevKeytraceClaim from './types/dev/keytrace/claim.js'
 export * as DevKeytraceProfile from './types/dev/keytrace/profile.js'
+export * as DevKeytraceReverseLookup from './types/dev/keytrace/reverseLookup.js'
 export * as DevKeytraceServerPublicKey from './types/dev/keytrace/serverPublicKey.js'
 export * as DevKeytraceSignature from './types/dev/keytrace/signature.js'
 export * as DevKeytraceStatement from './types/dev/keytrace/statement.js'
@@ -62,6 +64,17 @@ export class DevKeytraceNS {
     this.serverPublicKey = new DevKeytraceServerPublicKeyRecord(client)
     this.statement = new DevKeytraceStatementRecord(client)
     this.userPublicKey = new DevKeytraceUserPublicKeyRecord(client)
+  }
+
+  reverseLookup(
+    params?: DevKeytraceReverseLookup.QueryParams,
+    opts?: DevKeytraceReverseLookup.CallOptions,
+  ): Promise<DevKeytraceReverseLookup.Response> {
+    return this._client
+      .call('dev.keytrace.reverseLookup', params, undefined, opts)
+      .catch((e) => {
+        throw DevKeytraceReverseLookup.toKnownErr(e)
+      })
   }
 }
 
