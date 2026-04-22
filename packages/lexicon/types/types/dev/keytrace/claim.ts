@@ -30,6 +30,7 @@ export interface Main {
     | 'orcid'
     | 'itchio'
     | 'discord'
+    | 'steam'
     | (string & {})
   /** The identity claim URI (e.g., for github: https://gist.github.com/username/id, dns:example.com) */
   claimUri: string

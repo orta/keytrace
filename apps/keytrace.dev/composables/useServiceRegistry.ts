@@ -15,6 +15,7 @@ import NpmIcon from "~/components/icons/NpmIcon.vue";
 import TangledIcon from "~/components/icons/TangledIcon.vue";
 import OrcidIcon from "~/components/icons/OrcidIcon.vue";
 import ItchioIcon from "~/components/icons/ItchioIcon.vue";
+import SteamIcon from "~/components/icons/SteamIcon.vue";
 
 /**
  * Canonical mapping from icon string (as defined in ServiceProviderUI.icon)
@@ -31,6 +32,7 @@ const iconMap: Record<string, Component> = {
   tangled: TangledIcon,
   orcid: OrcidIcon,
   itchio: ItchioIcon,
+  steam: SteamIcon,
   twitter: Twitter,
   linkedin: Linkedin,
   instagram: Instagram,

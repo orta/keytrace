@@ -14,6 +14,7 @@ export const serviceNames: Record<string, string> = {
   reddit: "Reddit",
   hackernews: "Hacker News",
   orcid: "ORCiD",
+  steam: "Steam",
 };
 
 /** Inline SVG path strings for Satori OG images (Lucide 24x24 viewBox, stroke-based) */
