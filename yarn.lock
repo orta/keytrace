@@ -2208,6 +2208,12 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@keytrace/host@workspace:apps/host":
+  version: 0.0.0-use.local
+  resolution: "@keytrace/host@workspace:apps/host"
+  languageName: unknown
+  linkType: soft
+
 "@keytrace/lexicon@workspace:*, @keytrace/lexicon@workspace:packages/lexicon":
   version: 0.0.0-use.local
   resolution: "@keytrace/lexicon@workspace:packages/lexicon"
