@@ -1,9 +1,10 @@
 # syntax=docker/dockerfile:1.7
 
 # --- Build the Tap binary from indigo ---
-FROM golang:1.23-alpine AS tap-build
+FROM golang:1.26-alpine AS tap-build
 RUN apk add --no-cache git
 ENV CGO_ENABLED=0
+ENV GOTOOLCHAIN=auto
 RUN go install github.com/bluesky-social/indigo/cmd/tap@latest
 
 # --- Install deps and build the Nuxt app ---
