@@ -124,6 +124,7 @@ start(
     env: {
       TAP_SIGNAL_COLLECTION: "dev.keytrace.claim",
       TAP_COLLECTION_FILTERS: "dev.keytrace.claim",
+      TAP_LOG_LEVEL: process.env.TAP_LOG_LEVEL || "warn",
     },
     cwd: DATA_DIR,
   },
