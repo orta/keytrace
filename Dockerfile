@@ -2,8 +2,8 @@
 
 # --- Build the Tap binary from indigo ---
 FROM golang:1.26-alpine AS tap-build
-RUN apk add --no-cache git
-ENV CGO_ENABLED=0
+RUN apk add --no-cache git gcc musl-dev
+ENV CGO_ENABLED=1
 ENV GOTOOLCHAIN=auto
 RUN go install github.com/bluesky-social/indigo/cmd/tap@latest
 
