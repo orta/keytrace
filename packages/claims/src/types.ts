@@ -94,6 +94,13 @@ export interface VerificationStep {
 }
 
 /**
+ * Classification of a verification failure.
+ * - "terminal": the record itself is known-bad (bad signature, untrusted signer, etc.) — will never verify as-is.
+ * - "transient": the check couldn't complete right now (e.g. key-fetch network failure) — may succeed on retry.
+ */
+export type VerificationFailureKind = "terminal" | "transient";
+
+/**
  * Result of verifying a single claim
  */
 export interface ClaimVerificationResult {
@@ -111,6 +118,8 @@ export interface ClaimVerificationResult {
   steps: VerificationStep[];
   /** Error message if verification failed */
   error?: string;
+  /** Classification of the failure, when `verified` is false */
+  failureKind?: VerificationFailureKind;
   /** Identity data (available regardless of verification status) */
   identity: ClaimIdentity;
   /** Full claim record */

@@ -1,4 +1,4 @@
-import type { ClaimRecord, ClaimVerificationResult, ES256PublicJwk, KeyRecord, SignedClaimData, VerificationResult, VerificationStep, VerifyOptions } from "./types.js";
+import type { ClaimRecord, ClaimVerificationResult, ES256PublicJwk, KeyRecord, SignedClaimData, VerificationFailureKind, VerificationResult, VerificationStep, VerifyOptions } from "./types.js";
 import { getPrimarySig } from "./types.js";
 import { resolveHandle, resolvePds, listClaimRecords, getRecordByUri } from "./atproto.js";
 import { verifyES256Signature } from "./crypto/signature.js";
@@ -18,8 +18,34 @@ export type {
   VerificationResult,
   VerificationStep,
   VerifyOptions,
+  VerificationFailureKind,
 } from "./types.js";
 export { getPrimarySig } from "./types.js";
+
+/**
+ * Verify a single keytrace claim record.
+ *
+ * Unlike {@link getClaimsForDid}, this does no repo listing — the caller already
+ * has the record in hand (e.g. from a firehose/tap feed) and just needs to check
+ * it. Trusted signer handles are resolved on each call; callers ingesting a high
+ * volume of records should pass pre-resolved DIDs via `options.trustedDids` to
+ * avoid redundant handle resolution.
+ */
+export async function verifyClaim(
+  args: { did: string; uri: string; rkey: string; claim: ClaimRecord },
+  options?: VerifyOptions & { trustedDids?: Set<string> },
+): Promise<ClaimVerificationResult> {
+  const trustedDids = options?.trustedDids ?? (await resolveTrustedDids(options?.trustedSigners ?? DEFAULT_TRUSTED_SIGNERS, options));
+  return verifySingleClaim(args.did, args.uri, args.rkey, args.claim, trustedDids, options);
+}
+
+/**
+ * Resolve a set of trusted signer handles to their DIDs. Exposed so long-running
+ * ingestors can resolve once and pass the set to {@link verifyClaim}.
+ */
+export async function resolveTrustedSignerDids(handles?: string[], options?: VerifyOptions): Promise<Set<string>> {
+  return resolveTrustedDids(handles ?? DEFAULT_TRUSTED_SIGNERS, options);
+}
 
 /**
  * Verify all keytrace claims for a handle.
@@ -102,7 +128,7 @@ async function verifySingleClaim(did: string, uri: string, rkey: string, claim: 
         success: false,
         error: "Missing signature fields",
       });
-      return buildResult(uri, rkey, claim, false, steps, "Missing signature fields");
+      return buildResult(uri, rkey, claim, false, steps, "Missing signature fields", "terminal");
     }
     steps.push({ step: "validate_claim", success: true, detail: "Claim structure valid" });
 
@@ -111,11 +137,13 @@ async function verifySingleClaim(did: string, uri: string, rkey: string, claim: 
     if (!signerDid || !trustedDids.has(signerDid)) {
       const error = `Signing key is not from a trusted signer (source: ${sig.src})`;
       steps.push({ step: "validate_signer", success: false, error });
-      return buildResult(uri, rkey, claim, false, steps, error);
+      return buildResult(uri, rkey, claim, false, steps, error, "terminal");
     }
     steps.push({ step: "validate_signer", success: true, detail: `Signing key from trusted signer (${signerDid})` });
 
-    // Step 3: Fetch the signing key
+    // Step 3: Fetch the signing key.
+    // Failures here are the one transient path: a network blip can't tell us the
+    // claim is bad, so callers like the reverse-lookup ingestor should retry.
     let keyRecord: KeyRecord;
     try {
       keyRecord = await getRecordByUri<KeyRecord>(sig.src, options);
@@ -123,7 +151,7 @@ async function verifySingleClaim(did: string, uri: string, rkey: string, claim: 
     } catch (err) {
       const error = `Failed to fetch signing key: ${err instanceof Error ? err.message : String(err)}`;
       steps.push({ step: "fetch_key", success: false, error });
-      return buildResult(uri, rkey, claim, false, steps, error);
+      return buildResult(uri, rkey, claim, false, steps, error, "transient");
     }
 
     // Step 4: Parse the public JWK
@@ -137,7 +165,7 @@ async function verifySingleClaim(did: string, uri: string, rkey: string, claim: 
     } catch (err) {
       const error = `Invalid public key format: ${err instanceof Error ? err.message : String(err)}`;
       steps.push({ step: "parse_key", success: false, error });
-      return buildResult(uri, rkey, claim, false, steps, error);
+      return buildResult(uri, rkey, claim, false, steps, error, "terminal");
     }
 
     // Step 5: Reconstruct the signed claim data.
@@ -184,19 +212,21 @@ async function verifySingleClaim(did: string, uri: string, rkey: string, claim: 
       return buildResult(uri, rkey, claim, true, steps);
     } else {
       steps.push({ step: "verify_signature", success: false, error: "Signature verification failed" });
-      return buildResult(uri, rkey, claim, false, steps, "Signature verification failed");
+      return buildResult(uri, rkey, claim, false, steps, "Signature verification failed", "terminal");
     }
   } catch (err) {
+    // Unexpected throws are treated as transient: we can't prove the record is
+    // bad, only that this attempt failed unexpectedly.
     const error = `Unexpected error: ${err instanceof Error ? err.message : String(err)}`;
     steps.push({ step: "unknown", success: false, error });
-    return buildResult(uri, rkey, claim, false, steps, error);
+    return buildResult(uri, rkey, claim, false, steps, error, "transient");
   }
 }
 
 /**
  * Build a claim verification result.
  */
-function buildResult(uri: string, rkey: string, claim: ClaimRecord, verified: boolean, steps: VerificationStep[], error?: string): ClaimVerificationResult {
+function buildResult(uri: string, rkey: string, claim: ClaimRecord, verified: boolean, steps: VerificationStep[], error?: string, failureKind?: VerificationFailureKind): ClaimVerificationResult {
   return {
     uri,
     rkey,
@@ -205,6 +235,7 @@ function buildResult(uri: string, rkey: string, claim: ClaimRecord, verified: bo
     verified,
     steps,
     error,
+    failureKind: verified ? undefined : failureKind,
     identity: claim.identity,
     claim,
   };

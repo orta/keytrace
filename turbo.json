@@ -7,10 +7,12 @@
     },
     "dev": {
       "cache": false,
-      "persistent": true
+      "persistent": true,
+      "env": ["KEYTRACE_TAP_URL", "KEYTRACE_TAP_ADMIN_PASSWORD", "KEYTRACE_REVERSE_LOOKUP_DB"]
     },
     "test": {
-      "dependsOn": ["build"]
+      "dependsOn": ["build"],
+      "env": ["KEYTRACE_REVERSE_LOOKUP_DB"]
     },
     "lint": {},
     "typecheck": {

@@ -42,6 +42,44 @@ yarn typecheck
 yarn format
 ```
 
+### Developing the API
+
+If you're working on the API, you'll need to install and run [Tap](https://github.com/bluesky-social/indigo/blob/main/cmd/tap/README.md) to maintain a backfilled list of all claim records for us:
+
+```bash
+# Install tap on your machine
+go install github.com/bluesky-social/indigo/cmd/tap@latest
+
+# Run tap, only syncing keytrace claim records
+TAP_SIGNAL_COLLECTION=dev.keytrace.claim TAP_COLLECTION_FILTERS='dev.keytrace.claim' tap run --disable-acks=true
+
+# Run the server with a TAP_URL set
+KEYTRACE_TAP_URL=http://127.0.0.1:2480 yarn dev
+```
+
+If you need to check backfill, or test ingestion, remove both the Keytrace _and_ Tap databases:
+
+```bash
+rm tap.db apps/keytrace.dev/.data/reverse-lookup.sqlite
+```
+
+### Production (Railway / Docker)
+
+In production the Nuxt server and Tap run together inside one container, supervised by a small Node process at [apps/host/](apps/host/). The Railway start command should be:
+
+```bash
+node apps/host/index.mjs
+```
+
+The optionl included [Dockerfile](Dockerfile) builds the Tap Go binary, builds the Nuxt app, and produces an image whose `CMD` already runs the supervisor. The image expects a Railway Volume mounted at `/keytrace-data` so `tap.db` and `reverse-lookup.sqlite` survive redeploys 
+
+Environment variables consumed by the supervisor:
+
+- `KEYTRACE_DATA_DIR` — directory for `tap.db` and `reverse-lookup.sqlite` (default `/keytrace-data` in the image)
+- `TAP_BIN` — path to the tap binary (default `tap`, on `$PATH` in the image)
+- `TAP_HOST` / `TAP_PORT` — where tap should be reached (defaults `127.0.0.1` / `2480`)
+- `KEYTRACE_SERVER_ENTRY` — override the Nitro server entry path (defaults to the built `apps/keytrace.dev/.output/server/index.mjs`)
+
 ## How Verification Works
 
 The runner package implements a recipe-based verification system:
