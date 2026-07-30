@@ -30,6 +30,18 @@ for (const claim of result.claims) {
 const result2 = await getClaimsForDid('did:plc:abc123');
 ```
 
+The inverse — "who has claimed this identity?" — is `reverseLookup`:
+
+```typescript
+import { reverseLookup } from '@keytrace/claims';
+
+const { total, matches } = await reverseLookup('github', 'alice');
+
+for (const match of matches) {
+  console.log(`${match.did} claimed it (verified ${match.verifiedAt})`);
+}
+```
+
 ## API
 
 ### `getClaimsForHandle(handle, options?)`
@@ -47,6 +59,23 @@ Verify all keytrace claims for a DID.
 ```typescript
 const result = await getClaimsForDid('did:plc:abc123');
 ```
+
+### `reverseLookup(type, subject, options?)`
+
+Find the accounts that have verifiably claimed a given external identity — the
+inverse of `getClaimsForDid`. Queries the keytrace `dev.keytrace.reverseLookup`
+XRPC. Matching is exact (case-sensitive) on the subject, and only non-retracted
+claims whose signatures validate against a known keytrace server key are
+returned.
+
+```typescript
+const { total, matches } = await reverseLookup('npm', 'left-pad');
+// matches: { did, claim, verifiedAt, recheckSuggested? }[]
+```
+
+Throws a `ReverseLookupError` (with a `.code` such as `"UnknownType"` and a
+`.status`) if the server rejects the request. Accepts a `serviceUrl` option
+(default `https://keytrace.dev`) in addition to `fetch` and `timeout`.
 
 ### Options
 

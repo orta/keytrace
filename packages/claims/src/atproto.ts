@@ -28,7 +28,7 @@ interface GetRecordResponse {
 /**
  * Fetch with timeout support
  */
-async function fetchWithTimeout(url: string, options?: VerifyOptions): Promise<Response> {
+export async function fetchWithTimeout(url: string, options?: VerifyOptions): Promise<Response> {
   const fetchFn = options?.fetch ?? globalThis.fetch;
   const timeout = options?.timeout ?? DEFAULT_TIMEOUT;
 

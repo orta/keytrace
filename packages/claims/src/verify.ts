@@ -22,6 +22,10 @@ export type {
 } from "./types.js";
 export { getPrimarySig } from "./types.js";
 
+// Reverse lookup: find accounts that have claimed a given external identity
+export { reverseLookup, ReverseLookupError } from "./reverse-lookup.js";
+export type { ReverseLookupType, ReverseLookupMatch, ReverseLookupResult, ReverseLookupOptions } from "./reverse-lookup.js";
+
 /**
  * Verify a single keytrace claim record.
  *
