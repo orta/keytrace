@@ -55,20 +55,19 @@ export async function fetch(domain: string, options: DnsFetchOptions = {}): Prom
     const rootDomain = domain;
     const keytraceDomain = `_keytrace.${domain}`;
 
-    const fetchPromise = Promise.all([
-      dnsPromises.resolveTxt(rootDomain).catch(() => []),
-      dnsPromises.resolveTxt(keytraceDomain).catch(() => []),
-    ]).then(([rootRecords, keytraceRecords]) => ({
-      domain,
-      records: {
-        txt: [...rootRecords.flat(), ...keytraceRecords.flat()],
-      },
-      // Include which locations were checked for debugging
-      _locations: {
-        root: rootRecords.flat(),
-        _keytrace: keytraceRecords.flat(),
-      },
-    }));
+    const fetchPromise = Promise.all([dnsPromises.resolveTxt(rootDomain).catch(() => []), dnsPromises.resolveTxt(keytraceDomain).catch(() => [])]).then(
+      ([rootRecords, keytraceRecords]) => ({
+        domain,
+        records: {
+          txt: [...rootRecords.flat(), ...keytraceRecords.flat()],
+        },
+        // Include which locations were checked for debugging
+        _locations: {
+          root: rootRecords.flat(),
+          _keytrace: keytraceRecords.flat(),
+        },
+      }),
+    );
 
     return await Promise.race([fetchPromise, timeoutPromise]);
   } catch (error) {

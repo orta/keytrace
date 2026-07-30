@@ -146,11 +146,7 @@ describe("reddit service provider", () => {
       vi.restoreAllMocks();
     });
 
-    function mockFetchJson(
-      selftext: string,
-      author: string = "alice",
-      title: string = "Verification post",
-    ) {
+    function mockFetchJson(selftext: string, author: string = "alice", title: string = "Verification post") {
       const jsonResponse = [
         {
           data: {
@@ -212,10 +208,7 @@ describe("reddit service provider", () => {
     it("verifies user profile post", async () => {
       mockFetchJson(`My verification: ${did}`, "charlie");
 
-      const claim = createClaim(
-        "https://www.reddit.com/user/charlie/comments/def456/verify/",
-        did,
-      );
+      const claim = createClaim("https://www.reddit.com/user/charlie/comments/def456/verify/", did);
       const result = await verifyClaim(claim);
 
       expect(result.status).toBe(ClaimStatus.VERIFIED);

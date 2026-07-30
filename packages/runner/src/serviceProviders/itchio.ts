@@ -46,9 +46,7 @@ const itchio: ServiceProvider = {
           fetcher: "http",
           format: "text",
         },
-        target: [
-          { relation: "contains", format: "text" },
-        ],
+        target: [{ relation: "contains", format: "text" }],
       },
     };
   },

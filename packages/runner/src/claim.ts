@@ -107,25 +107,43 @@ export async function verifyClaim(claim: ClaimState, opts: VerifyOptions = {}): 
         content: truncateContent(proofData),
         targets: targetResults,
         patterns,
-        recommendations: !verified && match.provider.getRecommendations
-          ? match.provider.getRecommendations(proofData, match.match)
-          : undefined,
+        recommendations: !verified && match.provider.getRecommendations ? match.provider.getRecommendations(proofData, match.match) : undefined,
       };
 
       if (verified) {
-        claim.status = ClaimStatus.VERIFIED;
-
         // Extract identity metadata via postprocess if available
         let identity: IdentityMetadata | undefined;
         if (match.provider.postprocess) {
-          const metadata = match.provider.postprocess(proofData, match.match);
+          const metadata = match.provider.postprocess(proofData, match.match, claim.did);
           identity = {
             subject: metadata.subject,
             avatarUrl: metadata.avatarUrl,
             profileUrl: metadata.profileUrl,
             displayName: metadata.displayName,
+            account: metadata.account,
           };
         }
+
+        // The proof only shows access was held once; let the provider re-check it is still held.
+        // Throwing routes this down the same path as a postprocess failure: the error is
+        // recorded against this provider and any remaining ambiguous matches still get a turn.
+        if (match.provider.verifyAccess) {
+          const reason = await match.provider.verifyAccess({
+            did: claim.did,
+            match: match.match,
+            identity: identity ?? {},
+            fetch: (request) => fetchProof(request, opts),
+          });
+          if (reason) {
+            console.log(`[runner] Access check failed: ${reason}`);
+            // The DID target matched, so without this the UI would show a green proof and no
+            // explanation of why the claim still failed
+            proofDetails.recommendations = [...(proofDetails.recommendations ?? []), reason];
+            throw new Error(reason);
+          }
+        }
+
+        claim.status = ClaimStatus.VERIFIED;
 
         return {
           status: ClaimStatus.VERIFIED,
@@ -133,6 +151,7 @@ export async function verifyClaim(claim: ClaimState, opts: VerifyOptions = {}): 
           timestamp: new Date(),
           identity,
           proofDetails,
+          providerId: match.provider.id,
         };
       }
     } catch (err) {
@@ -252,7 +271,7 @@ function extractValues(data: unknown, target: ProofTarget): string[] {
       });
       return results;
     } catch (err) {
-      console.error(`[runner] CSS selector extraction failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
+      console.error(`[runner] CSS selector extraction failed: ${err instanceof Error ? err.message : "Unknown error"}`);
       return [];
     }
   }

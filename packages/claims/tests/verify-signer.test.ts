@@ -55,9 +55,7 @@ describe("signer validation", () => {
 
   it("should pass claims signed by default trusted signer (keytrace.dev)", async () => {
     vi.mocked(resolveHandle).mockResolvedValue(TRUSTED_DID);
-    vi.mocked(listClaimRecords).mockResolvedValue([
-      { uri: "at://user/dev.keytrace.claim/abc", rkey: "abc", value: makeClaimRecord(TRUSTED_DID) },
-    ]);
+    vi.mocked(listClaimRecords).mockResolvedValue([{ uri: "at://user/dev.keytrace.claim/abc", rkey: "abc", value: makeClaimRecord(TRUSTED_DID) }]);
 
     const result = await getClaimsForDid(USER_DID);
 
@@ -70,9 +68,7 @@ describe("signer validation", () => {
   it("should fail claims signed by an untrusted signer", async () => {
     // resolveHandle is called for "keytrace.dev" (default) → returns TRUSTED_DID
     vi.mocked(resolveHandle).mockResolvedValue(TRUSTED_DID);
-    vi.mocked(listClaimRecords).mockResolvedValue([
-      { uri: "at://user/dev.keytrace.claim/abc", rkey: "abc", value: makeClaimRecord(UNTRUSTED_DID) },
-    ]);
+    vi.mocked(listClaimRecords).mockResolvedValue([{ uri: "at://user/dev.keytrace.claim/abc", rkey: "abc", value: makeClaimRecord(UNTRUSTED_DID) }]);
 
     const result = await getClaimsForDid(USER_DID);
 
@@ -85,9 +81,7 @@ describe("signer validation", () => {
 
   it("should not fetch the signing key for untrusted signers", async () => {
     vi.mocked(resolveHandle).mockResolvedValue(TRUSTED_DID);
-    vi.mocked(listClaimRecords).mockResolvedValue([
-      { uri: "at://user/dev.keytrace.claim/abc", rkey: "abc", value: makeClaimRecord(UNTRUSTED_DID) },
-    ]);
+    vi.mocked(listClaimRecords).mockResolvedValue([{ uri: "at://user/dev.keytrace.claim/abc", rkey: "abc", value: makeClaimRecord(UNTRUSTED_DID) }]);
 
     await getClaimsForDid(USER_DID);
 
@@ -101,9 +95,7 @@ describe("signer validation", () => {
       if (handle === "custom.dev") return UNTRUSTED_DID;
       return TRUSTED_DID;
     });
-    vi.mocked(listClaimRecords).mockResolvedValue([
-      { uri: "at://user/dev.keytrace.claim/abc", rkey: "abc", value: makeClaimRecord(UNTRUSTED_DID) },
-    ]);
+    vi.mocked(listClaimRecords).mockResolvedValue([{ uri: "at://user/dev.keytrace.claim/abc", rkey: "abc", value: makeClaimRecord(UNTRUSTED_DID) }]);
 
     const result = await getClaimsForDid(USER_DID, { trustedSigners: ["custom.dev"] });
 
@@ -143,9 +135,7 @@ describe("signer validation", () => {
     const claim = makeClaimRecord(TRUSTED_DID);
     // @ts-expect-error - intentionally removing src
     claim.sig.src = undefined;
-    vi.mocked(listClaimRecords).mockResolvedValue([
-      { uri: "at://user/dev.keytrace.claim/abc", rkey: "abc", value: claim },
-    ]);
+    vi.mocked(listClaimRecords).mockResolvedValue([{ uri: "at://user/dev.keytrace.claim/abc", rkey: "abc", value: claim }]);
 
     const result = await getClaimsForDid(USER_DID);
 
@@ -159,9 +149,7 @@ describe("signer validation", () => {
       if (handle === "keytrace.dev") return TRUSTED_DID;
       throw new Error("unknown handle");
     });
-    vi.mocked(listClaimRecords).mockResolvedValue([
-      { uri: "at://user/dev.keytrace.claim/abc", rkey: "abc", value: makeClaimRecord(UNTRUSTED_DID) },
-    ]);
+    vi.mocked(listClaimRecords).mockResolvedValue([{ uri: "at://user/dev.keytrace.claim/abc", rkey: "abc", value: makeClaimRecord(UNTRUSTED_DID) }]);
 
     const result = await getClaimsForHandle("alice.bsky.social");
 

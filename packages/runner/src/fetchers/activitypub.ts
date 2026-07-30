@@ -107,10 +107,7 @@ export async function fetchActor(uri: string, options: ActivityPubFetchOptions =
 
   if (statusId) {
     // Status fetch: GET /api/v1/statuses/:id
-    const response = await mastodonFetch(
-      `https://${domain}/api/v1/statuses/${statusId}`,
-      timeout,
-    );
+    const response = await mastodonFetch(`https://${domain}/api/v1/statuses/${statusId}`, timeout);
     if (!response.ok) {
       throw new Error(`Mastodon API HTTP ${response.status}: ${response.statusText}`);
     }
@@ -118,10 +115,7 @@ export async function fetchActor(uri: string, options: ActivityPubFetchOptions =
     return statusToObject(status, domain);
   } else {
     // Profile fetch: GET /api/v1/accounts/lookup?acct=username
-    const response = await mastodonFetch(
-      `https://${domain}/api/v1/accounts/lookup?acct=${encodeURIComponent(username)}`,
-      timeout,
-    );
+    const response = await mastodonFetch(`https://${domain}/api/v1/accounts/lookup?acct=${encodeURIComponent(username)}`, timeout);
     if (!response.ok) {
       throw new Error(`Mastodon API HTTP ${response.status}: ${response.statusText}`);
     }

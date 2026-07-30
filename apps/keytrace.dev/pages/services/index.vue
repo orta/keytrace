@@ -29,14 +29,8 @@
       >
         <div class="flex items-start justify-between">
           <div class="flex items-start gap-3">
-            <GithubIcon
-              v-if="service.id === 'github'"
-              class="w-6 h-6 mt-0.5 text-zinc-400"
-            />
-            <FileCodeIcon
-              v-else-if="service.id === 'tangled'"
-              class="w-6 h-6 mt-0.5 text-zinc-400"
-            />
+            <GithubIcon v-if="service.id === 'github'" class="w-6 h-6 mt-0.5 text-zinc-400" />
+            <FileCodeIcon v-else-if="service.id === 'tangled'" class="w-6 h-6 mt-0.5 text-zinc-400" />
             <img
               v-else-if="service.homepage"
               :src="`https://www.google.com/s2/favicons?domain=${getDomain(service.homepage)}&sz=32`"

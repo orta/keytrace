@@ -6,6 +6,7 @@ export const serviceNames: Record<string, string> = {
   bluesky: "Bluesky",
   bsky: "Bluesky",
   npm: "npm",
+  npmorg: "npm org",
   pgp: "PGP",
   tangled: "Tangled",
   twitter: "Twitter",
@@ -14,6 +15,8 @@ export const serviceNames: Record<string, string> = {
   reddit: "Reddit",
   hackernews: "Hacker News",
   orcid: "ORCiD",
+  itchio: "itch.io",
+  discord: "Discord",
   steam: "Steam",
 };
 
@@ -28,6 +31,8 @@ export const serviceIconPaths: Record<string, string> = {
   linkedin: `<path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect width="4" height="12" x="2" y="9"/><circle cx="4" cy="4" r="2"/>`,
   instagram: `<rect width="20" height="20" x="2" y="2" rx="5" ry="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" x2="17.51" y1="6.5" y2="6.5"/>`,
   npm: `<path d="M2 12h20M2 6h20M2 18h20"/>`,
+  npmorg: `<path d="M2 12h20M2 6h20M2 18h20"/>`,
+  discord: `<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>`,
   pgp: `<rect width="18" height="11" x="3" y="11" rx="2" ry="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/>`,
   reddit: `<path d="M12 8c2.648 0 5.028.826 6.675 2.14a2.5 2.5 0 0 1 2.326-1.64 2.5 2.5 0 0 1 .33 4.979c.04.298.06.6.06.906 0 3.868-3.979 7-8.882 7H11.49C6.586 21.385 2.607 18.253 2.607 14.385c0-.306.02-.608.06-.906A2.5 2.5 0 0 1 3 8.5a2.5 2.5 0 0 1 2.325 1.64C6.972 8.826 9.352 8 12 8z"/><circle cx="9" cy="14" r="1"/><circle cx="15" cy="14" r="1"/><path d="M9.5 17.5s1 1 2.5 1 2.5-1 2.5-1"/>`,
   hackernews: `<path d="M3 3l9 10 9-10M12 13v8"/>`,

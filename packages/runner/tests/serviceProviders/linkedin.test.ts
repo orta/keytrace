@@ -22,7 +22,7 @@ describe("linkedin service provider", () => {
       expect(result.profile.display).toBe("ortatherox");
       expect(result.profile.uri).toBe("https://www.linkedin.com/in/ortatherox");
       expect(result.proof.request.fetcher).toBe("http");
-      expect(result.proof.request.uri).toBe(uri.split('?')[0]);
+      expect(result.proof.request.uri).toBe(uri.split("?")[0]);
       expect(result.proof.request.format).toBe("json-ld");
       expect(result.proof.request.options?.headers?.["User-Agent"]).toBe("Mozilla/5.0 (compatible; KeytraceBot/1.0)");
     });

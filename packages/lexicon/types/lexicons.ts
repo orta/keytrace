@@ -31,6 +31,7 @@ export const schemaDict = {
                 'activitypub',
                 'bsky',
                 'npm',
+                'npmorg',
                 'tangled',
                 'pgp',
                 'twitter',
@@ -122,6 +123,11 @@ export const schemaDict = {
             type: 'string',
             description: 'Primary identifier (username, domain, handle, etc.)',
           },
+          account: {
+            type: 'string',
+            description:
+              "The platform account that demonstrated control of the subject, when the two differ. Used by claim types where the subject is a shared namespace rather than a personal account — e.g. for npmorg the subject is the org scope ('babel') and the account is the npm user who published the proof ('alice'). Absent when the subject is itself the account.",
+          },
           avatarUrl: {
             type: 'string',
             format: 'uri',
@@ -195,6 +201,7 @@ export const schemaDict = {
                 'activitypub',
                 'bsky',
                 'npm',
+                'npmorg',
                 'tangled',
                 'pgp',
                 'twitter',
@@ -205,12 +212,13 @@ export const schemaDict = {
                 'orcid',
                 'itchio',
                 'discord',
+                'steam',
               ],
             },
             subject: {
               type: 'string',
               description:
-                'The subject identifier being looked up. Matched exactly (case-sensitive).',
+                "The subject identifier being looked up. Matched exactly (case-sensitive). For types whose subject is a shared namespace rather than a personal account (e.g. 'npmorg', where the subject is the scope 'babel'), a single subject may legitimately match several DIDs — one per person who proved publish access.",
             },
           },
         },

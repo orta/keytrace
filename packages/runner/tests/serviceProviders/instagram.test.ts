@@ -56,8 +56,8 @@ describe("instagram service provider", () => {
       const ogData = {
         type: "article",
         site_name: "Instagram",
-        title: "Orta Therox on Instagram: \"Linking my keytrace.dev - did:plc:test123\"",
-        description: "0 likes, 0 comments - orta on February 28, 2026: \"Linking my keytrace.dev - did:plc:test123\"",
+        title: 'Orta Therox on Instagram: "Linking my keytrace.dev - did:plc:test123"',
+        description: '0 likes, 0 comments - orta on February 28, 2026: "Linking my keytrace.dev - did:plc:test123"',
         url: "https://www.instagram.com/orta/p/DVS8Tm6DWzP/",
         image: "https://scontent.cdninstagram.com/example.jpg",
         username: "orta",
@@ -76,8 +76,8 @@ describe("instagram service provider", () => {
       const match = uri.match(instagram.reUri)!;
 
       const ogData = {
-        title: "Alice Smith on Instagram: \"Test post\"",
-        description: "5 likes - alice on January 1, 2026: \"Test post\"",
+        title: 'Alice Smith on Instagram: "Test post"',
+        description: '5 likes - alice on January 1, 2026: "Test post"',
       };
 
       const result = instagram.postprocess!(ogData, match);

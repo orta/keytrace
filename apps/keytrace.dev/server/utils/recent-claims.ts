@@ -36,8 +36,7 @@ export async function addRecentClaim(claim: RecentClaim): Promise<void> {
   // Don't overwrite - log warning and skip save to prevent data loss
   if (feed.length === 0 && lastKnownFeedSize > 5) {
     console.warn(
-      `[recent-claims] Read returned empty but last known size was ${lastKnownFeedSize}. ` +
-        `Skipping save to prevent data loss. New claim not added: ${claim.subject}`,
+      `[recent-claims] Read returned empty but last known size was ${lastKnownFeedSize}. ` + `Skipping save to prevent data loss. New claim not added: ${claim.subject}`,
     );
     return;
   }

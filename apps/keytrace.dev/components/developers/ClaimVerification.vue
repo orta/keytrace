@@ -1,14 +1,8 @@
 <template>
   <div class="border border-zinc-800 rounded-lg overflow-hidden">
-    <button
-      class="w-full flex items-center justify-between p-4 bg-kt-surface hover:bg-zinc-800/50 transition-colors text-left"
-      @click="expanded = !expanded"
-    >
+    <button class="w-full flex items-center justify-between p-4 bg-kt-surface hover:bg-zinc-800/50 transition-colors text-left" @click="expanded = !expanded">
       <div class="flex items-center gap-3">
-        <div
-          class="w-6 h-6 rounded-full flex items-center justify-center"
-          :class="claim.verified ? 'bg-verified/20' : 'bg-failed/20'"
-        >
+        <div class="w-6 h-6 rounded-full flex items-center justify-center" :class="claim.verified ? 'bg-verified/20' : 'bg-failed/20'">
           <CheckIcon v-if="claim.verified" class="w-4 h-4 text-verified" />
           <XIcon v-else class="w-4 h-4 text-failed" />
         </div>
@@ -16,32 +10,19 @@
           <span class="font-mono text-sm text-zinc-200">{{ claim.type }}:{{ claim.identity.subject }}</span>
         </div>
       </div>
-      <ChevronDownIcon
-        class="w-4 h-4 text-zinc-500 transition-transform"
-        :class="{ 'rotate-180': expanded }"
-      />
+      <ChevronDownIcon class="w-4 h-4 text-zinc-500 transition-transform" :class="{ 'rotate-180': expanded }" />
     </button>
 
     <div v-if="expanded" class="border-t border-zinc-800 p-4 space-y-4 bg-kt-inset">
-      <div
-        v-for="(step, index) in claim.steps"
-        :key="step.step"
-        class="relative"
-      >
+      <div v-for="(step, index) in claim.steps" :key="step.step" class="relative">
         <!-- Step header -->
         <div class="flex items-start gap-3">
           <div class="flex flex-col items-center">
-            <div
-              class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0"
-              :class="step.success ? 'bg-verified/20' : 'bg-failed/20'"
-            >
+            <div class="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0" :class="step.success ? 'bg-verified/20' : 'bg-failed/20'">
               <CheckIcon v-if="step.success" class="w-3 h-3 text-verified" />
               <XIcon v-else class="w-3 h-3 text-failed" />
             </div>
-            <div
-              v-if="index < claim.steps.length - 1"
-              class="w-px flex-1 bg-zinc-700 mt-1 min-h-[16px]"
-            />
+            <div v-if="index < claim.steps.length - 1" class="w-px flex-1 bg-zinc-700 mt-1 min-h-[16px]" />
           </div>
           <div class="flex-1 min-w-0 pb-3">
             <div class="font-mono text-xs text-zinc-400 mb-1">{{ formatStepName(step.step) }}</div>
@@ -215,9 +196,7 @@ async function fetchKey() {
       const plcResponse = await fetch(`https://plc.directory/${repo}`);
       if (plcResponse.ok) {
         const didDoc = await plcResponse.json();
-        const pdsService = didDoc.service?.find(
-          (s: { id: string; type: string }) => s.id === "#atproto_pds" || s.type === "AtprotoPersonalDataServer"
-        );
+        const pdsService = didDoc.service?.find((s: { id: string; type: string }) => s.id === "#atproto_pds" || s.type === "AtprotoPersonalDataServer");
         if (pdsService?.serviceEndpoint) {
           pdsUrl = pdsService.serviceEndpoint;
         }
@@ -226,7 +205,7 @@ async function fetchKey() {
 
     // Fetch the key record from the correct PDS
     const response = await fetch(
-      `${pdsUrl}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(repo)}&collection=${encodeURIComponent(collection)}&rkey=${encodeURIComponent(rkey)}`
+      `${pdsUrl}/xrpc/com.atproto.repo.getRecord?repo=${encodeURIComponent(repo)}&collection=${encodeURIComponent(collection)}&rkey=${encodeURIComponent(rkey)}`,
     );
 
     if (response.ok) {

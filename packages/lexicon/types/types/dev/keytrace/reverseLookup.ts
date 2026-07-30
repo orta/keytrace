@@ -19,6 +19,7 @@ export type QueryParams = {
     | 'activitypub'
     | 'bsky'
     | 'npm'
+    | 'npmorg'
     | 'tangled'
     | 'pgp'
     | 'twitter'
@@ -29,8 +30,9 @@ export type QueryParams = {
     | 'orcid'
     | 'itchio'
     | 'discord'
+    | 'steam'
     | (string & {})
-  /** The subject identifier being looked up. Matched exactly (case-sensitive). */
+  /** The subject identifier being looked up. Matched exactly (case-sensitive). For types whose subject is a shared namespace rather than a personal account (e.g. 'npmorg', where the subject is the scope 'babel'), a single subject may legitimately match several DIDs — one per person who proved publish access. */
   subject: string
 }
 export type InputSchema = undefined

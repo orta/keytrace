@@ -17,27 +17,27 @@ npm install @keytrace/runner
 ### Verify a Claim
 
 ```typescript
-import { createClaim, verifyClaim, ClaimStatus } from '@keytrace/runner';
+import { createClaim, verifyClaim, ClaimStatus } from "@keytrace/runner";
 
 // Create and verify a claim
-const claim = createClaim('https://gist.github.com/octocat/abc123', 'did:plc:xyz789');
+const claim = createClaim("https://gist.github.com/octocat/abc123", "did:plc:xyz789");
 const result = await verifyClaim(claim);
 
 if (result.status === ClaimStatus.VERIFIED) {
-  console.log('Claim verified!');
-  console.log('Identity:', result.identity);
+  console.log("Claim verified!");
+  console.log("Identity:", result.identity);
 } else {
-  console.log('Verification failed:', result.errors);
+  console.log("Verification failed:", result.errors);
 }
 ```
 
 ### Fetch a User's Profile and Claims
 
 ```typescript
-import { fetchProfile, verifyAllClaims, getProfileSummary } from '@keytrace/runner';
+import { fetchProfile, verifyAllClaims, getProfileSummary } from "@keytrace/runner";
 
 // Fetch profile and claims from ATProto
-const profile = await fetchProfile('alice.bsky.social');
+const profile = await fetchProfile("alice.bsky.social");
 
 // Verify all claims
 const verified = await verifyAllClaims(profile);
@@ -50,12 +50,12 @@ console.log(`${summary.verified}/${summary.total} claims verified`);
 ### Match URIs to Service Providers
 
 ```typescript
-import { serviceProviders } from '@keytrace/runner';
+import { serviceProviders } from "@keytrace/runner";
 
-const matches = serviceProviders.matchUri('https://gist.github.com/octocat/abc123');
+const matches = serviceProviders.matchUri("https://gist.github.com/octocat/abc123");
 // [{ provider: { id: 'github', name: 'GitHub', ... }, match: [...], isAmbiguous: false }]
 
-const matches2 = serviceProviders.matchUri('dns:example.com');
+const matches2 = serviceProviders.matchUri("dns:example.com");
 // [{ provider: { id: 'dns', name: 'Domain', ... }, match: [...], isAmbiguous: false }]
 ```
 
@@ -63,13 +63,13 @@ const matches2 = serviceProviders.matchUri('dns:example.com');
 
 Built-in providers for identity verification:
 
-| Provider | URI Pattern | Proof Location |
-|----------|-------------|----------------|
-| GitHub | `https://gist.github.com/user/id` | Gist content |
-| DNS | `dns:example.com` | TXT record |
-| Mastodon | `https://instance/@user` | Profile bio/fields |
-| Bluesky | `https://bsky.app/profile/handle` | Profile bio |
-| npm | `https://npmjs.com/package/keytrace-handle` | package.json |
+| Provider | URI Pattern                                 | Proof Location     |
+| -------- | ------------------------------------------- | ------------------ |
+| GitHub   | `https://gist.github.com/user/id`           | Gist content       |
+| DNS      | `dns:example.com`                           | TXT record         |
+| Mastodon | `https://instance/@user`                    | Profile bio/fields |
+| Bluesky  | `https://bsky.app/profile/handle`           | Profile bio        |
+| npm      | `https://npmjs.com/package/keytrace-handle` | package.json       |
 
 ## API
 
@@ -121,11 +121,11 @@ serviceProviders.get(id: string): ServiceProvider | undefined
 
 ```typescript
 enum ClaimStatus {
-  INIT = 'init',           // Created, not yet matched
-  MATCHED = 'matched',     // URI matched to provider
-  VERIFIED = 'verified',   // Proof verified successfully
-  FAILED = 'failed',       // Proof verification failed
-  ERROR = 'error',         // Error during verification
+  INIT = "init", // Created, not yet matched
+  MATCHED = "matched", // URI matched to provider
+  VERIFIED = "verified", // Proof verified successfully
+  FAILED = "failed", // Proof verification failed
+  ERROR = "error", // Error during verification
 }
 ```
 
@@ -133,7 +133,7 @@ enum ClaimStatus {
 
 ```typescript
 interface VerifyOptions {
-  timeout?: number;        // Request timeout in ms (default: 10000)
-  fetch?: typeof fetch;    // Custom fetch function
+  timeout?: number; // Request timeout in ms (default: 10000)
+  fetch?: typeof fetch; // Custom fetch function
 }
 ```

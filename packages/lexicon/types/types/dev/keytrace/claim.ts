@@ -20,6 +20,7 @@ export interface Main {
     | 'activitypub'
     | 'bsky'
     | 'npm'
+    | 'npmorg'
     | 'tangled'
     | 'pgp'
     | 'twitter'
@@ -77,6 +78,8 @@ export interface Identity {
   $type?: 'dev.keytrace.claim#identity'
   /** Primary identifier (username, domain, handle, etc.) */
   subject: string
+  /** The platform account that demonstrated control of the subject, when the two differ. Used by claim types where the subject is a shared namespace rather than a personal account — e.g. for npmorg the subject is the org scope ('babel') and the account is the npm user who published the proof ('alice'). Absent when the subject is itself the account. */
+  account?: string
   /** Avatar/profile image URL */
   avatarUrl?: string
   /** Profile page URL */

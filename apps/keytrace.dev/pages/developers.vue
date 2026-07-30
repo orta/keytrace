@@ -71,11 +71,14 @@
       <div class="bg-kt-card border border-zinc-800 rounded-lg p-8 flex flex-col items-center justify-center">
         <LoaderIcon class="w-8 h-8 text-violet-400 animate-spin mb-4" />
         <p class="text-sm text-zinc-400 mb-4">
-          Verifying claims for <span class="font-mono text-violet-400">{{ handle }}</span>...
+          Verifying claims for <span class="font-mono text-violet-400">{{ handle }}</span
+          >...
         </p>
         <p class="text-xs text-zinc-500 mb-2 w-full text-left">Running this code:</p>
         <div class="w-full bg-zinc-900 border border-zinc-800 rounded p-3 overflow-x-auto">
-          <pre class="text-xs font-mono text-zinc-400"><span class="text-violet-400">import</span> { getClaimsForHandle } <span class="text-violet-400">from</span> <span class="text-green-400">'@keytrace/claims'</span>;
+          <pre
+            class="text-xs font-mono text-zinc-400"
+          ><span class="text-violet-400">import</span> { getClaimsForHandle } <span class="text-violet-400">from</span> <span class="text-green-400">'@keytrace/claims'</span>;
 
 <span class="text-violet-400">const</span> result = <span class="text-violet-400">await</span> getClaimsForHandle(<span class="text-green-400">'{{ handle }}'</span>);</pre>
         </div>

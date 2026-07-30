@@ -108,7 +108,7 @@ const instagram: ServiceProvider = {
       }
     }
 
-    const displayName = ogData.title?.split(' on Instagram:')[0];
+    const displayName = ogData.title?.split(" on Instagram:")[0];
     const avatarUrl = ogData.image;
 
     return {

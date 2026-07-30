@@ -23,9 +23,7 @@
 
     <div v-else-if="error" class="text-center py-12">
       <p class="text-zinc-400">Service not found</p>
-      <NuxtLink to="/services" class="text-violet-400 hover:text-violet-300 mt-2 inline-block">
-        View all services
-      </NuxtLink>
+      <NuxtLink to="/services" class="text-violet-400 hover:text-violet-300 mt-2 inline-block"> View all services </NuxtLink>
     </div>
 
     <div v-else-if="recipe" class="space-y-8">
@@ -64,16 +62,12 @@
       <!-- Proof Text -->
       <section class="bg-kt-card border border-zinc-800 rounded-lg p-6">
         <h2 class="text-sm font-semibold text-zinc-300 mb-3">Proof Text</h2>
-        <p class="text-zinc-400 text-sm mb-3">
-          You need to include this text in your {{ recipe.name }} proof location:
-        </p>
+        <p class="text-zinc-400 text-sm mb-3">You need to include this text in your {{ recipe.name }} proof location:</p>
         <div class="bg-kt-inset px-4 py-3 rounded-lg flex items-center justify-between gap-4">
           <code class="text-sm font-mono text-emerald-400 break-all">{{ recipe.proofText }}</code>
           <CopyButton :value="recipe.proofText" />
         </div>
-        <p v-if="recipe.proofLocation" class="text-xs text-zinc-500 mt-3">
-          <span class="text-zinc-400">Where to put it:</span> <Markdown :content="recipe.proofLocation" />
-        </p>
+        <p v-if="recipe.proofLocation" class="text-xs text-zinc-500 mt-3"><span class="text-zinc-400">Where to put it:</span> <Markdown :content="recipe.proofLocation" /></p>
       </section>
 
       <!-- Verification Steps -->
@@ -83,9 +77,7 @@
         <ol class="space-y-6">
           <!-- Step 1: Fetch -->
           <li class="flex gap-4">
-            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-violet-600/20 text-violet-400 flex items-center justify-center text-sm font-bold">
-              1
-            </div>
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-violet-600/20 text-violet-400 flex items-center justify-center text-sm font-bold">1</div>
             <div class="flex-1 min-w-0">
               <h3 class="text-sm font-medium text-zinc-200 mb-1">Fetch proof data</h3>
               <p class="text-xs text-zinc-500 mb-2">
@@ -99,20 +91,12 @@
 
           <!-- Step 2: Check targets -->
           <li class="flex gap-4">
-            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-violet-600/20 text-violet-400 flex items-center justify-center text-sm font-bold">
-              2
-            </div>
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-violet-600/20 text-violet-400 flex items-center justify-center text-sm font-bold">2</div>
             <div class="flex-1 min-w-0">
               <h3 class="text-sm font-medium text-zinc-200 mb-1">Search for DID in response</h3>
-              <p class="text-xs text-zinc-500 mb-3">
-                The runner checks the following locations for your DID:
-              </p>
+              <p class="text-xs text-zinc-500 mb-3">The runner checks the following locations for your DID:</p>
               <ul class="space-y-2">
-                <li
-                  v-for="(target, idx) in recipe.verification.targets"
-                  :key="idx"
-                  class="bg-kt-inset px-3 py-2 rounded text-xs"
-                >
+                <li v-for="(target, idx) in recipe.verification.targets" :key="idx" class="bg-kt-inset px-3 py-2 rounded text-xs">
                   <code class="text-violet-400 font-mono">{{ target.path }}</code>
                   <span class="text-zinc-500 ml-2">{{ target.relation }}</span>
                   <p class="text-zinc-400 mt-1">{{ target.description }}</p>
@@ -123,14 +107,10 @@
 
           <!-- Step 3: Verify -->
           <li class="flex gap-4">
-            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-verified/20 text-verified flex items-center justify-center text-sm font-bold">
-              3
-            </div>
+            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-verified/20 text-verified flex items-center justify-center text-sm font-bold">3</div>
             <div class="flex-1">
               <h3 class="text-sm font-medium text-zinc-200 mb-1">Attestation</h3>
-              <p class="text-xs text-zinc-500">
-                If the DID is found, keytrace signs an attestation linking your identity to your ATProto DID and stores it in your repo.
-              </p>
+              <p class="text-xs text-zinc-500">If the DID is found, keytrace signs an attestation linking your identity to your ATProto DID and stores it in your repo.</p>
             </div>
           </li>
         </ol>
@@ -139,9 +119,7 @@
       <!-- Try it -->
       <section class="bg-kt-card border border-zinc-800 rounded-lg p-6">
         <h2 class="text-sm font-semibold text-zinc-300 mb-3">Try Verification</h2>
-        <p class="text-zinc-400 text-sm mb-4">
-          Test verification with your own claim URI and DID:
-        </p>
+        <p class="text-zinc-400 text-sm mb-4">Test verification with your own claim URI and DID:</p>
 
         <form class="space-y-3" @submit.prevent="runVerification">
           <div>
@@ -172,7 +150,11 @@
         </form>
 
         <!-- Result -->
-        <div v-if="verifyResult" class="mt-4 p-4 rounded-lg" :class="verifyResult.status === 'verified' ? 'bg-verified/10 border border-verified/30' : 'bg-red-500/10 border border-red-500/30'">
+        <div
+          v-if="verifyResult"
+          class="mt-4 p-4 rounded-lg"
+          :class="verifyResult.status === 'verified' ? 'bg-verified/10 border border-verified/30' : 'bg-red-500/10 border border-red-500/30'"
+        >
           <div class="flex items-center gap-2 mb-2">
             <CheckCircleIcon v-if="verifyResult.status === 'verified'" class="w-5 h-5 text-verified" />
             <XCircleIcon v-else class="w-5 h-5 text-red-400" />
@@ -184,8 +166,12 @@
             <p v-for="(err, i) in verifyResult.errors" :key="i">{{ err }}</p>
           </div>
           <div v-if="verifyResult.identity" class="mt-3 text-xs text-zinc-400">
-            <p v-if="verifyResult.identity.subject">Subject: <span class="text-zinc-200">{{ verifyResult.identity.subject }}</span></p>
-            <p v-if="verifyResult.identity.avatarUrl">Avatar: <a :href="verifyResult.identity.avatarUrl" target="_blank" class="text-violet-400 hover:underline">{{ verifyResult.identity.avatarUrl }}</a></p>
+            <p v-if="verifyResult.identity.subject">
+              Subject: <span class="text-zinc-200">{{ verifyResult.identity.subject }}</span>
+            </p>
+            <p v-if="verifyResult.identity.avatarUrl">
+              Avatar: <a :href="verifyResult.identity.avatarUrl" target="_blank" class="text-violet-400 hover:underline">{{ verifyResult.identity.avatarUrl }}</a>
+            </p>
           </div>
         </div>
       </section>

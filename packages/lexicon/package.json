@@ -1,6 +1,11 @@
 {
   "name": "@keytrace/lexicon",
-  "version": "1.4.1",
+  "version": "1.5.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/orta/keytrace",
+    "directory": "packages/lexicon"
+  },
   "files": [
     "lexicons",
     "types"
@@ -14,11 +19,6 @@
   "scripts": {
     "codegen": "lex gen-api --yes ./types ./lexicons/dev/keytrace/*",
     "validate": "node scripts/validate.mjs"
-  },
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/orta/keytrace",
-    "directory": "packages/lexicon"
   },
   "devDependencies": {
     "@atproto/lex-cli": "^0.9.8"

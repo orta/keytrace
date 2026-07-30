@@ -13,9 +13,7 @@ export default defineEventHandler(async (event) => {
   const claims = await getRecentClaims();
 
   // Find claims with DIDs as handles and resolve them
-  const didsToResolve = claims
-    .filter((c) => c.handle.startsWith("did:"))
-    .map((c) => c.did);
+  const didsToResolve = claims.filter((c) => c.handle.startsWith("did:")).map((c) => c.did);
 
   if (didsToResolve.length > 0) {
     const resolved = await resolveProfiles(didsToResolve);
@@ -44,9 +42,7 @@ async function resolveProfiles(dids: string[]): Promise<Record<string, { handle:
   await Promise.all(
     uniqueDids.map(async (did) => {
       try {
-        const response = await fetch(
-          `https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${encodeURIComponent(did)}`,
-        );
+        const response = await fetch(`https://public.api.bsky.app/xrpc/app.bsky.actor.getProfile?actor=${encodeURIComponent(did)}`);
         if (response.ok) {
           const profile = await response.json();
           results[did] = {

@@ -15,6 +15,7 @@ export type ReverseLookupType =
   | "activitypub"
   | "bsky"
   | "npm"
+  | "npmorg"
   | "tangled"
   | "pgp"
   | "twitter"
@@ -25,6 +26,7 @@ export type ReverseLookupType =
   | "orcid"
   | "itchio"
   | "discord"
+  | "steam"
   | (string & {});
 
 /**

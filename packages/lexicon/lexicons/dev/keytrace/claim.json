@@ -12,7 +12,25 @@
         "properties": {
           "type": {
             "type": "string",
-            "knownValues": ["github", "dns", "activitypub", "bsky", "npm", "tangled", "pgp", "twitter", "linkedin", "instagram", "reddit", "hackernews", "orcid", "itchio", "discord", "steam"],
+            "knownValues": [
+              "github",
+              "dns",
+              "activitypub",
+              "bsky",
+              "npm",
+              "npmorg",
+              "tangled",
+              "pgp",
+              "twitter",
+              "linkedin",
+              "instagram",
+              "reddit",
+              "hackernews",
+              "orcid",
+              "itchio",
+              "discord",
+              "steam"
+            ],
             "description": "The claim type identifier"
           },
           "claimUri": {
@@ -82,6 +100,10 @@
         "subject": {
           "type": "string",
           "description": "Primary identifier (username, domain, handle, etc.)"
+        },
+        "account": {
+          "type": "string",
+          "description": "The platform account that demonstrated control of the subject, when the two differ. Used by claim types where the subject is a shared namespace rather than a personal account — e.g. for npmorg the subject is the org scope ('babel') and the account is the npm user who published the proof ('alice'). Absent when the subject is itself the account."
         },
         "avatarUrl": {
           "type": "string",

@@ -73,7 +73,15 @@
 </template>
 
 <script setup lang="ts">
-import { Github as GithubIcon, Globe as GlobeIcon, Package as PackageIcon, AtSign as AtSignIcon, Key as KeyIcon, FileCode as FileCodeIcon, Linkedin as LinkedinIcon } from "lucide-vue-next";
+import {
+  Github as GithubIcon,
+  Globe as GlobeIcon,
+  Package as PackageIcon,
+  AtSign as AtSignIcon,
+  Key as KeyIcon,
+  FileCode as FileCodeIcon,
+  Linkedin as LinkedinIcon,
+} from "lucide-vue-next";
 
 const { session } = useSession();
 const { open: openLoginModal } = useLoginModal();

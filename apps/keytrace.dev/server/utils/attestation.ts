@@ -6,6 +6,8 @@ export interface ClaimData {
   did: string;
   "identity.subject": string;
   type: string;
+  /** Only present for claim types whose subject is a shared namespace — see createAttestation */
+  "identity.account"?: string;
 }
 
 export interface Attestation {
@@ -31,7 +33,7 @@ export interface ClaimRecord {
  * 3. Signs with ES256
  * 4. Returns the attestation (sig + key ref + timestamp)
  */
-export async function createAttestation(did: string, type: string, subject: string, claimUri: string): Promise<Attestation> {
+export async function createAttestation(did: string, type: string, subject: string, claimUri: string, account?: string): Promise<Attestation> {
   const keyPair = await getOrCreateTodaysKey();
   const now = new Date().toISOString();
 
@@ -41,6 +43,14 @@ export async function createAttestation(did: string, type: string, subject: stri
     "identity.subject": subject,
     type,
   };
+
+  // Claim types whose subject is a shared namespace (e.g. npmorg's org scope) need the account
+  // that proved access signed too — without it the signature attests only "someone can publish
+  // under @babel", which is not a statement about this DID. The key is omitted entirely rather
+  // than set to undefined so signedFields stays accurate for claims that don't have one.
+  if (account) {
+    claimData["identity.account"] = account;
+  }
 
   const sig = signClaim(claimData as unknown as Record<string, unknown>, keyPair.privateKey);
   const keyRef = await getTodaysKeyRef();
@@ -58,17 +68,11 @@ export async function createAttestation(did: string, type: string, subject: stri
  * Signs over { claimUri, did, status, <timestampField> } so the status fields can't be tampered with.
  * The timestamp field name matches the record field: lastVerifiedAt, failedAt, or retractedAt.
  */
-export async function createStatusAttestation(
-  did: string,
-  claimUri: string,
-  status: string,
-  statusAt: string,
-): Promise<Attestation> {
+export async function createStatusAttestation(did: string, claimUri: string, status: string, statusAt: string): Promise<Attestation> {
   const keyPair = await getOrCreateTodaysKey();
 
   // Use the actual record field name for the timestamp so signedFields maps directly to record fields
-  const timestampField =
-    status === "verified" ? "lastVerifiedAt" : status === "retracted" ? "retractedAt" : "failedAt";
+  const timestampField = status === "verified" ? "lastVerifiedAt" : status === "retracted" ? "retractedAt" : "failedAt";
 
   const claimData: Record<string, string> = {
     claimUri,

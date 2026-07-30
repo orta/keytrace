@@ -14,12 +14,7 @@
       <span class="text-zinc-600 text-sm">verified</span>
       <!-- Identity info with avatar if available -->
       <div class="flex items-center gap-1.5">
-        <img
-          v-if="claim.identity?.avatarUrl"
-          :src="claim.identity.avatarUrl"
-          :alt="identityDisplay"
-          class="w-4 h-4 rounded-full"
-        />
+        <img v-if="claim.identity?.avatarUrl" :src="claim.identity.avatarUrl" :alt="identityDisplay" class="w-4 h-4 rounded-full" />
         <a
           v-if="claim.identity?.profileUrl"
           :href="claim.identity.profileUrl"

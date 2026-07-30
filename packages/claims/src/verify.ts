@@ -1,4 +1,14 @@
-import type { ClaimRecord, ClaimVerificationResult, ES256PublicJwk, KeyRecord, SignedClaimData, VerificationFailureKind, VerificationResult, VerificationStep, VerifyOptions } from "./types.js";
+import type {
+  ClaimRecord,
+  ClaimVerificationResult,
+  ES256PublicJwk,
+  KeyRecord,
+  SignedClaimData,
+  VerificationFailureKind,
+  VerificationResult,
+  VerificationStep,
+  VerifyOptions,
+} from "./types.js";
 import { getPrimarySig } from "./types.js";
 import { resolveHandle, resolvePds, listClaimRecords, getRecordByUri } from "./atproto.js";
 import { verifyES256Signature } from "./crypto/signature.js";
@@ -187,11 +197,21 @@ async function verifySingleClaim(did: string, uri: string, rkey: string, claim: 
         "identity.subject": claim.identity.subject,
         type: claim.type,
       };
+      // Only signed when the subject is a shared namespace (e.g. npmorg), so it must be absent
+      // from the map — not present-and-undefined — for claims that don't carry it
+      if (claim.identity.account !== undefined) {
+        valueMap["identity.account"] = claim.identity.account;
+      }
       signedData = {};
       for (const field of fields) {
-        if (field in valueMap) {
-          signedData[field] = valueMap[field];
+        // A field the signer covered but we can't reconstruct would silently drop out here and
+        // produce a mismatched payload, so fail loudly instead of reporting a bad signature
+        if (!(field in valueMap)) {
+          const error = `Cannot reconstruct signed field "${field}" from this record`;
+          steps.push({ step: "reconstruct_data", success: false, error });
+          return buildResult(uri, rkey, claim, false, steps, error, "terminal");
         }
+        signedData[field] = valueMap[field];
       }
     } else {
       // Legacy format: { did, subject, type, verifiedAt }
@@ -230,7 +250,15 @@ async function verifySingleClaim(did: string, uri: string, rkey: string, claim: 
 /**
  * Build a claim verification result.
  */
-function buildResult(uri: string, rkey: string, claim: ClaimRecord, verified: boolean, steps: VerificationStep[], error?: string, failureKind?: VerificationFailureKind): ClaimVerificationResult {
+function buildResult(
+  uri: string,
+  rkey: string,
+  claim: ClaimRecord,
+  verified: boolean,
+  steps: VerificationStep[],
+  error?: string,
+  failureKind?: VerificationFailureKind,
+): ClaimVerificationResult {
   return {
     uri,
     rkey,

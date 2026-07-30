@@ -39,14 +39,14 @@ export async function fetch(url: string, options: HttpFetchOptions): Promise<unk
       const jsonLdScript = $('script[type="application/ld+json"]').first();
 
       if (jsonLdScript.length === 0) {
-        throw new Error('No JSON-LD script tag found in HTML');
+        throw new Error("No JSON-LD script tag found in HTML");
       }
 
       const jsonLdText = jsonLdScript.text().trim();
       try {
         return JSON.parse(jsonLdText);
       } catch (err) {
-        throw new Error(`Failed to parse JSON-LD: ${err instanceof Error ? err.message : 'Unknown error'}`);
+        throw new Error(`Failed to parse JSON-LD: ${err instanceof Error ? err.message : "Unknown error"}`);
       }
     }
 
@@ -57,17 +57,17 @@ export async function fetch(url: string, options: HttpFetchOptions): Promise<unk
 
       // Extract all Open Graph meta tags
       $('meta[property^="og:"]').each((_, elem) => {
-        const property = $(elem).attr('property');
-        const content = $(elem).attr('content');
+        const property = $(elem).attr("property");
+        const content = $(elem).attr("content");
         if (property && content) {
           // Convert og:title to title, og:description to description, etc.
-          const key = property.replace('og:', '');
+          const key = property.replace("og:", "");
           ogData[key] = content;
         }
       });
 
       if (Object.keys(ogData).length === 0) {
-        throw new Error('No Open Graph meta tags found in HTML');
+        throw new Error("No Open Graph meta tags found in HTML");
       }
 
       return ogData;

@@ -3,12 +3,8 @@
     <div class="flex items-end justify-between gap-5 flex-wrap">
       <div>
         <SectionLabel num="§2" label="Recent proofs" />
-        <h2 class="mt-2.5 text-[clamp(32px,3.6vw,44px)] font-semibold tracking-[-0.02em] text-zinc-100 leading-[1.1] max-w-[640px]">
-          Fresh proofs from the network.
-        </h2>
-        <p class="mt-2.5 text-zinc-500 text-sm max-w-[520px]">
-          Every claim here was written to its author's PDS. Stored in their repo, verifiable by anyone.
-        </p>
+        <h2 class="mt-2.5 text-[clamp(32px,3.6vw,44px)] font-semibold tracking-[-0.02em] text-zinc-100 leading-[1.1] max-w-[640px]">Fresh proofs from the network.</h2>
+        <p class="mt-2.5 text-zinc-500 text-sm max-w-[520px]">Every claim here was written to its author's PDS. Stored in their repo, verifiable by anyone.</p>
       </div>
     </div>
 
@@ -16,7 +12,7 @@
     <div class="mt-7 rounded-xl overflow-hidden bg-kt-inset border border-zinc-800">
       <!-- header -->
       <div class="flex items-center gap-3 px-4 py-2.5 border-b border-zinc-800 bg-kt-surface font-mono text-[11px] text-zinc-500">
-        <span class="w-[7px] h-[7px] rounded-full bg-verified animate-kt-pulse" style="box-shadow: 0 0 0 3px rgba(34,197,94,0.13)" />
+        <span class="w-[7px] h-[7px] rounded-full bg-verified animate-kt-pulse" style="box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.13)" />
         <span>dev.keytrace.claim</span>
         <span class="flex-1" />
         <span class="text-zinc-600">{{ claims.length }} recent claims</span>
@@ -37,7 +33,9 @@
             <NuxtLink :to="`/@${row.handle}`" class="text-zinc-200 font-medium hover:text-white transition-colors no-underline truncate">{{ row.handle }}</NuxtLink>
             <span class="text-zinc-600">→</span>
             <span class="text-violet-400 truncate">{{ row.identity }}</span>
-            <span v-if="row.serviceName" class="text-zinc-600 hidden sm:inline">via <span class="text-zinc-400">{{ row.serviceName }}</span></span>
+            <span v-if="row.serviceName" class="text-zinc-600 hidden sm:inline"
+              >via <span class="text-zinc-400">{{ row.serviceName }}</span></span
+            >
           </div>
           <div class="flex items-center gap-1.5 text-verified text-[11px]">
             <CheckCircleIcon class="w-3 h-3 text-verified" />

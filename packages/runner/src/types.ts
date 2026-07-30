@@ -10,6 +10,12 @@ export interface IdentityMetadata {
   profileUrl?: string;
   /** Display name if different from subject */
   displayName?: string;
+  /**
+   * The platform account that demonstrated control of the subject, when the two differ.
+   * Set by claim types whose subject is a shared namespace — e.g. npmorg's subject is the
+   * scope ("babel") and its account is the npm user who published the proof ("alice").
+   */
+  account?: string;
 }
 
 /**
@@ -53,6 +59,12 @@ export interface ClaimVerificationResult {
   identity?: IdentityMetadata;
   /** Details about the proof fetching and verification process */
   proofDetails?: ProofDetails;
+  /**
+   * The provider that actually verified the claim. When a URI matches several providers, this
+   * is not necessarily the first match — an ambiguous provider can fail and let a later one
+   * succeed — so callers recording the claim's type must use this rather than `matches[0]`.
+   */
+  providerId?: string;
 }
 
 /**
@@ -164,4 +176,3 @@ export interface StepResult {
   data?: unknown;
   error?: string;
 }
-

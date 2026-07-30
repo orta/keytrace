@@ -87,9 +87,7 @@
 
         <span :style="{ fontSize: '48px', fontWeight: '700', color: '#f4f4f5', lineHeight: '1.15' }"> Verify Keytrace Claims </span>
 
-        <span :style="{ fontSize: '20px', color: '#a1a1aa', lineHeight: '1.4' }">
-          Verify identity claims in the browser or Node.js. Zero runtime dependencies.
-        </span>
+        <span :style="{ fontSize: '20px', color: '#a1a1aa', lineHeight: '1.4' }"> Verify identity claims in the browser or Node.js. Zero runtime dependencies. </span>
       </div>
 
       <!-- Install command -->

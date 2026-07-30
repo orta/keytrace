@@ -11,10 +11,10 @@ npm install @keytrace/claims
 ## Usage
 
 ```typescript
-import { getClaimsForHandle, getClaimsForDid } from '@keytrace/claims';
+import { getClaimsForHandle, getClaimsForDid } from "@keytrace/claims";
 
 // Verify all claims for a handle
-const result = await getClaimsForHandle('alice.bsky.social');
+const result = await getClaimsForHandle("alice.bsky.social");
 
 console.log(`${result.summary.verified}/${result.summary.total} claims verified`);
 
@@ -27,15 +27,15 @@ for (const claim of result.claims) {
 }
 
 // Or verify by DID directly
-const result2 = await getClaimsForDid('did:plc:abc123');
+const result2 = await getClaimsForDid("did:plc:abc123");
 ```
 
 The inverse — "who has claimed this identity?" — is `reverseLookup`:
 
 ```typescript
-import { reverseLookup } from '@keytrace/claims';
+import { reverseLookup } from "@keytrace/claims";
 
-const { total, matches } = await reverseLookup('github', 'alice');
+const { total, matches } = await reverseLookup("github", "alice");
 
 for (const match of matches) {
   console.log(`${match.did} claimed it (verified ${match.verifiedAt})`);
@@ -49,7 +49,7 @@ for (const match of matches) {
 Verify all keytrace claims for an ATProto handle.
 
 ```typescript
-const result = await getClaimsForHandle('alice.bsky.social');
+const result = await getClaimsForHandle("alice.bsky.social");
 ```
 
 ### `getClaimsForDid(did, options?)`
@@ -57,7 +57,7 @@ const result = await getClaimsForHandle('alice.bsky.social');
 Verify all keytrace claims for a DID.
 
 ```typescript
-const result = await getClaimsForDid('did:plc:abc123');
+const result = await getClaimsForDid("did:plc:abc123");
 ```
 
 ### `reverseLookup(type, subject, options?)`
@@ -69,7 +69,7 @@ claims whose signatures validate against a known keytrace server key are
 returned.
 
 ```typescript
-const { total, matches } = await reverseLookup('npm', 'left-pad');
+const { total, matches } = await reverseLookup("npm", "left-pad");
 // matches: { did, claim, verifiedAt, recheckSuggested? }[]
 ```
 
@@ -81,10 +81,10 @@ Throws a `ReverseLookupError` (with a `.code` such as `"UnknownType"` and a
 
 ```typescript
 interface VerifyOptions {
-  fetch?: typeof fetch;        // Custom fetch function
-  timeout?: number;            // Request timeout in ms (default: 10000)
-  plcDirectoryUrl?: string;    // PLC directory URL (default: https://plc.directory)
-  publicApiUrl?: string;       // Public API URL (default: https://public.api.bsky.app)
+  fetch?: typeof fetch; // Custom fetch function
+  timeout?: number; // Request timeout in ms (default: 10000)
+  plcDirectoryUrl?: string; // PLC directory URL (default: https://plc.directory)
+  publicApiUrl?: string; // Public API URL (default: https://public.api.bsky.app)
 }
 ```
 
@@ -103,15 +103,15 @@ interface VerificationResult {
 }
 
 interface ClaimVerificationResult {
-  uri: string;                 // AT URI of the claim
-  rkey: string;                // Record key
-  type: string;                // Claim type (github, dns, etc.)
-  claimUri: string;            // The claimed identity URI
-  verified: boolean;           // Whether signature is valid
-  steps: VerificationStep[];   // Verification steps performed
-  error?: string;              // Error message if failed
-  identity: ClaimIdentity;     // Identity info from the claim
-  claim: ClaimRecord;          // Full claim record
+  uri: string; // AT URI of the claim
+  rkey: string; // Record key
+  type: string; // Claim type (github, dns, etc.)
+  claimUri: string; // The claimed identity URI
+  verified: boolean; // Whether signature is valid
+  steps: VerificationStep[]; // Verification steps performed
+  error?: string; // Error message if failed
+  identity: ClaimIdentity; // Identity info from the claim
+  claim: ClaimRecord; // Full claim record
 }
 ```
 

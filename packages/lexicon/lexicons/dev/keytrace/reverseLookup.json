@@ -12,11 +12,29 @@
           "type": {
             "type": "string",
             "description": "The claim type (e.g. 'github', 'dns', 'npm'). Mirrors dev.keytrace.claim#type; keep in sync when adding a new provider.",
-            "knownValues": ["github", "dns", "activitypub", "bsky", "npm", "tangled", "pgp", "twitter", "linkedin", "instagram", "reddit", "hackernews", "orcid", "itchio", "discord"]
+            "knownValues": [
+              "github",
+              "dns",
+              "activitypub",
+              "bsky",
+              "npm",
+              "npmorg",
+              "tangled",
+              "pgp",
+              "twitter",
+              "linkedin",
+              "instagram",
+              "reddit",
+              "hackernews",
+              "orcid",
+              "itchio",
+              "discord",
+              "steam"
+            ]
           },
           "subject": {
             "type": "string",
-            "description": "The subject identifier being looked up. Matched exactly (case-sensitive)."
+            "description": "The subject identifier being looked up. Matched exactly (case-sensitive). For types whose subject is a shared namespace rather than a personal account (e.g. 'npmorg', where the subject is the scope 'babel'), a single subject may legitimately match several DIDs — one per person who proved publish access."
           }
         }
       },

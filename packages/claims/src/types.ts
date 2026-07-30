@@ -6,6 +6,13 @@ export interface ClaimIdentity {
   avatarUrl?: string;
   profileUrl?: string;
   displayName?: string;
+  /**
+   * The platform account that demonstrated control of the subject, when the two differ.
+   * Present on claim types whose subject is a shared namespace — e.g. an `npmorg` claim's
+   * subject is the org scope ("babel") and its account is the npm user who proved access
+   * ("alice"). Absent when the subject is itself the account.
+   */
+  account?: string;
 }
 
 /**

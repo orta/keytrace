@@ -45,16 +45,23 @@ export default defineEventHandler(async (event) => {
     });
   }
 
-  // Get the matched provider
-  const { provider, match } = matches[0];
+  // Use the provider that actually verified, not the first match. A URI can match several
+  // providers (e.g. @acme/keytrace-claim matches both npm and npmorg, and only the registry can
+  // say which fits), and the first one is free to fail and let a later one succeed.
+  // Non-null: an empty `matches` already threw above
+  const verifiedMatch = matches.find((m) => m.provider.id === verifyResult.providerId) ?? matches[0]!;
+  const { provider, match } = verifiedMatch;
   const processed = provider.processURI(body.claimUri, match);
 
   // Use identity from verification result, falling back to processed profile
   const verifiedIdentity = verifyResult.identity;
   const subject = verifiedIdentity?.subject ?? processed.profile.display.replace(/^@/, "");
+  // Set only by providers whose subject is a shared namespace (npmorg), naming the account that
+  // proved access to it
+  const account = verifiedIdentity?.account;
 
   // Create cryptographic attestation
-  const attestation = await createAttestation(did, provider.id, subject, body.claimUri);
+  const attestation = await createAttestation(did, provider.id, subject, body.claimUri, account);
 
   // Build the signature object per dev.keytrace.signature lexicon
   const sig = {
@@ -71,11 +78,13 @@ export default defineEventHandler(async (event) => {
     avatarUrl?: string;
     profileUrl?: string;
     displayName?: string;
+    account?: string;
   } = {
     subject,
     avatarUrl: verifiedIdentity?.avatarUrl,
     profileUrl: verifiedIdentity?.profileUrl ?? processed.profile.uri,
     displayName: verifiedIdentity?.displayName,
+    account,
   };
 
   try {

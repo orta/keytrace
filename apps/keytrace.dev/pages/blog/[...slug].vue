@@ -14,15 +14,9 @@
         <p class="text-sm text-zinc-500 mt-2 leading-relaxed">{{ post.description }}</p>
       </header>
 
-      <div class="prose prose-invert prose-sm max-w-none
-        prose-headings:text-zinc-200 prose-headings:font-semibold
-        prose-p:text-zinc-400 prose-p:leading-relaxed
-        prose-a:text-violet-400 prose-a:no-underline hover:prose-a:text-violet-300
-        prose-strong:text-zinc-300
-        prose-code:text-violet-300 prose-code:bg-zinc-900 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-xs
-        prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-800
-        prose-li:text-zinc-400
-        prose-hr:border-zinc-800">
+      <div
+        class="prose prose-invert prose-sm max-w-none prose-headings:text-zinc-200 prose-headings:font-semibold prose-p:text-zinc-400 prose-p:leading-relaxed prose-a:text-violet-400 prose-a:no-underline hover:prose-a:text-violet-300 prose-strong:text-zinc-300 prose-code:text-violet-300 prose-code:bg-zinc-900 prose-code:px-1 prose-code:py-0.5 prose-code:rounded prose-code:text-xs prose-pre:bg-zinc-900 prose-pre:border prose-pre:border-zinc-800 prose-li:text-zinc-400 prose-hr:border-zinc-800"
+      >
         <ContentRenderer :value="post" />
       </div>
     </article>
@@ -33,9 +27,7 @@
 
 <script setup lang="ts">
 const route = useRoute();
-const { data: post } = await useAsyncData(`blog-${route.path}`, () =>
-  queryCollection("blog").path(route.path).first()
-);
+const { data: post } = await useAsyncData(`blog-${route.path}`, () => queryCollection("blog").path(route.path).first());
 
 if (!post.value) {
   throw createError({ statusCode: 404, statusMessage: "Post not found" });

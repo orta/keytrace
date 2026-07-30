@@ -118,10 +118,7 @@ describe("discord service provider", () => {
     it("shows guild name and description when DID not found", () => {
       const uri = "https://discord.gg/abc123";
       const match = uri.match(discord.reUri)!;
-      const recs = discord.getRecommendations!(
-        { guild: { name: "My Server", description: "A cool server" } },
-        match,
-      );
+      const recs = discord.getRecommendations!({ guild: { name: "My Server", description: "A cool server" } }, match);
 
       expect(recs.length).toBeGreaterThan(0);
       expect(recs[0]).toContain("My Server");

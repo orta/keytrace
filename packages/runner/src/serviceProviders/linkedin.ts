@@ -48,7 +48,7 @@ const linkedin: ServiceProvider = {
       },
       proof: {
         request: {
-          uri: uri.split('?')[0], // Remove query parameters
+          uri: uri.split("?")[0], // Remove query parameters
           fetcher: "http",
           format: "json-ld",
           options: {
@@ -138,7 +138,10 @@ const linkedin: ServiceProvider = {
     { uri: "https://www.linkedin.com/in/alice", shouldMatch: false },
     { uri: "https://www.linkedin.com/feed/", shouldMatch: false },
     // Comment URLs should NOT match (security: prevents using someone else's post + your comment)
-    { uri: "https://www.linkedin.com/feed/update/urn:li:activity:7433094511582498816/?dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287433098855795228672%2Curn%3Ali%3Aactivity%3A7433094511582498816%29", shouldMatch: false },
+    {
+      uri: "https://www.linkedin.com/feed/update/urn:li:activity:7433094511582498816/?dashCommentUrn=urn%3Ali%3Afsd_comment%3A%287433098855795228672%2Curn%3Ali%3Aactivity%3A7433094511582498816%29",
+      shouldMatch: false,
+    },
     { uri: "https://www.linkedin.com/feed/update/urn:li:activity:123456/", shouldMatch: false },
     // Wrong domain
     { uri: "https://twitter.com/alice/status/123", shouldMatch: false },

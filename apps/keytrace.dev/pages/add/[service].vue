@@ -199,10 +199,13 @@ watch(
   { immediate: true },
 );
 
-// Normalize npm-specific input formats, e.g. "+" @orta/keytrace-claim@0.0.3" → URL
+// Normalize the line npm prints on publish, e.g. "+ @orta/keytrace-claim@0.0.3" → package URL.
+// Both npm claim types use a package URL, so the same rewrite serves them. Normalizing here
+// rather than widening the providers' regexes keeps the stored (and signed) claimUri canonical.
 watch(claimUri, (val) => {
-  if (selectedService.value?.id !== "npm") return;
-  const npmShorthand = /^\+?\s*(@[a-z0-9_-]+\/[a-z0-9_-]+)(?:@[^\s]+)?\s*$/i.exec(val);
+  const id = selectedService.value?.id;
+  if (id !== "npm" && id !== "npmorg") return;
+  const npmShorthand = /^\+?\s*(@[a-z0-9][a-z0-9._-]*\/[a-z0-9][a-z0-9._-]*)(?:@[^\s]+)?\s*$/i.exec(val);
   if (npmShorthand) {
     claimUri.value = `https://www.npmjs.com/package/${npmShorthand[1]}`;
   }

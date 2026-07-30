@@ -129,7 +129,9 @@ async function save() {
       },
     });
     saved.value = true;
-    setTimeout(() => { saved.value = false; }, 3000);
+    setTimeout(() => {
+      saved.value = false;
+    }, 3000);
   } catch (err: unknown) {
     const status = (err as any)?.response?.status;
     if (status === 403) {

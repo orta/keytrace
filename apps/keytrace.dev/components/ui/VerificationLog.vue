@@ -25,15 +25,8 @@
               {{ step.action }}
             </span>
             <!-- Disclosure toggle -->
-            <button
-              v-if="step.expandable"
-              class="text-zinc-500 hover:text-zinc-300 transition-colors"
-              @click="toggleExpand(i)"
-            >
-              <ChevronRightIcon
-                class="w-4 h-4 transition-transform"
-                :class="{ 'rotate-90': expandedSteps.has(i) }"
-              />
+            <button v-if="step.expandable" class="text-zinc-500 hover:text-zinc-300 transition-colors" @click="toggleExpand(i)">
+              <ChevronRightIcon class="w-4 h-4 transition-transform" :class="{ 'rotate-90': expandedSteps.has(i) }" />
             </button>
           </div>
           <div v-if="step.detail" class="text-xs text-zinc-500 mt-0.5 font-mono truncate">
@@ -46,10 +39,7 @@
       </div>
 
       <!-- Expandable content -->
-      <div
-        v-if="step.expandable && expandedSteps.has(i)"
-        class="px-4 pb-3 ml-7"
-      >
+      <div v-if="step.expandable && expandedSteps.has(i)" class="px-4 pb-3 ml-7">
         <div class="rounded-lg bg-kt-inset border border-zinc-800 overflow-hidden">
           <!-- URL/Target if present -->
           <div v-if="step.expandable.url" class="px-3 py-2 border-b border-zinc-800 text-xs">
@@ -67,22 +57,20 @@
               <div class="flex items-center gap-2">
                 <CheckCircleIcon v-if="target.matched" class="w-3 h-3 text-verified flex-shrink-0" />
                 <XCircleIcon v-else class="w-3 h-3 text-zinc-600 flex-shrink-0" />
-                <span class="text-zinc-400">{{ target.css || target.path.join('.') }}</span>
+                <span class="text-zinc-400">{{ target.css || target.path.join(".") }}</span>
                 <span class="text-zinc-600">({{ target.relation }})</span>
               </div>
               <div v-if="target.valuesFound.length > 0" class="ml-5 mt-1 text-zinc-500 break-all">
-                Found: {{ target.valuesFound.map(v => v.slice(0, 100) + (v.length > 100 ? '...' : '')).join(', ') }}
+                Found: {{ target.valuesFound.map((v) => v.slice(0, 100) + (v.length > 100 ? "..." : "")).join(", ") }}
               </div>
-              <div v-else class="ml-5 mt-1 text-zinc-600 italic">
-                No values found at this path
-              </div>
+              <div v-else class="ml-5 mt-1 text-zinc-600 italic">No values found at this path</div>
             </div>
           </div>
           <!-- Patterns used -->
           <div v-if="step.expandable.patterns && step.expandable.patterns.length > 0" class="border-t border-zinc-800 p-3">
             <div class="text-xs text-zinc-500 font-medium mb-1">Looking for:</div>
             <div class="text-xs font-mono text-emerald-400/80">
-              {{ step.expandable.patterns.join(' or ') }}
+              {{ step.expandable.patterns.join(" or ") }}
             </div>
           </div>
           <!-- Recommendations -->

@@ -36,10 +36,7 @@
     />
 
     <!-- Two-column layout -->
-    <div
-      class="flex-row"
-      :style="{ display: 'flex', flexDirection: 'row', flex: '1', position: 'relative' }"
-    >
+    <div class="flex-row" :style="{ display: 'flex', flexDirection: 'row', flex: '1', position: 'relative' }">
       <!-- Left column: profile -->
       <div
         :style="{
@@ -76,7 +73,7 @@
             marginBottom: '24px',
           }"
         >
-          {{ (displayName || handle || '?')[0].toUpperCase() }}
+          {{ (displayName || handle || "?")[0].toUpperCase() }}
         </div>
 
         <!-- Name + handle -->
@@ -96,7 +93,7 @@
           }"
         >
           <div :style="{ width: '8px', height: '8px', borderRadius: '50%', backgroundColor: '#22c55e' }" />
-          <span :style="{ fontSize: '20px', color: '#4ade80', fontWeight: '600' }">{{ verifiedCount }} verified {{ verifiedCount === 1 ? 'identity' : 'identities' }}</span>
+          <span :style="{ fontSize: '20px', color: '#4ade80', fontWeight: '600' }">{{ verifiedCount }} verified {{ verifiedCount === 1 ? "identity" : "identities" }}</span>
         </div>
 
         <!-- keytrace.dev label -->
@@ -125,7 +122,8 @@
             letterSpacing: '0.08em',
             textTransform: 'uppercase',
           }"
-        >Verified Claims</span>
+          >Verified Claims</span
+        >
 
         <div :style="{ display: 'flex', flexDirection: 'column', gap: '10px' }">
           <div
@@ -184,10 +182,7 @@
         </div>
 
         <!-- More claims note -->
-        <span
-          v-if="claims.length > 5"
-          :style="{ fontSize: '14px', color: '#52525b', marginTop: '12px' }"
-        >and {{ claims.length - 5 }} more…</span>
+        <span v-if="claims.length > 5" :style="{ fontSize: '14px', color: '#52525b', marginTop: '12px' }">and {{ claims.length - 5 }} more…</span>
       </div>
     </div>
   </div>

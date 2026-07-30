@@ -71,7 +71,7 @@ In production the Nuxt server and Tap run together inside one container, supervi
 node apps/host/index.mjs
 ```
 
-The optionl included [Dockerfile](Dockerfile) builds the Tap Go binary, builds the Nuxt app, and produces an image whose `CMD` already runs the supervisor. The image expects a Railway Volume mounted at `/keytrace-data` so `tap.db` and `reverse-lookup.sqlite` survive redeploys 
+The optionl included [Dockerfile](Dockerfile) builds the Tap Go binary, builds the Nuxt app, and produces an image whose `CMD` already runs the supervisor. The image expects a Railway Volume mounted at `/keytrace-data` so `tap.db` and `reverse-lookup.sqlite` survive redeploys
 
 Environment variables consumed by the supervisor:
 
@@ -119,6 +119,7 @@ Use the deploy script to bump versions and publish all packages to npm:
 ```
 
 This will:
+
 1. Bump versions in `@keytrace/runner`, `@keytrace/claims`, and `@keytrace/lexicon`
 2. Build all packages
 3. Publish to npm
@@ -129,7 +130,6 @@ After running, push to remote:
 ```bash
 git push && git push --tags
 ```
-
 
 ## Adding a New Service Provider
 

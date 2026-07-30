@@ -12,17 +12,12 @@
 
     <!-- Popover -->
     <Transition name="popover">
-      <div
-        v-if="isVisible"
-        class="absolute right-0 top-full mt-2 w-80 sm:w-96 z-50"
-        @mouseenter="cancelHide"
-        @mouseleave="hidePopoverDelayed"
-      >
+      <div v-if="isVisible" class="absolute right-0 top-full mt-2 w-80 sm:w-96 z-50" @mouseenter="cancelHide" @mouseleave="hidePopoverDelayed">
         <div class="bg-kt-elevated border border-zinc-800 rounded-xl shadow-2xl overflow-hidden">
           <!-- Header -->
           <div class="px-4 py-3 border-b border-zinc-800">
             <h3 class="text-sm font-semibold text-zinc-200">
-              {{ isRunning ? 'Verifying...' : result ? 'Verification Result' : 'Re-verify Claim' }}
+              {{ isRunning ? "Verifying..." : result ? "Verification Result" : "Re-verify Claim" }}
             </h3>
             <p class="text-xs text-zinc-500 mt-0.5 truncate">{{ displayName }}</p>
           </div>
@@ -33,17 +28,11 @@
 
             <!-- Result message -->
             <div v-if="result" class="mt-3">
-              <div
-                v-if="result.status === 'verified'"
-                class="flex items-center gap-2 px-3 py-2 rounded-lg bg-verified/10 border border-verified/20"
-              >
+              <div v-if="result.status === 'verified'" class="flex items-center gap-2 px-3 py-2 rounded-lg bg-verified/10 border border-verified/20">
                 <CheckCircleIcon class="w-4 h-4 text-verified flex-shrink-0" />
                 <span class="text-xs text-verified font-medium">Verified successfully</span>
               </div>
-              <div
-                v-else
-                class="px-3 py-2 rounded-lg bg-failed/10 border border-failed/20"
-              >
+              <div v-else class="px-3 py-2 rounded-lg bg-failed/10 border border-failed/20">
                 <div class="flex items-center gap-2">
                   <XCircleIcon class="w-4 h-4 text-failed flex-shrink-0" />
                   <span class="text-xs text-failed font-medium">Verification failed</span>
@@ -55,9 +44,7 @@
             </div>
 
             <!-- Action hint when not running -->
-            <p v-if="!isRunning && !result" class="text-xs text-zinc-600 mt-3 text-center">
-              Click to run verification
-            </p>
+            <p v-if="!isRunning && !result" class="text-xs text-zinc-600 mt-3 text-center">Click to run verification</p>
           </div>
         </div>
       </div>
@@ -246,7 +233,9 @@ async function runVerification() {
 <style scoped>
 .popover-enter-active,
 .popover-leave-active {
-  transition: opacity 0.15s ease, transform 0.15s ease;
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
 }
 
 .popover-enter-from,

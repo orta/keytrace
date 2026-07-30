@@ -1,16 +1,5 @@
 import type { Component } from "vue";
-import {
-  Github,
-  Globe,
-  AtSign,
-  Cloud,
-  Shield,
-  Key,
-  Twitter,
-  Linkedin,
-  Instagram,
-  MessageSquare,
-} from "lucide-vue-next";
+import { Github, Globe, AtSign, Cloud, Shield, Key, Twitter, Linkedin, Instagram, MessageSquare } from "lucide-vue-next";
 import NpmIcon from "~/components/icons/NpmIcon.vue";
 import TangledIcon from "~/components/icons/TangledIcon.vue";
 import OrcidIcon from "~/components/icons/OrcidIcon.vue";

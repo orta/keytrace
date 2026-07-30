@@ -56,6 +56,26 @@ export interface ProcessedURI {
 }
 
 /**
+ * Context handed to a provider's `verifyAccess` hook
+ */
+export interface AccessContext {
+  /** The DID being claimed */
+  did: string;
+  /** The regex match against the claim URI */
+  match: RegExpMatchArray;
+  /** Identity metadata already derived by `postprocess` */
+  identity: {
+    subject?: string;
+    avatarUrl?: string;
+    profileUrl?: string;
+    displayName?: string;
+    account?: string;
+  };
+  /** Fetch further data through the runner's fetcher registry */
+  fetch(request: ProofRequest): Promise<unknown>;
+}
+
+/**
  * An additional input field for the add claim wizard (beyond the main claim URI)
  */
 export interface ExtraInput {
@@ -118,16 +138,39 @@ export interface ServiceProvider {
   /** Process matched URI into verification config */
   processURI(uri: string, match: RegExpMatchArray): ProcessedURI;
 
-  /** Optional post-processing after fetch to extract identity metadata */
+  /**
+   * Optional post-processing after fetch to extract identity metadata.
+   *
+   * `did` is the DID being claimed. Providers that need to know *which part* of the proof
+   * carried the DID (e.g. which npm version, and therefore who published it) use it to bind
+   * the identity to the DID rather than to the proof document as a whole. Throw to refuse
+   * to attest when a trustworthy identity can't be derived.
+   */
   postprocess?(
     data: unknown,
     match: RegExpMatchArray,
+    did?: string,
   ): {
     subject?: string;
     avatarUrl?: string;
     profileUrl?: string;
     displayName?: string;
+    account?: string;
   };
+
+  /**
+   * Optional check, run after the DID proof matches and `postprocess` succeeds, asserting a
+   * condition that the proof document itself can't establish — typically that access is
+   * *still* held rather than merely held once.
+   *
+   * A published artifact outlives the permission that created it: an npm package stays in an
+   * org scope after its publisher leaves. Providers whose proof has that shape re-check the
+   * live permission here.
+   *
+   * Return `null` when satisfied, or a human-readable reason when not. `fetch` routes through
+   * the runner's fetcher registry so it honours the caller's timeout and proxy settings.
+   */
+  verifyAccess?(ctx: AccessContext): Promise<string | null>;
 
   /** Generate proof text for user to add to their profile */
   getProofText(did: string, handle?: string): string;

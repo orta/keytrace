@@ -254,13 +254,9 @@ describe("hackernews service provider", () => {
     });
 
     describe("item (comment/post) verification", () => {
-      function mockFetchItemHtml(
-        text: string | undefined,
-        by: string = "alice",
-        title: string | undefined = undefined,
-      ) {
-        const commentText = text ? `<span class="commtext">${text}</span>` : '';
-        const titleText = title ? `<span class="titleline"><a>${title}</a></span>` : '';
+      function mockFetchItemHtml(text: string | undefined, by: string = "alice", title: string | undefined = undefined) {
+        const commentText = text ? `<span class="commtext">${text}</span>` : "";
+        const titleText = title ? `<span class="titleline"><a>${title}</a></span>` : "";
 
         const html = `<html><body>
           <a class="hnuser">${by}</a>
@@ -290,11 +286,7 @@ describe("hackernews service provider", () => {
       });
 
       it("verifies a HN story containing the DID in text", async () => {
-        mockFetchItemHtml(
-          `Ask HN: Verifying my identity ${did}`,
-          "frank",
-          "My verification post",
-        );
+        mockFetchItemHtml(`Ask HN: Verifying my identity ${did}`, "frank", "My verification post");
 
         const claim = createClaim("https://news.ycombinator.com/item?id=99999", did);
         const result = await verifyClaim(claim);

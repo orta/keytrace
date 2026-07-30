@@ -42,14 +42,7 @@ describe("orcid service provider", () => {
       const result = orcid.processURI(uri, match);
 
       expect(result.proof.target).toHaveLength(1);
-      expect(result.proof.target[0].path).toEqual([
-        "person",
-        "researcher-urls",
-        "researcher-url",
-        "*",
-        "url",
-        "value",
-      ]);
+      expect(result.proof.target[0].path).toEqual(["person", "researcher-urls", "researcher-url", "*", "url", "value"]);
       expect(result.proof.target[0].relation).toBe("contains");
     });
   });
@@ -160,10 +153,7 @@ describe("orcid service provider", () => {
     });
 
     it("verifies when DID appears in any of multiple researcher URLs", async () => {
-      mockFetch([
-        { value: "https://example.com/my-profile" },
-        { value: `https://bsky.app/profile/${did}` },
-      ]);
+      mockFetch([{ value: "https://example.com/my-profile" }, { value: `https://bsky.app/profile/${did}` }]);
 
       const claim = createClaim("https://orcid.org/0009-0004-2882-6258", did);
       const result = await verifyClaim(claim);

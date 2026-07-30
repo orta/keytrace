@@ -5,9 +5,7 @@
         <!-- Brand column -->
         <div>
           <KeytraceLogo :height="26" />
-          <p class="mt-3.5 text-[13px] text-zinc-500 max-w-[280px] leading-relaxed">
-            Cryptographic proofs of identity for atproto. Open lexicon, open source runner, your repo.
-          </p>
+          <p class="mt-3.5 text-[13px] text-zinc-500 max-w-[280px] leading-relaxed">Cryptographic proofs of identity for atproto. Open lexicon, open source runner, your repo.</p>
           <div class="mt-4 flex gap-2.5">
             <a
               v-for="link in socialLinks"
@@ -45,7 +43,9 @@
           <span class="text-zinc-700">·</span>
           <span>Built on atproto</span>
         </div>
-        <a href="https://bsky.app/profile/orta.io" target="_blank" rel="noopener" class="text-violet-400 no-underline hover:text-violet-300 transition-colors font-mono text-[11px]">./orta</a>
+        <a href="https://bsky.app/profile/orta.io" target="_blank" rel="noopener" class="text-violet-400 no-underline hover:text-violet-300 transition-colors font-mono text-[11px]"
+          >./orta</a
+        >
       </div>
     </div>
   </footer>

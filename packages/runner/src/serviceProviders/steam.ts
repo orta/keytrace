@@ -51,9 +51,7 @@ const steam: ServiceProvider = {
     const identifier = vanity ?? steamId;
     const isVanity = Boolean(vanity);
 
-    const profileUri = isVanity
-      ? `https://steamcommunity.com/id/${identifier}`
-      : `https://steamcommunity.com/profiles/${identifier}`;
+    const profileUri = isVanity ? `https://steamcommunity.com/id/${identifier}` : `https://steamcommunity.com/profiles/${identifier}`;
 
     return {
       profile: {
@@ -88,9 +86,7 @@ const steam: ServiceProvider = {
     const customURL = extractXmlCData(xml, "customURL");
     const steamID64 = extractXmlText(xml, "steamID64");
     if (!steamID64 || !STEAM_ID_64_RE.test(steamID64)) {
-      throw new Error(
-        `Steam profile XML did not include a valid <steamID64> (got ${JSON.stringify(steamID64 ?? "")}); cannot attest without a stable identifier`,
-      );
+      throw new Error(`Steam profile XML did not include a valid <steamID64> (got ${JSON.stringify(steamID64 ?? "")}); cannot attest without a stable identifier`);
     }
 
     // Always use the resolved steamID64 as the subject & profileURL
@@ -126,21 +122,15 @@ const steam: ServiceProvider = {
 
     const privacy = extractXmlText(data, "privacyState");
     if (privacy && privacy !== "public") {
-      recommendations.push(
-        `This profile's privacy is set to **${privacy}**. Set it to **Public** so Keytrace can read the Summary.`,
-      );
+      recommendations.push(`This profile's privacy is set to **${privacy}**. Set it to **Public** so Keytrace can read the Summary.`);
       return recommendations;
     }
 
     const summary = extractXmlCData(data, "summary") ?? "";
     if (!summary.trim()) {
-      recommendations.push(
-        "Your profile Summary is empty. Add your DID via Edit Profile → General → Summary.",
-      );
+      recommendations.push("Your profile Summary is empty. Add your DID via Edit Profile → General → Summary.");
     } else {
-      recommendations.push(
-        `Your current Summary: "${summary.slice(0, 160)}${summary.length > 160 ? "…" : ""}". Make sure it contains your full DID.`,
-      );
+      recommendations.push(`Your current Summary: "${summary.slice(0, 160)}${summary.length > 160 ? "…" : ""}". Make sure it contains your full DID.`);
     }
     return recommendations;
   },

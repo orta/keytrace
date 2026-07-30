@@ -10,11 +10,8 @@ const TAP_HOST = process.env.TAP_HOST || "127.0.0.1";
 const TAP_PORT = process.env.TAP_PORT || "2480";
 const TAP_URL = `http://${TAP_HOST}:${TAP_PORT}`;
 const DATA_DIR = process.env.KEYTRACE_DATA_DIR || REPO_ROOT;
-const NUXT_ENTRY =
-  process.env.KEYTRACE_SERVER_ENTRY ||
-  path.join(REPO_ROOT, "apps", "keytrace.dev", ".output", "server", "index.mjs");
-const REVERSE_LOOKUP_DB =
-  process.env.KEYTRACE_REVERSE_LOOKUP_DB || path.join(DATA_DIR, "reverse-lookup.sqlite");
+const NUXT_ENTRY = process.env.KEYTRACE_SERVER_ENTRY || path.join(REPO_ROOT, "apps", "keytrace.dev", ".output", "server", "index.mjs");
+const REVERSE_LOOKUP_DB = process.env.KEYTRACE_REVERSE_LOOKUP_DB || path.join(DATA_DIR, "reverse-lookup.sqlite");
 
 const children = new Map();
 let shuttingDown = false;
@@ -116,19 +113,14 @@ async function waitForTap(url, timeoutMs = 30_000) {
 process.on("SIGTERM", () => shutdown(0));
 process.on("SIGINT", () => shutdown(0));
 
-start(
-  "tap",
-  TAP_BIN,
-  ["run", "--disable-acks=true"],
-  {
-    env: {
-      TAP_SIGNAL_COLLECTION: "dev.keytrace.claim",
-      TAP_COLLECTION_FILTERS: "dev.keytrace.claim",
-      TAP_LOG_LEVEL: process.env.TAP_LOG_LEVEL || "warn",
-    },
-    cwd: DATA_DIR,
+start("tap", TAP_BIN, ["run", "--disable-acks=true"], {
+  env: {
+    TAP_SIGNAL_COLLECTION: "dev.keytrace.claim",
+    TAP_COLLECTION_FILTERS: "dev.keytrace.claim",
+    TAP_LOG_LEVEL: process.env.TAP_LOG_LEVEL || "warn",
   },
-);
+  cwd: DATA_DIR,
+});
 
 try {
   await waitForTap(TAP_URL);

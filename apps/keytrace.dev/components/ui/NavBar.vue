@@ -21,7 +21,7 @@
         <div class="flex items-center gap-2.5 justify-end">
           <!-- Status lamp -->
           <div class="hidden lg:flex items-center gap-1.5 font-mono text-[10px] text-zinc-500">
-            <span class="w-1.5 h-1.5 rounded-full bg-verified animate-kt-pulse" style="box-shadow: 0 0 0 3px rgba(34,197,94,0.13)" />
+            <span class="w-1.5 h-1.5 rounded-full bg-verified animate-kt-pulse" style="box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.13)" />
             runner: healthy
           </div>
 

@@ -18,6 +18,9 @@
           <span class="text-sm font-semibold text-zinc-200 block truncate">
             {{ claim.identity?.displayName || claim.identity?.subject || claim.displayName }}
           </span>
+          <!-- A shared subject like an npm org scope says nothing on its own about which person
+               holds it, so name the account that proved access alongside it -->
+          <span v-if="claim.identity?.account" class="text-xs text-zinc-500 block truncate"> access proved by {{ claim.identity.account }} </span>
           <span v-if="claim.comment" class="text-xs text-zinc-500 block truncate">
             {{ claim.comment }}
           </span>
@@ -101,6 +104,8 @@ export interface ClaimIdentity {
   avatarUrl?: string;
   profileUrl?: string;
   displayName?: string;
+  /** The account that proved control of a shared subject, e.g. the npm user behind an org scope */
+  account?: string;
 }
 
 export interface ClaimData {

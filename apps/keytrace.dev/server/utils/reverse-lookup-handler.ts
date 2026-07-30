@@ -19,7 +19,12 @@ function verifiedAtFor(claim: ClaimRecord): string {
   return lastVerifiedAt ?? claim.createdAt;
 }
 
-export type HandlerOutcome = { kind: "indexed" } | { kind: "removed-deleted" } | { kind: "removed-retracted" } | { kind: "removed-terminal"; reason?: string } | { kind: "flagged-transient"; reason?: string };
+export type HandlerOutcome =
+  | { kind: "indexed" }
+  | { kind: "removed-deleted" }
+  | { kind: "removed-retracted" }
+  | { kind: "removed-terminal"; reason?: string }
+  | { kind: "flagged-transient"; reason?: string };
 
 export async function handleClaimEvent(evt: RecordEvent, db: ReverseLookupDb, verify: VerifyFn): Promise<HandlerOutcome> {
   const claim = evt.record as unknown as ClaimRecord | undefined;

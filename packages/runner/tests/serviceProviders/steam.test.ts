@@ -3,19 +3,9 @@ import steam from "../../src/serviceProviders/steam.js";
 import { createClaim, verifyClaim } from "../../src/claim.js";
 import { ClaimStatus } from "../../src/types.js";
 
-function buildXml(fields: {
-  steamID64?: string;
-  steamID?: string;
-  avatarFull?: string;
-  customURL?: string;
-  summary?: string;
-  realname?: string;
-  privacyState?: string;
-}): string {
-  const cdata = (tag: string, value?: string) =>
-    value === undefined ? "" : `<${tag}><![CDATA[${value}]]></${tag}>`;
-  const plain = (tag: string, value?: string) =>
-    value === undefined ? "" : `<${tag}>${value}</${tag}>`;
+function buildXml(fields: { steamID64?: string; steamID?: string; avatarFull?: string; customURL?: string; summary?: string; realname?: string; privacyState?: string }): string {
+  const cdata = (tag: string, value?: string) => (value === undefined ? "" : `<${tag}><![CDATA[${value}]]></${tag}>`);
+  const plain = (tag: string, value?: string) => (value === undefined ? "" : `<${tag}>${value}</${tag}>`);
 
   return `<?xml version="1.0" encoding="UTF-8" standalone="yes"?><profile>
     ${plain("steamID64", fields.steamID64 ?? "76561197960287930")}
@@ -177,7 +167,7 @@ describe("steam service provider", () => {
         buildXml({
           steamID64: "76561197994000231",
           steamID: "Alice",
-          summary: 'No DID here',
+          summary: "No DID here",
         }),
       );
 

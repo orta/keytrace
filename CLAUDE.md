@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Keytrace is an identity verification system for ATProto. Users link their decentralized identities (DIDs) to external accounts (GitHub, DNS, ActivityPub, Bluesky, npm, PGP, Tangled, Twitter, LinkedIn, Instagram) by creating claims that are cryptographically verified and stored as ATProto records.
+Keytrace is an identity verification system for ATProto. Users link their decentralized identities (DIDs) to external accounts (GitHub, DNS, ActivityPub, Bluesky, npm, npm orgs, PGP, Tangled, Twitter, LinkedIn, Instagram, Reddit, Hacker News, ORCiD, itch.io, Discord, Steam) by creating claims that are cryptographically verified and stored as ATProto records.
 
 ## Workflow
 
@@ -36,7 +36,7 @@ yarn format:check     # Check formatting
 
 ### Monorepo Structure
 
-- **`packages/runner`** - Core verification library (`@keytrace/runner`). Recipe-based claim verification with service providers for GitHub, DNS, ActivityPub, Bluesky, npm, PGP, Tangled, Twitter, LinkedIn, Instagram.
+- **`packages/runner`** - Core verification library (`@keytrace/runner`). Recipe-based claim verification with service providers for GitHub, DNS, ActivityPub, Bluesky, npm, npm orgs, PGP, Tangled, Twitter, LinkedIn, Instagram, Reddit, Hacker News, ORCiD, itch.io, Discord, Steam.
 - **`packages/claims`** - Client-side claim verification library (`@keytrace/claims`). ES256 signature verification, ATProto record fetching.
 - **`packages/lexicon`** - ATProto lexicon JSON schemas and generated TypeScript types. Lexicons: `dev.keytrace.claim`, `dev.keytrace.signature`, `dev.keytrace.serverPublicKey`, `dev.keytrace.statement`, `dev.keytrace.userPublicKey`, `dev.keytrace.recipe`, `dev.keytrace.profile`. Run `yarn codegen` in this package after editing lexicon JSON to regenerate `types/`.
 - **`apps/keytrace.dev`** - Nuxt 3 full-stack web application with OAuth, API, and SSR.
@@ -101,6 +101,10 @@ yarn format:check     # Check formatting
 - nuxt-og-image Satori flex plugin overrides `flexDirection` to `column` on divs with block children; add `class="flex-row"` to opt out
 - `features.inlineStyles: false` in nuxt.config prevents 68KB of inline CSS from pushing OG tags past crawler byte limits
 - ATProto lexicon `key` field uses `literal:self` for singleton records (e.g., `dev.keytrace.profile`)
+- Claim type values are lowercase with no separators (`hackernews`, `itchio`, `npmorg`), unlike lexicon field names which are camelCase
+- Adding a claim type means updating four lists: `knownValues` in `claim.json` **and** `reverseLookup.json`, `ReverseLookupType` in `packages/claims/src/reverse-lookup.ts`, and `serviceNames`/`serviceIconPaths` in `apps/keytrace.dev/utils/serviceData.ts`. `tests/lexicon-ids.test.ts` only guards the first two against the generated types
+- `npm` and `npmorg` both match `@scope/keytrace-claim` and no regex can split them — only the registry knows if a scope is a person or an org. `npm` is `isAmbiguous: true` so it gets first refusal and falls through. Callers must read `ClaimVerificationResult.providerId` rather than `matches[0]` to know which one actually verified
+- `packages/lexicon/types/` is generated and excluded from oxfmt in `.oxfmtrc.json`; formatting it rewrites the quote style and breaks `lexicon-ids.test.ts`
 
 ## Key Files
 
